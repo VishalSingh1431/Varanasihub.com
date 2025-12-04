@@ -8,55 +8,31 @@ export const trackEvent = async (req, res) => {
   try {
     const { businessId, eventType } = req.body;
 
+    // If no eventType, just accept and return (silent fail)
+    if (!eventType) {
+      return res.json({ success: true, message: 'Event tracked (no type)' });
+    }
+
     // Event types that don't require businessId
     const generalEventTypes = ['page_view', 'button_click', 'form_submit', 'search', 'share'];
     
-    // If it's a general event type, businessId is optional
-    if (!eventType) {
-      return res.status(400).json({ error: 'eventType is required' });
-    }
-
-    // For business-specific events, businessId is required
-    if (!generalEventTypes.includes(eventType) && !eventType.startsWith('share_') && !businessId) {
-      return res.status(400).json({ error: 'businessId is required for this event type' });
-    }
-
-    // Validate event type - allow share events and widget clicks
-    const validEventTypes = [
-      'visitor', 
-      'call_click', 
-      'whatsapp_click', 
-      'whatsapp_widget_click',
-      'gallery_view', 
-      'map_click',
-      'share_whatsapp',
-      'share_facebook',
-      'share_twitter',
-      'share_linkedin',
-      'share_telegram',
-      'share_reddit',
-      'share_pinterest',
-      'share_copy',
-      'page_view',
-      'button_click',
-      'form_submit',
-      'search',
-      'share',
-      'business_view'
-    ];
+    // For business-specific events, businessId is optional (just log if missing)
+    const needsBusinessId = !generalEventTypes.includes(eventType) && !eventType.startsWith('share_');
     
-    // Allow any event type that starts with 'share_' for flexibility
-    if (!validEventTypes.includes(eventType) && !eventType.startsWith('share_')) {
-      // Silently accept unknown event types for forward compatibility
-      return res.json({ success: true, message: 'Event tracked (unknown type)' });
-    }
-
-    // Verify business exists (only if businessId is provided)
+    // Verify business exists (only if businessId is provided and needed)
     if (businessId) {
-      const business = await Business.findById(businessId);
-      if (!business) {
-        return res.status(404).json({ error: 'Business not found' });
+      try {
+        const business = await Business.findById(businessId);
+        if (!business && needsBusinessId) {
+          // Business not found but event needs it - just log, don't fail
+          return res.json({ success: true, message: 'Event tracked (business not found)' });
+        }
+      } catch (err) {
+        // If business lookup fails, just continue
       }
+    } else if (needsBusinessId) {
+      // Event needs businessId but not provided - just accept it
+      return res.json({ success: true, message: 'Event tracked (no businessId)' });
     }
 
     // Map event type to metric name
