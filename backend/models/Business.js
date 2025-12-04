@@ -34,15 +34,23 @@ class Business {
     };
     
     let safeCategory = 'Services'; // Default
-    const lowerCategory = String(data.category || '').toLowerCase();
+    const categoryStr = String(data.category || '').trim();
+    const lowerCategory = categoryStr.toLowerCase();
     
-    // First check if it's already a valid category
-    if (data.category && validCategories.includes(String(data.category).trim())) {
-      safeCategory = String(data.category).trim();
-    } else if (data.category && categoryMap[lowerCategory]) {
+    // First check if it's already a valid category (exact match)
+    if (data.category && validCategories.includes(categoryStr)) {
+      safeCategory = categoryStr;
+      console.log('✅ Category is already valid:', safeCategory);
+    } 
+    // Then check the mapping (case-insensitive)
+    else if (data.category && lowerCategory && categoryMap[lowerCategory]) {
       safeCategory = categoryMap[lowerCategory];
-    } else {
-      safeCategory = 'Services'; // Force to Services if anything fails
+      console.log('✅ Category mapped in model:', categoryStr, '→', safeCategory);
+    } 
+    // If still not valid, force to Services
+    else {
+      safeCategory = 'Services';
+      console.log('⚠️ Category not found in model map, using default Services:', categoryStr);
     }
     
     // Final validation - ensure it's definitely one of the valid categories

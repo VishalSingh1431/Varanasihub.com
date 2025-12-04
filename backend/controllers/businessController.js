@@ -132,9 +132,9 @@ export const createBusiness = async (req, res) => {
       'clinic': 'Clinic', 'clinics': 'Clinic', 'hospital': 'Clinic', 'medical': 'Clinic',
       'healthcare': 'Clinic', 'spa': 'Clinic', 'salon': 'Clinic', 'beauty': 'Clinic',
       
-      // Library category (education, learning)
+      // Library category (education, learning) - COLLEGE MAPS HERE
       'library': 'Library', 'libraries': 'Library', 'book': 'Library', 'school': 'Library',
-      'college': 'Library', 'education': 'Library',
+      'college': 'Library', 'colleges': 'Library', 'education': 'Library', 'educational': 'Library',
       
       // Hotel category (hospitality, travel, accommodation)
       'hotel': 'Hotel', 'hotels': 'Hotel', 'lodging': 'Hotel', 'accommodation': 'Hotel',
@@ -156,14 +156,32 @@ export const createBusiness = async (req, res) => {
     // Force to valid category - default to Services if anything fails
     let finalCategory = 'Services'; // ALWAYS default to Services
     
+    console.log('🔍 STEP 1 - Category input:', category);
+    console.log('🔍 STEP 2 - Normalized:', normalizedCategory);
+    console.log('🔍 STEP 3 - Lower:', lowerCategory);
+    console.log('🔍 STEP 4 - CategoryMap has key?', categoryMap.hasOwnProperty(lowerCategory));
+    console.log('🔍 STEP 5 - CategoryMap value:', categoryMap[lowerCategory]);
+    
+    // First check if it's already a valid category (exact match)
     if (normalizedCategory && validCategories.includes(normalizedCategory)) {
       finalCategory = normalizedCategory;
-    } else if (normalizedCategory && categoryMap[lowerCategory]) {
-      finalCategory = categoryMap[lowerCategory];
+      console.log('✅ Direct match with valid category:', finalCategory);
+    } 
+    // Then check the mapping (case-insensitive) - THIS IS WHERE COLLEGE SHOULD MAP TO LIBRARY
+    else if (normalizedCategory && lowerCategory) {
+      if (categoryMap[lowerCategory]) {
+        finalCategory = categoryMap[lowerCategory];
+        console.log('✅ Category mapped via categoryMap:', normalizedCategory, '→', finalCategory);
+      } else {
+        console.log('⚠️ Category NOT in map, using default Services. Key:', lowerCategory, 'Available keys:', Object.keys(categoryMap).slice(0, 10));
+      }
     }
     // If still not valid, finalCategory is already 'Services'
+    else {
+      console.log('⚠️ No normalized category, using default Services');
+    }
     
-    console.log('🔍 Category input:', category, 'Normalized:', normalizedCategory, 'Lower:', lowerCategory, '→ Final:', finalCategory);
+    console.log('🔍 FINAL RESULT - Category:', category, '→ Final:', finalCategory);
 
     // Set default email and phone if not provided
     const finalEmail = email || 'example@gmail.com';
@@ -612,7 +630,7 @@ export const updateBusiness = async (req, res) => {
         'clinic': 'Clinic', 'clinics': 'Clinic', 'hospital': 'Clinic', 'medical': 'Clinic',
         'healthcare': 'Clinic', 'spa': 'Clinic', 'salon': 'Clinic', 'beauty': 'Clinic',
         'library': 'Library', 'libraries': 'Library', 'book': 'Library', 'school': 'Library',
-        'college': 'Library', 'education': 'Library',
+        'college': 'Library', 'colleges': 'Library', 'education': 'Library', 'educational': 'Library',
         'hotel': 'Hotel', 'hotels': 'Hotel', 'lodging': 'Hotel', 'accommodation': 'Hotel',
         'tourism': 'Hotel', 'travel agency': 'Hotel', 'travel': 'Hotel',
         'restaurant': 'Restaurant', 'restaurants': 'Restaurant', 'food': 'Restaurant',
