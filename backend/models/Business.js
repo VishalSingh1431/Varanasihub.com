@@ -8,6 +8,14 @@ class Business {
    * Create a new business
    */
   static async create(data) {
+    // FINAL SAFETY CHECK - ensure category is ALWAYS valid
+    const validCategories = ['Shop', 'Clinic', 'Library', 'Hotel', 'Restaurant', 'Services'];
+    const safeCategory = validCategories.includes(data.category) ? data.category : 'Services';
+    
+    if (data.category !== safeCategory) {
+      console.log('🛡️ Business.create: Category converted', data.category, '→', safeCategory);
+    }
+    
     const query = `
       INSERT INTO businesses (
         business_name, owner_name, category, mobile, email, address,
@@ -20,7 +28,7 @@ class Business {
     const values = [
       data.businessName,
       data.ownerName || null,
-      data.category,
+      safeCategory, // Use safe category
       data.mobile,
       data.email.toLowerCase(),
       data.address,

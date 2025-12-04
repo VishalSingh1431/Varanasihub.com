@@ -103,20 +103,21 @@ export const createBusiness = async (req, res) => {
     
     // Normalize: convert to string, trim, handle null/undefined
     const normalizedCategory = categoryValue ? String(categoryValue).trim() : '';
+    const lowerCategory = normalizedCategory.toLowerCase();
     
-    // Map ANY variation to valid category - handle "Other" and all variations
+    // Map ANY variation to valid category - comprehensive mapping
     const categoryMap = {
       'shop': 'Shop', 'shops': 'Shop', 'store': 'Shop', 'stores': 'Shop',
       'clinic': 'Clinic', 'clinics': 'Clinic', 'hospital': 'Clinic', 'medical': 'Clinic',
       'library': 'Library', 'libraries': 'Library', 'book': 'Library',
       'hotel': 'Hotel', 'hotels': 'Hotel', 'lodging': 'Hotel', 'accommodation': 'Hotel',
       'restaurant': 'Restaurant', 'restaurants': 'Restaurant', 'food': 'Restaurant', 'dining': 'Restaurant',
-      'services': 'Services', 'service': 'Services', 'other': 'Services', 'others': 'Services', 'general': 'Services', 'misc': 'Services', 'miscellaneous': 'Services'
+      'services': 'Services', 'service': 'Services', 'other': 'Services', 'others': 'Services', 
+      'general': 'Services', 'misc': 'Services', 'miscellaneous': 'Services', 'default': 'Services'
     };
     
     // Force to valid category - default to Services if anything fails
     let finalCategory = 'Services'; // ALWAYS default to Services
-    const lowerCategory = normalizedCategory.toLowerCase();
     
     if (normalizedCategory && validCategories.includes(normalizedCategory)) {
       finalCategory = normalizedCategory;
@@ -125,7 +126,7 @@ export const createBusiness = async (req, res) => {
     }
     // If still not valid, finalCategory is already 'Services'
     
-    console.log('🔍 Category input:', category, 'Normalized:', normalizedCategory, '→ Final:', finalCategory);
+    console.log('🔍 Category input:', category, 'Normalized:', normalizedCategory, 'Lower:', lowerCategory, '→ Final:', finalCategory);
 
     // Set default email and phone if not provided
     const finalEmail = email || 'example@gmail.com';
@@ -328,11 +329,12 @@ export const createBusiness = async (req, res) => {
       requiresApproval: true,
     });
   } catch (error) {
-    console.error('Error creating business:', error);
-    console.error('Error stack:', error.stack);
+    console.error('❌ Error creating business:', error.message);
+    console.error('Error code:', error.code);
+    console.error('Category received from request:', req.body?.category);
+    console.error('Final category that was used:', typeof finalCategory !== 'undefined' ? finalCategory : 'NOT SET');
+    console.error('Safe category that was used:', typeof safeCategory !== 'undefined' ? safeCategory : 'NOT SET');
     console.error('Request body keys:', Object.keys(req.body || {}));
-    console.error('Category received:', req.body?.category);
-    console.error('Final category used:', finalCategory);
     console.error('Request files keys:', Object.keys(req.files || {}));
     
     // Handle PostgreSQL unique constraint violation
