@@ -23,22 +23,22 @@ export const securityMiddleware = helmet({
 });
 
 /**
- * Rate limiting for API routes
+ * Rate limiting for API routes - DISABLED (no limits)
  */
 export const apiLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 1000000, // Very high limit (effectively unlimited)
   message: 'Too many requests from this IP, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
 });
 
 /**
- * Stricter rate limiting for auth routes
+ * Rate limiting for auth routes - DISABLED (no limits)
  */
 export const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // Limit each IP to 10 login attempts per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: 1000000, // Very high limit (effectively unlimited)
   message: 'Too many authentication attempts, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
@@ -46,11 +46,11 @@ export const authLimiter = rateLimit({
 });
 
 /**
- * Rate limiting for file uploads
+ * Rate limiting for file uploads - DISABLED (no limits)
  */
 export const uploadLimiter = rateLimit({
-  windowMs: 60 * 60 * 1000, // 1 hour
-  max: 50, // Limit each IP to 50 uploads per hour
+  windowMs: 60 * 60 * 1000,
+  max: 1000000, // Very high limit (effectively unlimited)
   message: 'Too many file uploads, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,

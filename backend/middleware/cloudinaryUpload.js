@@ -93,15 +93,8 @@ export const processCloudinaryUploads = async (req, res, next) => {
       req.files.logo[0].cloudinary = logoResult;
     }
 
-    // Process gallery images - max 10 images
+    // Process gallery images - no limit
     if (req.files?.images && req.files.images.length > 0) {
-      // Limit to 10 images
-      if (req.files.images.length > 10) {
-        return res.status(400).json({ 
-          error: 'Maximum 10 images allowed. Please select only 10 images.' 
-        });
-      }
-      
       const imagePromises = req.files.images.map((image) =>
         uploadToCloudinary(
           image.buffer,
