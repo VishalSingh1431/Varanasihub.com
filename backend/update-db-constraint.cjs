@@ -1,21 +1,6 @@
-// Update database constraint - CommonJS version
-// Run from project root: node update-db-constraint.cjs
-// OR from backend: node ../update-db-constraint.cjs
+// Update database constraint - Run from backend directory
 const { Pool } = require('pg');
-const path = require('path');
-const fs = require('fs');
-
-// Try to find .env file
-let envPath = path.join(__dirname, 'backend', '.env');
-if (!fs.existsSync(envPath)) {
-  envPath = path.join(__dirname, '.env');
-}
-if (!fs.existsSync(envPath)) {
-  console.error('❌ .env file not found. Please run from project root or backend directory.');
-  process.exit(1);
-}
-
-require('dotenv').config({ path: envPath });
+require('dotenv').config({ path: '.env' });
 
 async function updateConstraint() {
   const pool = new Pool({
