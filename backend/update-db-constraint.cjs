@@ -39,7 +39,15 @@ async function updateConstraint() {
 
   try {
     console.log('🔄 Updating database constraint...');
-    console.log('Connecting to:', process.env.DB_HOST || process.env.POSTGRES_HOST);
+    console.log('DB_HOST:', process.env.DB_HOST || process.env.POSTGRES_HOST || 'NOT SET');
+    console.log('DB_NAME:', process.env.DB_NAME || process.env.POSTGRES_DB || 'NOT SET');
+    console.log('DB_USER:', process.env.DB_USER || process.env.POSTGRES_USER || 'NOT SET');
+    
+    if (!process.env.DB_HOST && !process.env.POSTGRES_HOST) {
+      console.error('❌ DB_HOST is not set in .env file!');
+      console.error('Please check your .env file has DB_HOST or POSTGRES_HOST');
+      process.exit(1);
+    }
     
     // Drop old constraint
     await pool.query('ALTER TABLE businesses DROP CONSTRAINT IF EXISTS businesses_category_check;');
