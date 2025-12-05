@@ -1578,56 +1578,79 @@ export const generateBusinessHTML = (business) => {
 
     <!-- Main Content -->
     <main style="max-width: 100vw; overflow-x: hidden; box-sizing: border-box;">
-    <!-- Hero Section -->
-    <section id="home" class="relative bg-gray-50 py-20 md:py-32">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full" style="max-width: 100%; box-sizing: border-box;">
-        <div class="text-center">
+    <!-- Enhanced Hero Section - Full Width with Better Design -->
+    <section id="home" class="relative bg-gradient-to-r ${theme.primary} text-white py-20 md:py-28 lg:py-32 overflow-hidden">
+      <!-- Animated Background Elements -->
+      <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+      </div>
+      
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full" style="max-width: 100%; box-sizing: border-box;">
+        <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
           ${business.logoUrl ? `
-          <div class="flex justify-center mb-8">
-            <div class="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 flex items-center justify-center">
-              <img src="${escapeHtml(business.logoUrl)}" alt="${escapeHtml(generateImageAlt(business.logoUrl || '', 0, 'logo'))}" class="max-w-full max-h-full w-auto h-auto object-contain rounded-2xl bg-white p-4 sm:p-6 shadow-lg border border-gray-200" style="max-width: 100%; height: auto;" itemProp="logo">
-            </div>
+          <div class="flex-shrink-0">
+            <img src="${escapeHtml(business.logoUrl)}" alt="${escapeHtml(generateImageAlt(business.logoUrl || '', 0, 'logo'))}" class="w-40 h-40 md:w-48 md:h-48 object-contain rounded-3xl bg-white/20 backdrop-blur-md p-4 md:p-6 shadow-2xl border-4 border-white/30" style="max-width: 100%; height: auto;" itemProp="logo">
           </div>
           ` : `
-          <div class="flex justify-center mb-8">
-            <div class="w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 bg-gray-200 rounded-2xl flex items-center justify-center shadow-lg border border-gray-300">
-              <span class="text-gray-600 text-5xl sm:text-6xl md:text-7xl font-bold">${escapeHtml(business.businessName.charAt(0).toUpperCase())}</span>
-            </div>
+          <div class="flex-shrink-0 w-40 h-40 md:w-48 md:h-48 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center shadow-2xl border-4 border-white/30">
+            <span class="text-white text-6xl md:text-7xl font-bold">${escapeHtml(business.businessName.charAt(0).toUpperCase())}</span>
           </div>
           `}
-          
-          <div class="mb-4">
-            <span class="inline-block px-4 py-2 bg-gray-100 text-gray-700 rounded-full text-sm font-medium mb-6">
-              ${escapeHtml(business.category)} in Varanasi
-            </span>
-          </div>
-          
-          <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight flex items-center justify-center gap-3 flex-wrap" itemProp="name">
-            <span itemProp="name">${escapeHtml(business.businessName)}</span>
-            ${business.verified ? '<span class="inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-full text-sm md:text-base font-bold shadow-lg" title="Verified Business"><svg class="w-5 h-5 md:w-6 md:h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg> Verified</span>' : ''}
-            ${business.isPremium ? '<svg class="w-10 h-10 md:w-12 md:h-12 text-blue-600 inline-block" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" title="Premium Business"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>' : ''}
-          </h1>
-          
-          ${business.ownerName ? `<p class="text-lg md:text-xl text-gray-600 mb-4 font-medium">Owner: ${escapeHtml(ownerFirstName)}</p>` : ''}
-          ${business.navbarTagline ? `<p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8 leading-relaxed">${escapeHtml(business.navbarTagline)}</p>` : ''}
-          ${business.description ? `<p class="text-base md:text-lg text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed">${escapeHtml(business.description.substring(0, 150))}${business.description.length > 150 ? '...' : ''}</p>` : ''}
-          
-          <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            ${business.mobile ? `
-            <a href="tel:${escapeHtml(business.mobile)}" class="px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold text-base hover:bg-blue-700 transition-all duration-200 inline-flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-              </svg>
-              Call Now
-            </a>
+          <div class="flex-1 text-center md:text-left max-w-3xl">
+            ${business.category ? `
+            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold mb-4 border border-white/30">
+              <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+              ${escapeHtml(business.category)}
+            </div>
             ` : ''}
-            ${business.whatsapp ? `
-            <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/[^0-9]/g, ''))}" target="_blank" class="px-8 py-4 bg-green-600 text-white rounded-lg font-semibold text-base hover:bg-green-700 transition-all duration-200 inline-flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+            
+            <!-- Trust Badge -->
+            ${business.googlePlacesData?.rating ? `
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium mb-4 border border-white/30">
+              <svg class="w-3 h-3 fill-yellow-400 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
               </svg>
-              WhatsApp Us
-            </a>
+              <span>${business.googlePlacesData.rating} Rating</span>
+            </div>
+            ` : ''}
+            
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 break-words leading-tight tracking-tight" itemProp="name">
+              ${escapeHtml(business.businessName)}
+            </h1>
+            
+            ${business.ownerName ? `
+            <p class="text-base sm:text-lg md:text-xl text-white/90 mb-3 font-medium">
+              Owner: <span class="font-semibold">${escapeHtml(business.ownerName)}</span>
+            </p>
+            ` : ''}
+            
+            ${business.navbarTagline ? `
+            <p class="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 md:mb-8 italic font-light leading-relaxed">
+              ${escapeHtml(business.navbarTagline)}
+            </p>
+            ` : ''}
+            
+            <!-- Enhanced CTAs -->
+            ${(business.mobile || business.whatsapp) ? `
+            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+              ${business.mobile ? `
+              <a href="tel:${escapeHtml(business.mobile)}" class="group px-8 py-4 ${theme.button} text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 hover:shadow-2xl text-base sm:text-lg shadow-lg">
+                <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                </svg>
+                Call Now
+              </a>
+              ` : ''}
+              ${business.whatsapp ? `
+              <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/[^0-9]/g, ''))}" target="_blank" rel="noopener noreferrer" class="group px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 hover:shadow-2xl text-base sm:text-lg shadow-lg">
+                <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                </svg>
+                WhatsApp
+              </a>
+              ` : ''}
+            </div>
             ` : ''}
           </div>
         </div>

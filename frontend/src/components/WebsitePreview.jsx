@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react';
-import { X, Phone, Mail, MapPin, Instagram, Facebook, Globe, Youtube, Clock, Calendar, Gift, ShoppingBag, Map, MessageCircle } from 'lucide-react';
+import { X, Phone, Mail, MapPin, Instagram, Facebook, Globe, Youtube, Clock, Calendar, Gift, ShoppingBag, Map, MessageCircle, Star, ChevronLeft, ChevronRight, Copy, Check, ArrowUp, Share2, Menu, ChevronDown, ChevronUp } from 'lucide-react';
 
 const WebsitePreview = ({ formData, onClose }) => {
   const [imageUrls, setImageUrls] = useState([]);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [showReadMore, setShowReadMore] = useState(false);
+  const [currentReviewPage, setCurrentReviewPage] = useState(0);
+  const [currentOfferPage, setCurrentOfferPage] = useState(0);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [copiedText, setCopiedText] = useState('');
 
   // Cleanup object URLs on unmount
   useEffect(() => {
@@ -186,6 +194,99 @@ const WebsitePreview = ({ formData, onClose }) => {
     return !!(formData.mobileNumber || formData.email || formData.address);
   };
 
+  // Lightbox functions
+  const openLightbox = (index) => {
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+  };
+
+  const nextImage = () => {
+    setLightboxIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setLightboxIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  // Copy to clipboard
+  const copyToClipboard = (text, label) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopiedText(label);
+      setTimeout(() => setCopiedText(''), 2000);
+    });
+  };
+
+  // Scroll to top
+  const scrollToTop = () => {
+    const previewContent = document.querySelector('.preview-content');
+    if (previewContent) {
+      previewContent.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  // Show back to top button on scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      const previewContent = document.querySelector('.preview-content');
+      if (previewContent) {
+        setShowBackToTop(previewContent.scrollTop > 300);
+      }
+    };
+    const previewContent = document.querySelector('.preview-content');
+    if (previewContent) {
+      previewContent.addEventListener('scroll', handleScroll);
+      return () => previewContent.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const handleKeyPress = (e) => {
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextImage();
+      if (e.key === 'ArrowLeft') prevImage();
+    };
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [lightboxOpen, lightboxIndex, images.length]);
+
+  // Calculate stats
+  const stats = {
+    yearsInBusiness: formData.googlePlacesData?.yearsInBusiness || 5,
+    customersServed: formData.googlePlacesData?.customersServed || 1000,
+    rating: formData.googlePlacesData?.rating || 4.5,
+    totalRatings: formData.googlePlacesData?.totalRatings || 50,
+  };
+
+  // Reviews pagination
+  const reviewsPerPage = 6;
+  const totalReviewPages = formData.googlePlacesData?.reviews 
+    ? Math.ceil(formData.googlePlacesData.reviews.length / reviewsPerPage)
+    : 0;
+  const paginatedReviews = formData.googlePlacesData?.reviews 
+    ? formData.googlePlacesData.reviews.slice(
+        currentReviewPage * reviewsPerPage,
+        (currentReviewPage + 1) * reviewsPerPage
+      )
+    : [];
+
+  // Special offers pagination
+  const offersPerPage = 2;
+  const totalOfferPages = formData.specialOffers 
+    ? Math.ceil(formData.specialOffers.length / offersPerPage)
+    : 0;
+  const paginatedOffers = formData.specialOffers 
+    ? formData.specialOffers.slice(
+        currentOfferPage * offersPerPage,
+        (currentOfferPage + 1) * offersPerPage
+      )
+    : [];
+
   if (!formData.businessName) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
@@ -225,17 +326,17 @@ const WebsitePreview = ({ formData, onClose }) => {
         </div>
 
         {/* Preview Content */}
-        <div className="p-0">
-          {/* Navbar */}
-          <nav className={`bg-white border-b-2 ${theme.accent.replace('text-', 'border-')} sticky top-0 z-50 shadow-sm`}>
+        <div className="p-0 preview-content overflow-y-auto" style={{ maxHeight: 'calc(90vh - 80px)' }}>
+          {/* Enhanced Navbar with Glassmorphism */}
+          <nav className={`bg-white/95 backdrop-blur-md border-b-2 ${theme.accent.replace('text-', 'border-')} sticky top-0 z-50 shadow-lg transition-all duration-300`}>
             <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
-              <div className="flex items-center justify-between flex-wrap gap-2 sm:gap-4">
+              <div className="flex items-center justify-between gap-2 sm:gap-4">
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                   {logoUrl ? (
-                    <img src={logoUrl} alt={formData.businessName} className="w-10 h-10 sm:w-12 sm:h-12 object-contain rounded-lg flex-shrink-0" />
+                    <img src={logoUrl} alt={formData.businessName} className="w-10 h-10 sm:w-12 sm:h-12 object-contain rounded-lg flex-shrink-0 shadow-md" />
                   ) : (
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <span className="text-gray-600 font-bold text-lg sm:text-xl">{formData.businessName.charAt(0).toUpperCase()}</span>
+                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+                      <span className="text-white font-bold text-lg sm:text-xl">{formData.businessName.charAt(0).toUpperCase()}</span>
                     </div>
                   )}
                   <div className="min-w-0 flex-1">
@@ -245,56 +346,143 @@ const WebsitePreview = ({ formData, onClose }) => {
                     )}
                   </div>
                 </div>
-                <div className="flex items-center gap-2 sm:gap-4 flex-wrap text-sm sm:text-base">
-                  <a href="#home" className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap">Home</a>
+                
+                {/* Desktop Navigation */}
+                <div className="hidden md:flex items-center gap-4 text-sm">
+                  <a href="#home" className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-colors">Home</a>
+                  {formData.description && (
+                    <a href="#about" className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-colors">About</a>
+                  )}
                   {(formData.services && formData.services.length > 0) && (
-                    <a href="#services" className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap">Services</a>
+                    <a href="#services" className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-colors">Services</a>
+                  )}
+                  {images.length > 0 && (
+                    <a href="#gallery" className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-colors">Gallery</a>
                   )}
                   {hasContactInfo() && (
-                    <a href="#contact" className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap">Contact</a>
+                    <a href="#contact" className="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-colors">Contact</a>
+                  )}
+                  {/* Quick Contact Icons */}
+                  {formData.mobileNumber && (
+                    <a href={`tel:${formData.mobileNumber}`} className="p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors" title="Call Now">
+                      <Phone className="w-4 h-4" />
+                    </a>
+                  )}
+                  {formData.whatsappNumber && (
+                    <a href={`https://wa.me/${formData.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors" title="WhatsApp">
+                      <MessageCircle className="w-4 h-4" />
+                    </a>
                   )}
                 </div>
+
+                {/* Mobile Menu Button */}
+                <button
+                  onClick={() => setShowMobileMenu(!showMobileMenu)}
+                  className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                  aria-label="Toggle menu"
+                >
+                  {showMobileMenu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+                </button>
               </div>
+
+              {/* Mobile Menu */}
+              {showMobileMenu && (
+                <div className="md:hidden mt-4 pt-4 border-t border-gray-200 space-y-2">
+                  <a href="#home" onClick={() => setShowMobileMenu(false)} className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">Home</a>
+                  {formData.description && (
+                    <a href="#about" onClick={() => setShowMobileMenu(false)} className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">About</a>
+                  )}
+                  {(formData.services && formData.services.length > 0) && (
+                    <a href="#services" onClick={() => setShowMobileMenu(false)} className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">Services</a>
+                  )}
+                  {images.length > 0 && (
+                    <a href="#gallery" onClick={() => setShowMobileMenu(false)} className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">Gallery</a>
+                  )}
+                  {hasContactInfo() && (
+                    <a href="#contact" onClick={() => setShowMobileMenu(false)} className="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">Contact</a>
+                  )}
+                  <div className="flex gap-2 pt-2">
+                    {formData.mobileNumber && (
+                      <a href={`tel:${formData.mobileNumber}`} className="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg text-center font-medium hover:bg-blue-700 transition-colors">
+                        <Phone className="w-4 h-4 inline mr-2" />
+                        Call
+                      </a>
+                    )}
+                    {formData.whatsappNumber && (
+                      <a href={`https://wa.me/${formData.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg text-center font-medium hover:bg-green-700 transition-colors">
+                        <MessageCircle className="w-4 h-4 inline mr-2" />
+                        WhatsApp
+                      </a>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </nav>
 
-          {/* Hero Section */}
-          <section id="home" className={`bg-gradient-to-r ${theme.primary} text-white py-16 md:py-20`}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Enhanced Hero Section - Full Width with Better Design */}
+          <section id="home" className={`relative bg-gradient-to-r ${theme.primary} text-white py-20 md:py-28 lg:py-32 overflow-hidden`}>
+            {/* Animated Background Elements */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+              <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+            </div>
+            
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
                 {logoUrl ? (
                   <div className="flex-shrink-0">
-                    <img src={logoUrl} alt={formData.businessName} className="w-32 h-32 md:w-40 md:h-40 object-contain rounded-2xl bg-white p-4 md:p-6 shadow-2xl" />
+                    <img src={logoUrl} alt={formData.businessName} className="w-40 h-40 md:w-48 md:h-48 object-contain rounded-3xl bg-white/20 backdrop-blur-md p-4 md:p-6 shadow-2xl border-4 border-white/30 transition-transform duration-300 hover:scale-105" />
                   </div>
                 ) : (
-                  <div className="flex-shrink-0 w-32 h-32 md:w-40 md:h-40 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center shadow-2xl">
-                    <span className="text-white text-5xl md:text-6xl font-bold">{formData.businessName.charAt(0).toUpperCase()}</span>
+                  <div className="flex-shrink-0 w-40 h-40 md:w-48 md:h-48 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center shadow-2xl border-4 border-white/30">
+                    <span className="text-white text-6xl md:text-7xl font-bold">{formData.businessName.charAt(0).toUpperCase()}</span>
                   </div>
                 )}
-                <div className="flex-1 text-center md:text-left max-w-2xl">
+                <div className="flex-1 text-center md:text-left max-w-3xl">
                   {formData.category && (
-                    <div className="inline-block px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold mb-4">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold mb-4 border border-white/30">
+                      <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                       {formData.category}
                     </div>
                   )}
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 break-words px-4 sm:px-0">{formData.businessName}</h1>
+                  
+                  {/* Trust Badge */}
+                  {formData.googlePlacesData?.rating && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium mb-4 border border-white/30">
+                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                      <span>{formData.googlePlacesData.rating} Rating</span>
+                    </div>
+                  )}
+                  
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 break-words leading-tight tracking-tight">
+                    {formData.businessName}
+                  </h1>
+                  
                   {formData.ownerName && (
-                    <p className="text-sm sm:text-base md:text-lg text-blue-100 mb-3 px-4 sm:px-0">Owner: {formData.ownerName}</p>
+                    <p className="text-base sm:text-lg md:text-xl text-white/90 mb-3 font-medium">
+                      Owner: <span className="font-semibold">{formData.ownerName}</span>
+                    </p>
                   )}
+                  
                   {formData.navbarTagline && (
-                    <p className="text-xs sm:text-sm md:text-base lg:text-lg text-blue-100 mb-4 sm:mb-6 md:mb-8 italic px-4 sm:px-0">{formData.navbarTagline}</p>
+                    <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 md:mb-8 italic font-light leading-relaxed">
+                      {formData.navbarTagline}
+                    </p>
                   )}
+                  
+                  {/* Enhanced CTAs */}
                   {(formData.mobileNumber || formData.whatsappNumber) && (
-                    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start px-4 sm:px-0">
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                       {formData.mobileNumber && (
-                        <a href={`tel:${formData.mobileNumber}`} className={`px-4 sm:px-6 py-2.5 sm:py-3 ${theme.button} text-white rounded-lg font-semibold flex items-center justify-center gap-2 transition-transform hover:scale-105 text-sm sm:text-base`}>
-                          <Phone className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <a href={`tel:${formData.mobileNumber}`} className={`group px-8 py-4 ${theme.button} text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 hover:shadow-2xl text-base sm:text-lg shadow-lg`}>
+                          <Phone className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                           Call Now
                         </a>
                       )}
                       {formData.whatsappNumber && (
-                        <a href={`https://wa.me/${formData.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="px-4 sm:px-6 py-2.5 sm:py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold flex items-center justify-center gap-2 transition-transform hover:scale-105 text-sm sm:text-base">
-                          <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <a href={`https://wa.me/${formData.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="group px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 hover:shadow-2xl text-base sm:text-lg shadow-lg">
+                          <MessageCircle className="w-5 h-5 group-hover:rotate-12 transition-transform" />
                           WhatsApp
                         </a>
                       )}
@@ -305,37 +493,155 @@ const WebsitePreview = ({ formData, onClose }) => {
             </div>
           </section>
 
-          {/* Description Section */}
-          {formData.description && formData.description.trim() && (
-            <section className="py-12 md:py-16 bg-gray-50">
-              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 text-center">About Us</h2>
-                <p className="text-base md:text-lg text-gray-700 leading-relaxed whitespace-pre-line text-center md:text-left">{formData.description}</p>
+          {/* Stats/Metrics Section */}
+          {(stats.yearsInBusiness || stats.customersServed || stats.rating) && (
+            <section className="py-8 md:py-12 bg-white border-b border-gray-200">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+                  {stats.yearsInBusiness && (
+                    <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl border border-blue-100">
+                      <div className="text-3xl md:text-4xl font-black text-blue-600 mb-1">{stats.yearsInBusiness}+</div>
+                      <div className="text-xs md:text-sm text-gray-600 font-medium">Years in Business</div>
+                    </div>
+                  )}
+                  {stats.customersServed && (
+                    <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
+                      <div className="text-3xl md:text-4xl font-black text-green-600 mb-1">{stats.customersServed}+</div>
+                      <div className="text-xs md:text-sm text-gray-600 font-medium">Happy Customers</div>
+                    </div>
+                  )}
+                  {stats.rating && (
+                    <div className="text-center p-4 bg-gradient-to-br from-yellow-50 to-amber-50 rounded-xl border border-yellow-100">
+                      <div className="flex items-center justify-center gap-1 mb-1">
+                        <Star className="w-5 h-5 md:w-6 md:h-6 fill-yellow-400 text-yellow-400" />
+                        <span className="text-3xl md:text-4xl font-black text-yellow-600">{stats.rating}</span>
+                      </div>
+                      <div className="text-xs md:text-sm text-gray-600 font-medium">Average Rating</div>
+                    </div>
+                  )}
+                  {stats.totalRatings && (
+                    <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border border-purple-100">
+                      <div className="text-3xl md:text-4xl font-black text-purple-600 mb-1">{stats.totalRatings}+</div>
+                      <div className="text-xs md:text-sm text-gray-600 font-medium">Reviews</div>
+                    </div>
+                  )}
+                </div>
               </div>
             </section>
           )}
 
-          {/* Services Section */}
+          {/* Enhanced Description Section - Two Column Layout */}
+          {formData.description && formData.description.trim() && (
+            <section id="about" className="py-12 md:py-16 bg-gray-50">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+                  About <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Us</span>
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+                  <div className="order-2 md:order-1">
+                    <div className="prose prose-lg max-w-none">
+                      {formData.description.length > 300 && !showReadMore ? (
+                        <>
+                          <p className="text-base md:text-lg text-gray-700 leading-relaxed whitespace-pre-line">
+                            {formData.description.substring(0, 300)}...
+                          </p>
+                          <button
+                            onClick={() => setShowReadMore(true)}
+                            className="mt-4 text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2"
+                          >
+                            Read More
+                            <ChevronDown className="w-4 h-4" />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-base md:text-lg text-gray-700 leading-relaxed whitespace-pre-line">
+                            {formData.description}
+                          </p>
+                          {formData.description.length > 300 && showReadMore && (
+                            <button
+                              onClick={() => setShowReadMore(false)}
+                              className="mt-4 text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2"
+                            >
+                              Read Less
+                              <ChevronUp className="w-4 h-4" />
+                            </button>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  {images.length > 0 && (
+                    <div className="order-1 md:order-2">
+                      <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                        <img 
+                          src={images[0]} 
+                          alt={formData.businessName} 
+                          className="w-full h-64 md:h-80 object-cover"
+                          onClick={() => openLightbox(0)}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end justify-center pb-4">
+                          <span className="text-white text-sm font-medium">Click to view gallery</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Enhanced Services Section - Better Cards with Hover Effects */}
           {formData.services && formData.services.length > 0 && (
             <section id="services" className="py-12 md:py-16 bg-white">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 md:mb-12 text-center">Our Services</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+                  Our <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Services</span>
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                   {formData.services.map((service, idx) => (
-                    <div key={idx} className={`bg-white rounded-xl shadow-lg overflow-hidden border-2 ${service.featured ? 'border-yellow-400 ring-2 ring-yellow-200' : 'border-gray-200'} transition-transform hover:scale-105`}>
-                      {serviceImageUrls[idx] && (
-                        <img src={serviceImageUrls[idx]} alt={service.title || 'Service'} className="w-full h-48 object-cover" />
+                    <div 
+                      key={idx} 
+                      className={`group bg-white rounded-2xl shadow-lg overflow-hidden border-2 transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
+                        service.featured 
+                          ? 'border-yellow-400 ring-4 ring-yellow-200 bg-gradient-to-br from-yellow-50 to-orange-50' 
+                          : 'border-gray-200 hover:border-blue-300'
+                      }`}
+                    >
+                      {serviceImageUrls[idx] ? (
+                        <div className="relative overflow-hidden h-56">
+                          <img 
+                            src={serviceImageUrls[idx]} 
+                            alt={service.title || 'Service'} 
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          {service.featured && (
+                            <div className="absolute top-4 left-4 px-3 py-1 bg-yellow-400 text-yellow-900 text-xs font-black rounded-full shadow-lg">
+                              ⭐ FEATURED
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className={`h-56 bg-gradient-to-br ${service.featured ? 'from-yellow-200 to-orange-200' : 'from-blue-100 to-purple-100'} flex items-center justify-center`}>
+                          <ShoppingBag className={`w-16 h-16 ${service.featured ? 'text-yellow-700' : 'text-blue-600'} opacity-50`} />
+                        </div>
                       )}
                       <div className="p-6">
-                        {service.featured && (
-                          <span className="inline-block px-2 py-1 bg-yellow-400 text-yellow-900 text-xs font-bold rounded mb-2">FEATURED</span>
+                        {service.featured && !serviceImageUrls[idx] && (
+                          <span className="inline-block px-3 py-1 bg-yellow-400 text-yellow-900 text-xs font-black rounded-full mb-3 shadow-md">
+                            ⭐ FEATURED
+                          </span>
                         )}
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">{service.title || 'Service Title'}</h3>
+                        <h3 className="text-xl md:text-2xl font-black text-gray-900 mb-3">{service.title || 'Service Title'}</h3>
                         {service.description && (
-                          <p className="text-gray-600 mb-3">{service.description}</p>
+                          <p className="text-gray-600 mb-4 leading-relaxed line-clamp-3">{service.description}</p>
                         )}
                         {service.price && (
-                          <p className="text-2xl font-bold text-blue-600">₹{service.price}</p>
+                          <div className="flex items-baseline gap-2">
+                            <span className="text-3xl font-black text-blue-600">₹{service.price}</span>
+                            <span className="text-sm text-gray-500">per service</span>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -345,119 +651,268 @@ const WebsitePreview = ({ formData, onClose }) => {
             </section>
           )}
 
-          {/* Special Offers Section */}
+          {/* Enhanced Special Offers Section - Carousel with Countdown */}
           {formData.specialOffers && formData.specialOffers.length > 0 && (
-            <section className="py-12 md:py-16 bg-gradient-to-r from-red-50 to-orange-50">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 md:mb-12 text-center">Special Offers</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {formData.specialOffers.map((offer, idx) => {
-                    const daysLeft = daysUntilExpiry(offer.expiryDate);
-                    return (
-                      <div key={idx} className="bg-white rounded-xl shadow-lg p-6 border-2 border-red-300 relative overflow-hidden transition-transform hover:scale-105">
-                        {daysLeft !== null && daysLeft <= 3 && (
-                          <span className="absolute top-4 right-4 px-3 py-1 bg-red-600 text-white text-xs font-bold rounded-full">URGENT</span>
-                        )}
-                        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">{offer.title || 'Special Offer'}</h3>
-                        {offer.description && (
-                          <p className="text-gray-600 mb-4">{offer.description}</p>
-                        )}
-                        {offer.expiryDate && (
-                          <div className="flex items-center gap-2 text-sm text-gray-600 flex-wrap">
-                            <Clock className="w-4 h-4" />
-                            <span>Expires: {new Date(offer.expiryDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                            {daysLeft !== null && (
-                              <span className={`ml-2 px-2 py-1 rounded ${daysLeft <= 3 ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'}`}>
-                                {daysLeft > 0 ? `${daysLeft} days left` : 'Expired'}
-                              </span>
+            <section className="py-12 md:py-16 bg-gradient-to-r from-red-50 via-orange-50 to-yellow-50 relative overflow-hidden">
+              {/* Background Pattern */}
+              <div className="absolute inset-0 opacity-5">
+                <div className="absolute top-0 left-0 w-64 h-64 bg-red-500 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 right-0 w-64 h-64 bg-orange-500 rounded-full blur-3xl"></div>
+              </div>
+              
+              <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-8 md:mb-12">
+                  <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-2">
+                    Special <span className="bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">Offers</span>
+                  </h2>
+                  <p className="text-gray-600">Limited time offers - Don't miss out!</p>
+                </div>
+                
+                {/* Offers Carousel */}
+                <div className="relative">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    {paginatedOffers.map((offer, idx) => {
+                      const daysLeft = daysUntilExpiry(offer.expiryDate);
+                      const isUrgent = daysLeft !== null && daysLeft <= 3;
+                      const isExpired = daysLeft !== null && daysLeft <= 0;
+                      
+                      return (
+                        <div 
+                          key={idx} 
+                          className={`bg-white rounded-2xl shadow-xl p-6 md:p-8 border-2 relative overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
+                            isUrgent ? 'border-red-400 ring-4 ring-red-200' : 
+                            isExpired ? 'border-gray-300 opacity-60' : 
+                            'border-orange-300'
+                          }`}
+                        >
+                          {/* Urgent Badge */}
+                          {isUrgent && (
+                            <div className="absolute top-0 right-0 bg-gradient-to-r from-red-600 to-red-700 text-white px-4 py-2 rounded-bl-2xl shadow-lg">
+                              <span className="text-xs font-bold animate-pulse">⚡ URGENT</span>
+                            </div>
+                          )}
+                          
+                          {/* Expired Badge */}
+                          {isExpired && (
+                            <div className="absolute top-0 right-0 bg-gray-600 text-white px-4 py-2 rounded-bl-2xl">
+                              <span className="text-xs font-bold">EXPIRED</span>
+                            </div>
+                          )}
+                          
+                          <div className="flex items-start gap-3 mb-4">
+                            <Gift className={`w-8 h-8 ${isUrgent ? 'text-red-600' : 'text-orange-600'}`} />
+                            <div className="flex-1">
+                              <h3 className="text-2xl md:text-3xl font-black text-gray-900 mb-2">{offer.title || 'Special Offer'}</h3>
+                              {offer.description && (
+                                <p className="text-gray-600 mb-4 leading-relaxed">{offer.description}</p>
+                              )}
+                            </div>
+                          </div>
+                          
+                          {offer.expiryDate && (
+                            <div className="flex items-center justify-between flex-wrap gap-3 p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl border border-gray-200">
+                              <div className="flex items-center gap-2 text-sm text-gray-700">
+                                <Clock className="w-4 h-4" />
+                                <span className="font-medium">
+                                  Expires: {new Date(offer.expiryDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                </span>
+                              </div>
+                              {daysLeft !== null && (
+                                <div className={`px-4 py-2 rounded-full font-bold text-sm ${
+                                  isUrgent ? 'bg-red-100 text-red-700 animate-pulse' : 
+                                  isExpired ? 'bg-gray-100 text-gray-500' : 
+                                  'bg-yellow-100 text-yellow-700'
+                                }`}>
+                                  {isExpired ? 'Expired' : isUrgent ? `⚠️ ${daysLeft} days left!` : `⏰ ${daysLeft} days left`}
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Carousel Navigation */}
+                  {totalOfferPages > 1 && (
+                    <div className="flex items-center justify-center gap-4">
+                      <button
+                        onClick={() => setCurrentOfferPage(prev => Math.max(0, prev - 1))}
+                        disabled={currentOfferPage === 0}
+                        className="p-2 rounded-full bg-white border-2 border-gray-300 hover:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      <span className="text-sm text-gray-600 font-medium">
+                        {currentOfferPage + 1} / {totalOfferPages}
+                      </span>
+                      <button
+                        onClick={() => setCurrentOfferPage(prev => Math.min(totalOfferPages - 1, prev + 1))}
+                        disabled={currentOfferPage === totalOfferPages - 1}
+                        className="p-2 rounded-full bg-white border-2 border-gray-300 hover:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Enhanced Business Hours Section - Visual Timeline */}
+          {hasBusinessHours() && (
+            <section className="py-12 md:py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+                  Business <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Hours</span>
+                </h2>
+                <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border-2 border-gray-100">
+                  {/* Real-time Status */}
+                  <div className="flex items-center justify-center gap-4 mb-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+                    <div className={`w-5 h-5 rounded-full ${isOpenNow() ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+                    <span className={`text-xl md:text-2xl font-bold ${isOpenNow() ? 'text-green-700' : 'text-red-700'}`}>
+                      {isOpenNow() ? '🟢 Open Now' : '🔴 Closed Now'}
+                    </span>
+                    {formData.mobileNumber && (
+                      <a 
+                        href={`tel:${formData.mobileNumber}`}
+                        className="ml-auto text-sm text-blue-600 hover:text-blue-700 font-medium underline"
+                      >
+                        Call to Confirm
+                      </a>
+                    )}
+                  </div>
+                  
+                  {/* Hours Timeline */}
+                  <div className="space-y-3">
+                    {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day, index) => {
+                      const hours = formData.businessHours?.[day];
+                      const isToday = new Date().getDay() === (index === 0 ? 6 : index);
+                      return (
+                        <div 
+                          key={day} 
+                          className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
+                            isToday 
+                              ? 'bg-blue-50 border-blue-300 shadow-md' 
+                              : 'bg-gray-50 border-gray-200 hover:border-gray-300'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className={`font-bold text-sm md:text-base capitalize min-w-[100px] ${isToday ? 'text-blue-700' : 'text-gray-900'}`}>
+                              {isToday && '📅 '}
+                              {day}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            {hours && hours.open ? (
+                              <>
+                                <Clock className={`w-4 h-4 ${isToday ? 'text-blue-600' : 'text-gray-500'}`} />
+                                <span className={`font-semibold ${isToday ? 'text-blue-700' : 'text-gray-700'}`}>
+                                  {hours.start} - {hours.end}
+                                </span>
+                              </>
+                            ) : (
+                              <span className="text-gray-400 italic font-medium">Closed</span>
                             )}
                           </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* Business Hours Section */}
-          {hasBusinessHours() && (
-            <section className="py-12 md:py-16 bg-white">
-              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center">Business Hours</h2>
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <div className="flex items-center justify-center gap-3 mb-6">
-                    <div className={`w-4 h-4 rounded-full ${isOpenNow() ? 'bg-green-500' : 'bg-red-500'}`}></div>
-                    <span className={`text-lg font-semibold ${isOpenNow() ? 'text-green-700' : 'text-red-700'}`}>
-                      {isOpenNow() ? 'Open Now' : 'Closed Now'}
-                    </span>
-                  </div>
-                  <div className="space-y-3">
-                    {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => (
-                      <div key={day} className="flex items-center justify-between py-2 border-b border-gray-200 last:border-0">
-                        <span className="font-medium text-gray-900 capitalize">{day}</span>
-                        <span className="text-gray-600">{formatHours(day)}</span>
-                      </div>
-                    ))}
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
             </section>
           )}
 
-          {/* Google Reviews Section */}
+          {/* Enhanced Google Reviews Section - Carousel */}
           {formData.googlePlacesData?.reviews && formData.googlePlacesData.reviews.length > 0 && (
-            <section className="py-12 md:py-16 bg-gray-50">
-              <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <section className="py-12 md:py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-8 md:mb-12">
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">Google Reviews</h2>
+                  <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-6">
+                    Customer <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Reviews</span>
+                  </h2>
                   {formData.googlePlacesData.rating && (
-                    <div className="flex items-center justify-center gap-2 mb-2 flex-wrap">
-                      <span className="text-3xl font-bold text-gray-900">{formData.googlePlacesData.rating}</span>
-                      <div className="flex text-yellow-400">
+                    <div className="inline-flex items-center gap-3 px-6 py-3 bg-white rounded-full shadow-lg border-2 border-blue-200 mb-4">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
+                        <span className="text-3xl font-black text-gray-900">{formData.googlePlacesData.rating}</span>
+                      </div>
+                      <div className="h-8 w-px bg-gray-300"></div>
+                      <div className="flex text-yellow-400 text-lg">
                         {[...Array(5)].map((_, i) => (
-                          <span key={i}>{i < Math.round(formData.googlePlacesData.rating) ? '★' : '☆'}</span>
+                          <Star key={i} className={`w-5 h-5 ${i < Math.round(formData.googlePlacesData.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
                         ))}
                       </div>
                       {formData.googlePlacesData.totalRatings > 0 && (
-                        <span className="text-gray-600">({formData.googlePlacesData.totalRatings} reviews)</span>
+                        <>
+                          <div className="h-8 w-px bg-gray-300"></div>
+                          <span className="text-gray-600 font-semibold">({formData.googlePlacesData.totalRatings} reviews)</span>
+                        </>
                       )}
                     </div>
                   )}
                   {formData.googlePlacesData.priceLevel !== null && formData.googlePlacesData.priceLevel !== undefined && (
-                    <p className="text-gray-600">Price Level: {'$'.repeat(formData.googlePlacesData.priceLevel + 1)}</p>
+                    <p className="text-gray-600 font-medium">Price Level: <span className="text-green-600 font-bold">{'$'.repeat(formData.googlePlacesData.priceLevel + 1)}</span></p>
                   )}
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {formData.googlePlacesData.reviews.slice(0, 6).map((review, idx) => (
-                    <div key={idx} className="bg-white rounded-xl shadow-md p-6">
-                      <div className="flex items-center gap-3 mb-4">
+                
+                {/* Reviews Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                  {paginatedReviews.map((review, idx) => (
+                    <div key={idx} className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100 hover:border-blue-200 transition-all duration-300 hover:shadow-xl">
+                      <div className="flex items-start gap-4 mb-4">
                         {review.authorPhoto ? (
-                          <img src={review.authorPhoto} alt={review.authorName} className="w-12 h-12 rounded-full object-cover" />
+                          <img src={review.authorPhoto} alt={review.authorName} className="w-14 h-14 rounded-full object-cover border-2 border-gray-200" />
                         ) : (
-                          <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                            <span className="text-blue-600 font-semibold">{review.authorName?.charAt(0) || 'U'}</span>
+                          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center flex-shrink-0 border-2 border-gray-200">
+                            <span className="text-white font-bold text-lg">{review.authorName?.charAt(0) || 'U'}</span>
                           </div>
                         )}
                         <div className="min-w-0 flex-1">
-                          <p className="font-semibold text-gray-900 truncate">{review.authorName || 'Anonymous'}</p>
-                          <div className="flex text-yellow-400 text-sm">
+                          <p className="font-bold text-gray-900 truncate mb-1">{review.authorName || 'Anonymous'}</p>
+                          <div className="flex text-yellow-400 text-sm mb-2">
                             {[...Array(5)].map((_, i) => (
-                              <span key={i}>{i < review.rating ? '★' : '☆'}</span>
+                              <Star key={i} className={`w-4 h-4 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
                             ))}
                           </div>
+                          {review.time && (
+                            <p className="text-gray-500 text-xs">{review.time}</p>
+                          )}
                         </div>
                       </div>
                       {review.text && (
-                        <p className="text-gray-700 text-sm line-clamp-4">{review.text}</p>
-                      )}
-                      {review.time && (
-                        <p className="text-gray-500 text-xs mt-3">{review.time}</p>
+                        <p className="text-gray-700 text-sm leading-relaxed line-clamp-5">{review.text}</p>
                       )}
                     </div>
                   ))}
                 </div>
+                
+                {/* Reviews Pagination */}
+                {totalReviewPages > 1 && (
+                  <div className="flex items-center justify-center gap-4">
+                    <button
+                      onClick={() => setCurrentReviewPage(prev => Math.max(0, prev - 1))}
+                      disabled={currentReviewPage === 0}
+                      className="px-4 py-2 rounded-lg bg-white border-2 border-gray-300 hover:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                    >
+                      <ChevronLeft className="w-5 h-5 inline mr-1" />
+                      Previous
+                    </button>
+                    <span className="text-sm text-gray-600 font-medium px-4">
+                      Page {currentReviewPage + 1} of {totalReviewPages}
+                    </span>
+                    <button
+                      onClick={() => setCurrentReviewPage(prev => Math.min(totalReviewPages - 1, prev + 1))}
+                      disabled={currentReviewPage === totalReviewPages - 1}
+                      className="px-4 py-2 rounded-lg bg-white border-2 border-gray-300 hover:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                    >
+                      Next
+                      <ChevronRight className="w-5 h-5 inline ml-1" />
+                    </button>
+                  </div>
+                )}
               </div>
             </section>
           )}
@@ -609,12 +1064,14 @@ const WebsitePreview = ({ formData, onClose }) => {
             </section>
           )}
 
-          {/* Video Section */}
+          {/* Enhanced Video Section */}
           {embedUrl && (
-            <section className="py-12 md:py-16 bg-gray-50">
-              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6 md:mb-8 text-center">Watch Our Video</h2>
-                <div className="aspect-video rounded-xl overflow-hidden shadow-2xl">
+            <section className="py-12 md:py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+              <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+                  Watch Our <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Video</span>
+                </h2>
+                <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
                   <iframe
                     src={embedUrl}
                     title="Business Video"
@@ -622,23 +1079,110 @@ const WebsitePreview = ({ formData, onClose }) => {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   ></iframe>
+                  <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
+                {formData.youtubeVideo && (
+                  <div className="text-center mt-6">
+                    <a
+                      href={formData.youtubeVideo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors"
+                    >
+                      <Youtube className="w-5 h-5" />
+                      Watch on YouTube
+                    </a>
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* Enhanced Gallery Section - Masonry Grid with Lightbox */}
+          {images.length > 0 && (
+            <section id="gallery" className="py-12 md:py-16 bg-white">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+                  Photo <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Gallery</span>
+                </h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
+                  {images.map((img, idx) => (
+                    <div
+                      key={idx}
+                      className="relative group cursor-pointer rounded-lg overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300"
+                      onClick={() => openLightbox(idx)}
+                    >
+                      <img 
+                        src={img} 
+                        alt={`Gallery ${idx + 1}`} 
+                        className="w-full h-48 md:h-56 object-cover transition-transform duration-300 group-hover:scale-110"
+                        loading="lazy"
+                      />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+                        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                          <div className="bg-white/90 backdrop-blur-sm rounded-full p-3">
+                            <svg className="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </section>
           )}
 
-          {/* Gallery Section */}
-          {images.length > 0 && (
-            <section className="py-12 md:py-16 bg-white">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-8 md:mb-12 text-center">Gallery</h2>
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {images.map((img, idx) => (
-                    <img key={idx} src={img} alt={`Gallery ${idx + 1}`} className="w-full h-48 object-cover rounded-lg shadow-md transition-transform hover:scale-105" />
-                  ))}
-                </div>
+          {/* Lightbox Modal */}
+          {lightboxOpen && images.length > 0 && (
+            <div 
+              className="fixed inset-0 bg-black/90 z-[9999] flex items-center justify-center p-4"
+              onClick={closeLightbox}
+            >
+              <button
+                onClick={closeLightbox}
+                className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-[10000] bg-black/50 rounded-full p-2 hover:bg-black/70"
+                aria-label="Close lightbox"
+              >
+                <X className="w-6 h-6 sm:w-8 sm:h-8" />
+              </button>
+              
+              {images.length > 1 && (
+                <>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-[10000] bg-black/50 rounded-full p-2 sm:p-3 hover:bg-black/70"
+                    aria-label="Previous image"
+                  >
+                    <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </button>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-[10000] bg-black/50 rounded-full p-2 sm:p-3 hover:bg-black/70"
+                    aria-label="Next image"
+                  >
+                    <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </button>
+                </>
+              )}
+              
+              <div 
+                className="max-w-6xl w-full max-h-[85vh] px-4"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <img 
+                  src={images[lightboxIndex]} 
+                  alt={`Gallery ${lightboxIndex + 1}`}
+                  className="w-full h-auto max-h-[75vh] object-contain rounded-lg mx-auto"
+                />
+                {images.length > 1 && (
+                  <div className="text-center text-white mt-4 text-sm sm:text-base">
+                    {lightboxIndex + 1} / {images.length}
+                  </div>
+                )}
               </div>
-            </section>
+            </div>
           )}
 
           {/* Contact Section */}
@@ -695,10 +1239,13 @@ const WebsitePreview = ({ formData, onClose }) => {
                 </div>
                 {formData.googleMapLink && (
                   <div className="mt-8">
-                    <h3 className="text-xl font-semibold mb-4 text-center">Find Us</h3>
-                    <div className="bg-gray-800 rounded-lg p-4 space-y-4">
-                      {/* Embedded Google Map */}
-                      <div className="w-full h-64 rounded-lg overflow-hidden bg-gray-700">
+                    <h3 className="text-2xl font-bold mb-6 text-center flex items-center justify-center gap-2">
+                      <Map className="w-6 h-6" />
+                      Find Us on Map
+                    </h3>
+                    <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 md:p-6 space-y-4 border border-white/20">
+                      {/* Enhanced Embedded Google Map */}
+                      <div className="w-full h-64 md:h-80 rounded-xl overflow-hidden bg-gray-700 shadow-2xl border-2 border-white/20">
                         {(() => {
                           // Extract place ID or use address for embedding
                           let embedUrl = '';
@@ -725,6 +1272,7 @@ const WebsitePreview = ({ formData, onClose }) => {
                               loading="lazy"
                               referrerPolicy="no-referrer-when-downgrade"
                               title="Business Location"
+                              className="w-full h-full"
                             ></iframe>
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-gray-400">
@@ -733,16 +1281,36 @@ const WebsitePreview = ({ formData, onClose }) => {
                           );
                         })()}
                       </div>
-                      {/* Link to open in Google Maps */}
-                      <a 
-                        href={formData.googleMapLink} 
-                        target="_blank" 
-                        rel="noopener noreferrer" 
-                        className="text-blue-400 hover:text-blue-300 flex items-center gap-2 justify-center transition-colors"
-                      >
-                        <Map className="w-5 h-5" />
-                        Open in Google Maps
-                      </a>
+                      {/* Enhanced Link to open in Google Maps */}
+                      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                        <a 
+                          href={formData.googleMapLink} 
+                          target="_blank" 
+                          rel="noopener noreferrer" 
+                          className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold transition-all duration-300 hover:scale-105 shadow-lg"
+                        >
+                          <Map className="w-5 h-5" />
+                          Open in Google Maps
+                        </a>
+                        {formData.address && (
+                          <button
+                            onClick={() => copyToClipboard(formData.address, 'map')}
+                            className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 text-white rounded-xl font-semibold transition-all duration-300 border border-white/20"
+                          >
+                            {copiedText === 'map' ? (
+                              <>
+                                <Check className="w-5 h-5 text-green-400" />
+                                Copied!
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-5 h-5" />
+                                Copy Address
+                              </>
+                            )}
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
@@ -750,41 +1318,189 @@ const WebsitePreview = ({ formData, onClose }) => {
             </section>
           )}
 
-          {/* Footer */}
-          <footer className={`bg-gradient-to-r ${theme.footer || 'from-gray-900 via-gray-800 to-gray-900'} text-white py-8 md:py-12`}>
+          {/* Enhanced Footer - Multi-column with Newsletter */}
+          <footer className={`bg-gradient-to-r ${theme.footer || 'from-gray-900 via-gray-800 to-gray-900'} text-white py-12 md:py-16`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div>
-                  <h3 className="text-xl font-bold mb-4">{formData.businessName}</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+                {/* Business Info */}
+                <div className="lg:col-span-1">
+                  <h3 className="text-2xl font-black mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                    {formData.businessName}
+                  </h3>
                   {formData.footerDescription && formData.footerDescription.trim() && (
-                    <p className="text-gray-300">{formData.footerDescription}</p>
+                    <p className="text-gray-300 text-sm leading-relaxed mb-4">{formData.footerDescription}</p>
+                  )}
+                  {formData.category && (
+                    <span className="inline-block px-3 py-1 bg-white/10 rounded-full text-xs font-semibold text-gray-300">
+                      {formData.category}
+                    </span>
                   )}
                 </div>
+                
+                {/* Quick Links */}
                 <div>
-                  <h4 className="font-semibold mb-4">Quick Links</h4>
+                  <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
+                    <span>Quick Links</span>
+                  </h4>
                   <ul className="space-y-2 text-gray-300">
-                    <li><a href="#home" className="hover:text-white transition-colors">Home</a></li>
+                    <li><a href="#home" className="hover:text-white transition-colors flex items-center gap-2 group">
+                      <span className="w-0 group-hover:w-2 h-0.5 bg-white transition-all"></span>
+                      Home
+                    </a></li>
+                    {formData.description && (
+                      <li><a href="#about" className="hover:text-white transition-colors flex items-center gap-2 group">
+                        <span className="w-0 group-hover:w-2 h-0.5 bg-white transition-all"></span>
+                        About
+                      </a></li>
+                    )}
                     {(formData.services && formData.services.length > 0) && (
-                      <li><a href="#services" className="hover:text-white transition-colors">Services</a></li>
+                      <li><a href="#services" className="hover:text-white transition-colors flex items-center gap-2 group">
+                        <span className="w-0 group-hover:w-2 h-0.5 bg-white transition-all"></span>
+                        Services
+                      </a></li>
+                    )}
+                    {images.length > 0 && (
+                      <li><a href="#gallery" className="hover:text-white transition-colors flex items-center gap-2 group">
+                        <span className="w-0 group-hover:w-2 h-0.5 bg-white transition-all"></span>
+                        Gallery
+                      </a></li>
                     )}
                     {hasContactInfo() && (
-                      <li><a href="#contact" className="hover:text-white transition-colors">Contact</a></li>
+                      <li><a href="#contact" className="hover:text-white transition-colors flex items-center gap-2 group">
+                        <span className="w-0 group-hover:w-2 h-0.5 bg-white transition-all"></span>
+                        Contact
+                      </a></li>
                     )}
                   </ul>
                 </div>
+                
+                {/* Contact Info */}
                 <div>
-                  <h4 className="font-semibold mb-4">Contact</h4>
-                  <ul className="space-y-2 text-gray-300">
-                    {formData.mobileNumber && <li className="break-all">{formData.mobileNumber}</li>}
-                    {formData.email && <li className="break-all">{formData.email}</li>}
+                  <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
+                    <Phone className="w-5 h-5" />
+                    Contact
+                  </h4>
+                  <ul className="space-y-3 text-gray-300">
+                    {formData.mobileNumber && (
+                      <li className="flex items-start gap-2">
+                        <Phone className="w-4 h-4 mt-1 flex-shrink-0" />
+                        <a href={`tel:${formData.mobileNumber}`} className="hover:text-white transition-colors break-all">
+                          {formData.mobileNumber}
+                        </a>
+                      </li>
+                    )}
+                    {formData.email && (
+                      <li className="flex items-start gap-2">
+                        <Mail className="w-4 h-4 mt-1 flex-shrink-0" />
+                        <a href={`mailto:${formData.email}`} className="hover:text-white transition-colors break-all">
+                          {formData.email}
+                        </a>
+                      </li>
+                    )}
+                    {formData.address && (
+                      <li className="flex items-start gap-2">
+                        <MapPin className="w-4 h-4 mt-1 flex-shrink-0" />
+                        <span className="break-words text-sm">{formData.address}</span>
+                      </li>
+                    )}
                   </ul>
                 </div>
+                
+                {/* Social Media */}
+                {hasSocialMedia() && (
+                  <div>
+                    <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
+                      <Share2 className="w-5 h-5" />
+                      Follow Us
+                    </h4>
+                    <div className="flex flex-wrap gap-3">
+                      {formData.instagram && (
+                        <a href={formData.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gradient-to-br from-pink-500 to-purple-600 rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                          <Instagram className="w-6 h-6" />
+                        </a>
+                      )}
+                      {formData.facebook && (
+                        <a href={formData.facebook} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                          <Facebook className="w-6 h-6" />
+                        </a>
+                      )}
+                      {formData.website && (
+                        <a href={formData.website} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-gray-600 rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                          <Globe className="w-6 h-6" />
+                        </a>
+                      )}
+                      {formData.youtubeVideo && (
+                        <a href={formData.youtubeVideo} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center hover:scale-110 transition-transform shadow-lg">
+                          <Youtube className="w-6 h-6" />
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; {new Date().getFullYear()} {formData.businessName}. All rights reserved.</p>
+              
+              {/* Bottom Bar */}
+              <div className="border-t border-gray-700 pt-8 mt-8">
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                  <p className="text-gray-400 text-sm text-center md:text-left">
+                    &copy; {new Date().getFullYear()} <span className="font-semibold text-white">{formData.businessName}</span>. All rights reserved.
+                  </p>
+                  <p className="text-gray-400 text-sm">
+                    Made with ❤️ by <a href="https://varanasihub.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:text-blue-300">VaranasiHub</a>
+                  </p>
+                </div>
               </div>
             </div>
           </footer>
+
+          {/* Floating Action Buttons - Mobile */}
+          <div className="fixed bottom-4 right-4 z-[100] flex flex-col gap-3 md:hidden">
+            {/* Back to Top */}
+            {showBackToTop && (
+              <button
+                onClick={scrollToTop}
+                className="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-blue-700 transition-all duration-300 hover:scale-110"
+                aria-label="Back to top"
+              >
+                <ArrowUp className="w-6 h-6" />
+              </button>
+            )}
+            
+            {/* WhatsApp FAB */}
+            {formData.whatsappNumber && (
+              <a
+                href={`https://wa.me/${formData.whatsappNumber.replace(/\D/g, '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-14 h-14 bg-green-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-green-700 transition-all duration-300 hover:scale-110 animate-bounce"
+                aria-label="WhatsApp"
+              >
+                <MessageCircle className="w-7 h-7" />
+              </a>
+            )}
+            
+            {/* Call FAB */}
+            {formData.mobileNumber && (
+              <a
+                href={`tel:${formData.mobileNumber}`}
+                className="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-blue-700 transition-all duration-300 hover:scale-110"
+                aria-label="Call"
+              >
+                <Phone className="w-7 h-7" />
+              </a>
+            )}
+          </div>
+
+          {/* Back to Top Button - Desktop */}
+          {showBackToTop && (
+            <button
+              onClick={scrollToTop}
+              className="hidden md:fixed md:bottom-8 md:right-8 z-[100] w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all duration-300"
+              aria-label="Back to top"
+            >
+              <ArrowUp className="w-6 h-6" />
+            </button>
+          )}
         </div>
       </div>
     </div>
