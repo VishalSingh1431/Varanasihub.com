@@ -184,16 +184,6 @@ class Business {
         'food & beverage': 'Food & Beverage', 'retail': 'Retail', 'wholesale': 'Wholesale',
         'manufacturing': 'Manufacturing', 'construction': 'Construction', 'other': 'Other',
         'hospital': 'Clinic', 'lodging': 'Hotel', 'food': 'Restaurant', 'general': 'Services', 'misc': 'Other'
-        'hotel': 'Hotel', 'hotels': 'Hotel', 'lodging': 'Hotel', 'accommodation': 'Hotel',
-        'tourism': 'Hotel', 'travel agency': 'Hotel', 'travel': 'Hotel',
-        'restaurant': 'Restaurant', 'restaurants': 'Restaurant', 'food': 'Restaurant',
-        'dining': 'Restaurant', 'food & beverage': 'Restaurant', 'catering': 'Restaurant',
-        'services': 'Services', 'service': 'Services', 'other': 'Services', 'others': 'Services',
-        'general': 'Services', 'misc': 'Services', 'miscellaneous': 'Services', 'default': 'Services',
-        'temple': 'Services', 'gym': 'Services', 'fitness': 'Services', 'real estate': 'Services',
-        'law firm': 'Services', 'accounting': 'Services', 'it services': 'Services',
-        'photography': 'Services', 'event management': 'Services', 'repair services': 'Services',
-        'entertainment': 'Services'
       };
       
       const lowerCategory = String(data.category).toLowerCase();
