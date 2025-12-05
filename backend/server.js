@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 import compression from 'compression';
 import morgan from 'morgan';
 import { initializeDatabase } from './config/database.js';
@@ -15,7 +17,10 @@ import abTestRoutes from './routes/abTestRoutes.js';
 import appointmentRoutes from './routes/appointmentRoutes.js';
 import googlePlacesRoutes from './routes/googlePlacesRoutes.js';
 
-dotenv.config();
+// Load .env from backend directory (works even when run from different directory)
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+dotenv.config({ path: join(__dirname, '.env') });
 
 // Validate environment variables
 validateEnv();

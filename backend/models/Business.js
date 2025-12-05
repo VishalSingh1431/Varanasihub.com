@@ -183,7 +183,7 @@ class Business {
         'fitness': 'Fitness', 'entertainment': 'Entertainment', 'tourism': 'Tourism',
         'food & beverage': 'Food & Beverage', 'retail': 'Retail', 'wholesale': 'Wholesale',
         'manufacturing': 'Manufacturing', 'construction': 'Construction', 'other': 'Other',
-        'hospital': 'Clinic', 'lodging': 'Hotel', 'food': 'Restaurant', 'general': 'Services', 'misc': 'Other'
+        'hospital': 'Clinic', 'lodging': 'Hotel', 'food': 'Restaurant', 'general': 'Services', 'misc': 'Other',
       };
       
       const lowerCategory = String(data.category).toLowerCase();
