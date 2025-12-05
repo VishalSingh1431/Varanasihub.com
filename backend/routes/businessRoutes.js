@@ -10,6 +10,7 @@ import {
   updateBusiness,
   checkSubdomainAvailability,
   getPublicStats,
+  testCreateCollege,
 } from '../controllers/businessController.js';
 import { uploadBusinessMedia, processCloudinaryUploads } from '../middleware/cloudinaryUpload.js';
 import { verifyToken } from '../middleware/auth.js';
@@ -36,6 +37,10 @@ router.post('/create', uploadLimiter, (req, res, next) => {
     next();
   });
 }, processCloudinaryUploads, createBusiness);
+
+// TEST ENDPOINT - Create test business with College category (POST to create, GET to test mapping)
+router.post('/test-college', testCreateCollege);
+router.get('/test-college', testCreateCollege);
 
 // Get public statistics (must come before /:slug to avoid conflicts)
 router.get('/stats', getPublicStats);

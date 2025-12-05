@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "jspdf": "^3.0.4",
-    "recharts": "^3.4.1"
-  }
-}

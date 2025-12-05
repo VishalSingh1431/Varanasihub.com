@@ -9,28 +9,28 @@ class Business {
    */
   static async create(data) {
     // FINAL SAFETY CHECK - ensure category is ALWAYS valid
-    const validCategories = ['Shop', 'Clinic', 'Library', 'Hotel', 'Restaurant', 'Services'];
+    const validCategories = ['Shop', 'Restaurant', 'Hotel', 'Clinic', 'Library', 'Services', 'Temple', 'School', 'College', 'Gym', 'Salon', 'Spa', 'Pharmacy', 'Bank', 'Travel Agency', 'Real Estate', 'Law Firm', 'Accounting', 'IT Services', 'Photography', 'Event Management', 'Catering', 'Bakery', 'Jewelry', 'Fashion', 'Electronics', 'Furniture', 'Automobile', 'Repair Services', 'Education', 'Healthcare', 'Beauty', 'Fitness', 'Entertainment', 'Tourism', 'Food & Beverage', 'Retail', 'Wholesale', 'Manufacturing', 'Construction', 'Other'];
     
     // Comprehensive mapping for any category that slips through - matches controller mapping
     const categoryMap = {
-      'shop': 'Shop', 'shops': 'Shop', 'store': 'Shop', 'stores': 'Shop', 'retail': 'Shop',
-      'jewelry': 'Shop', 'fashion': 'Shop', 'electronics': 'Shop', 'furniture': 'Shop',
-      'automobile': 'Shop', 'wholesale': 'Shop', 'manufacturing': 'Shop', 'construction': 'Shop',
-      'bakery': 'Shop', 'pharmacy': 'Shop', 'bank': 'Shop',
-      'clinic': 'Clinic', 'clinics': 'Clinic', 'hospital': 'Clinic', 'medical': 'Clinic',
-      'healthcare': 'Clinic', 'spa': 'Clinic', 'salon': 'Clinic', 'beauty': 'Clinic',
-      'library': 'Library', 'libraries': 'Library', 'book': 'Library', 'school': 'Library',
-      'college': 'Library', 'education': 'Library',
-      'hotel': 'Hotel', 'hotels': 'Hotel', 'lodging': 'Hotel', 'accommodation': 'Hotel',
-      'tourism': 'Hotel', 'travel agency': 'Hotel', 'travel': 'Hotel',
-      'restaurant': 'Restaurant', 'restaurants': 'Restaurant', 'food': 'Restaurant',
-      'dining': 'Restaurant', 'food & beverage': 'Restaurant', 'catering': 'Restaurant',
-      'services': 'Services', 'service': 'Services', 'other': 'Services', 'others': 'Services',
-      'general': 'Services', 'misc': 'Services', 'miscellaneous': 'Services', 'default': 'Services',
-      'temple': 'Services', 'gym': 'Services', 'fitness': 'Services', 'real estate': 'Services',
-      'law firm': 'Services', 'accounting': 'Services', 'it services': 'Services',
-      'photography': 'Services', 'event management': 'Services', 'repair services': 'Services',
-      'entertainment': 'Services'
+      'shop': 'Shop', 'shops': 'Shop', 'store': 'Shop', 'stores': 'Shop',
+      'restaurant': 'Restaurant', 'restaurants': 'Restaurant',
+      'hotel': 'Hotel', 'hotels': 'Hotel',
+      'clinic': 'Clinic', 'clinics': 'Clinic',
+      'library': 'Library', 'libraries': 'Library',
+      'services': 'Services', 'service': 'Services',
+      'temple': 'Temple', 'school': 'School', 'college': 'College', 'gym': 'Gym',
+      'salon': 'Salon', 'spa': 'Spa', 'pharmacy': 'Pharmacy', 'bank': 'Bank',
+      'travel agency': 'Travel Agency', 'real estate': 'Real Estate', 'law firm': 'Law Firm',
+      'accounting': 'Accounting', 'it services': 'IT Services', 'photography': 'Photography',
+      'event management': 'Event Management', 'catering': 'Catering', 'bakery': 'Bakery',
+      'jewelry': 'Jewelry', 'fashion': 'Fashion', 'electronics': 'Electronics',
+      'furniture': 'Furniture', 'automobile': 'Automobile', 'repair services': 'Repair Services',
+      'education': 'Education', 'healthcare': 'Healthcare', 'beauty': 'Beauty',
+      'fitness': 'Fitness', 'entertainment': 'Entertainment', 'tourism': 'Tourism',
+      'food & beverage': 'Food & Beverage', 'retail': 'Retail', 'wholesale': 'Wholesale',
+      'manufacturing': 'Manufacturing', 'construction': 'Construction', 'other': 'Other',
+      'hospital': 'Clinic', 'lodging': 'Hotel', 'food': 'Restaurant', 'general': 'Services', 'misc': 'Other'
     };
     
     let safeCategory = 'Services'; // Default
@@ -164,16 +164,26 @@ class Business {
     // FINAL SAFETY CHECK for category in update too
     let safeCategory = data.category;
     if (data.category) {
-      const validCategories = ['Shop', 'Clinic', 'Library', 'Hotel', 'Restaurant', 'Services'];
+      const validCategories = ['Shop', 'Restaurant', 'Hotel', 'Clinic', 'Library', 'Services', 'Temple', 'School', 'College', 'Gym', 'Salon', 'Spa', 'Pharmacy', 'Bank', 'Travel Agency', 'Real Estate', 'Law Firm', 'Accounting', 'IT Services', 'Photography', 'Event Management', 'Catering', 'Bakery', 'Jewelry', 'Fashion', 'Electronics', 'Furniture', 'Automobile', 'Repair Services', 'Education', 'Healthcare', 'Beauty', 'Fitness', 'Entertainment', 'Tourism', 'Food & Beverage', 'Retail', 'Wholesale', 'Manufacturing', 'Construction', 'Other'];
       const categoryMap = {
-        'shop': 'Shop', 'shops': 'Shop', 'store': 'Shop', 'stores': 'Shop', 'retail': 'Shop',
-        'jewelry': 'Shop', 'fashion': 'Shop', 'electronics': 'Shop', 'furniture': 'Shop',
-        'automobile': 'Shop', 'wholesale': 'Shop', 'manufacturing': 'Shop', 'construction': 'Shop',
-        'bakery': 'Shop', 'pharmacy': 'Shop', 'bank': 'Shop',
-        'clinic': 'Clinic', 'clinics': 'Clinic', 'hospital': 'Clinic', 'medical': 'Clinic',
-        'healthcare': 'Clinic', 'spa': 'Clinic', 'salon': 'Clinic', 'beauty': 'Clinic',
-        'library': 'Library', 'libraries': 'Library', 'book': 'Library', 'school': 'Library',
-        'college': 'Library', 'education': 'Library',
+        'shop': 'Shop', 'shops': 'Shop', 'store': 'Shop', 'stores': 'Shop',
+        'restaurant': 'Restaurant', 'restaurants': 'Restaurant',
+        'hotel': 'Hotel', 'hotels': 'Hotel',
+        'clinic': 'Clinic', 'clinics': 'Clinic',
+        'library': 'Library', 'libraries': 'Library',
+        'services': 'Services', 'service': 'Services',
+        'temple': 'Temple', 'school': 'School', 'college': 'College', 'gym': 'Gym',
+        'salon': 'Salon', 'spa': 'Spa', 'pharmacy': 'Pharmacy', 'bank': 'Bank',
+        'travel agency': 'Travel Agency', 'real estate': 'Real Estate', 'law firm': 'Law Firm',
+        'accounting': 'Accounting', 'it services': 'IT Services', 'photography': 'Photography',
+        'event management': 'Event Management', 'catering': 'Catering', 'bakery': 'Bakery',
+        'jewelry': 'Jewelry', 'fashion': 'Fashion', 'electronics': 'Electronics',
+        'furniture': 'Furniture', 'automobile': 'Automobile', 'repair services': 'Repair Services',
+        'education': 'Education', 'healthcare': 'Healthcare', 'beauty': 'Beauty',
+        'fitness': 'Fitness', 'entertainment': 'Entertainment', 'tourism': 'Tourism',
+        'food & beverage': 'Food & Beverage', 'retail': 'Retail', 'wholesale': 'Wholesale',
+        'manufacturing': 'Manufacturing', 'construction': 'Construction', 'other': 'Other',
+        'hospital': 'Clinic', 'lodging': 'Hotel', 'food': 'Restaurant', 'general': 'Services', 'misc': 'Other'
         'hotel': 'Hotel', 'hotels': 'Hotel', 'lodging': 'Hotel', 'accommodation': 'Hotel',
         'tourism': 'Hotel', 'travel agency': 'Hotel', 'travel': 'Hotel',
         'restaurant': 'Restaurant', 'restaurants': 'Restaurant', 'food': 'Restaurant',

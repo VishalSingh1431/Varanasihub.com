@@ -6,6 +6,151 @@ import { generateBusinessHTML } from '../views/businessTemplate.js';
 import pool from '../config/database.js';
 
 /**
+ * TEST ENDPOINT - Create actual test business with College category
+ */
+export const testCreateCollege = async (req, res) => {
+  try {
+    console.log('🧪 TEST: Creating actual test business with College category');
+    
+    const {
+      businessName = 'Test College Business',
+      ownerName = 'Test Owner',
+      category = 'College',
+      mobileNumber = '0123456789',
+      email = `test-college-${Date.now()}@example.com`,
+      address = 'Test Address, Varanasi, UP',
+      description = 'This is a test business with College category to verify it works correctly',
+    } = req.body;
+    
+    // Validate and normalize category using the same logic as createBusiness
+    const validCategories = ['Shop', 'Restaurant', 'Hotel', 'Clinic', 'Library', 'Services', 'Temple', 'School', 'College', 'Gym', 'Salon', 'Spa', 'Pharmacy', 'Bank', 'Travel Agency', 'Real Estate', 'Law Firm', 'Accounting', 'IT Services', 'Photography', 'Event Management', 'Catering', 'Bakery', 'Jewelry', 'Fashion', 'Electronics', 'Furniture', 'Automobile', 'Repair Services', 'Education', 'Healthcare', 'Beauty', 'Fitness', 'Entertainment', 'Tourism', 'Food & Beverage', 'Retail', 'Wholesale', 'Manufacturing', 'Construction', 'Other'];
+    
+    const categoryMap = {
+      'shop': 'Shop', 'shops': 'Shop', 'store': 'Shop', 'stores': 'Shop',
+      'restaurant': 'Restaurant', 'restaurants': 'Restaurant',
+      'hotel': 'Hotel', 'hotels': 'Hotel',
+      'clinic': 'Clinic', 'clinics': 'Clinic',
+      'library': 'Library', 'libraries': 'Library',
+      'services': 'Services', 'service': 'Services',
+      'temple': 'Temple', 'school': 'School', 'college': 'College', 'gym': 'Gym',
+      'salon': 'Salon', 'spa': 'Spa', 'pharmacy': 'Pharmacy', 'bank': 'Bank',
+      'travel agency': 'Travel Agency', 'real estate': 'Real Estate', 'law firm': 'Law Firm',
+      'accounting': 'Accounting', 'it services': 'IT Services', 'photography': 'Photography',
+      'event management': 'Event Management', 'catering': 'Catering', 'bakery': 'Bakery',
+      'jewelry': 'Jewelry', 'fashion': 'Fashion', 'electronics': 'Electronics',
+      'furniture': 'Furniture', 'automobile': 'Automobile', 'repair services': 'Repair Services',
+      'education': 'Education', 'healthcare': 'Healthcare', 'beauty': 'Beauty',
+      'fitness': 'Fitness', 'entertainment': 'Entertainment', 'tourism': 'Tourism',
+      'food & beverage': 'Food & Beverage', 'retail': 'Retail', 'wholesale': 'Wholesale',
+      'manufacturing': 'Manufacturing', 'construction': 'Construction', 'other': 'Other',
+      'hospital': 'Clinic', 'lodging': 'Hotel', 'food': 'Restaurant', 'general': 'Services', 'misc': 'Other'
+    };
+    
+    let categoryValue = category;
+    if (typeof category === 'object' && category !== null) {
+      categoryValue = category.value || category.name || category.category || 'Services';
+    }
+    
+    const normalizedCategory = categoryValue ? String(categoryValue).trim() : '';
+    const lowerCategory = normalizedCategory.toLowerCase();
+    
+    let finalCategory = 'Services';
+    if (normalizedCategory && validCategories.includes(normalizedCategory)) {
+      finalCategory = normalizedCategory;
+    } else if (normalizedCategory && lowerCategory && categoryMap[lowerCategory]) {
+      finalCategory = categoryMap[lowerCategory];
+    }
+    
+    console.log('🧪 TEST - Category mapping:');
+    console.log('  Input:', category);
+    console.log('  Normalized:', normalizedCategory);
+    console.log('  Lower:', lowerCategory);
+    console.log('  Final:', finalCategory);
+    console.log('  Is valid?', validCategories.includes(finalCategory));
+    
+    // Create the test business
+    const testBusinessData = {
+      businessName,
+      ownerName: ownerName || '',
+      category: finalCategory,
+      mobile: mobileNumber || '0123456789',
+      email: email.toLowerCase(),
+      address,
+      mapLink: '',
+      whatsapp: '',
+      description,
+      logoUrl: null,
+      imagesUrl: [],
+      youtubeVideo: '',
+      navbarTagline: '',
+      footerDescription: '',
+      services: [],
+      specialOffers: [],
+      businessHours: {},
+      appointmentSettings: {},
+      theme: 'modern',
+      socialLinks: {
+        instagram: '',
+        facebook: '',
+        website: '',
+      },
+      slug: `test-college-${Date.now()}`,
+      subdomainUrl: `https://test-college-${Date.now()}.varanasihub.com`,
+      subdirectoryUrl: `https://varanasihub.com/test-college-${Date.now()}`,
+      status: 'pending',
+      userId: null,
+    };
+    
+    console.log('🧪 TEST - Creating business with data:', {
+      businessName: testBusinessData.businessName,
+      category: testBusinessData.category,
+      slug: testBusinessData.slug,
+    });
+    
+    const business = await Business.create(testBusinessData);
+    
+    console.log('✅ TEST SUCCESS - Business created:', {
+      id: business.id,
+      businessName: business.businessName,
+      category: business.category,
+      slug: business.slug,
+    });
+    
+    return res.json({
+      success: true,
+      message: 'Test business created successfully with College category',
+      test: {
+        inputCategory: category,
+        finalCategory: finalCategory,
+        isValid: validCategories.includes(finalCategory),
+        testPassed: finalCategory === 'College',
+        categoryInDatabase: business.category,
+      },
+      business: {
+        id: business.id,
+        businessName: business.businessName,
+        category: business.category,
+        slug: business.slug,
+        subdomainUrl: business.subdomainUrl,
+        subdirectoryUrl: business.subdirectoryUrl,
+      }
+    });
+  } catch (error) {
+    console.error('❌ TEST ERROR:', error);
+    console.error('Error code:', error.code);
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    
+    return res.status(500).json({ 
+      success: false,
+      error: error.message,
+      errorCode: error.code,
+      details: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  }
+};
+
+/**
  * Check subdomain/slug availability
  */
 export const checkSubdomainAvailability = async (req, res) => {
@@ -107,8 +252,8 @@ export const createBusiness = async (req, res) => {
       });
     }
 
-    // Validate and normalize category - FORCE to valid value
-    const validCategories = ['Shop', 'Clinic', 'Library', 'Hotel', 'Restaurant', 'Services'];
+    // Validate and normalize category - ALL categories are separate
+    const validCategories = ['Shop', 'Restaurant', 'Hotel', 'Clinic', 'Library', 'Services', 'Temple', 'School', 'College', 'Gym', 'Salon', 'Spa', 'Pharmacy', 'Bank', 'Travel Agency', 'Real Estate', 'Law Firm', 'Accounting', 'IT Services', 'Photography', 'Event Management', 'Catering', 'Bakery', 'Jewelry', 'Fashion', 'Electronics', 'Furniture', 'Automobile', 'Repair Services', 'Education', 'Healthcare', 'Beauty', 'Fitness', 'Entertainment', 'Tourism', 'Food & Beverage', 'Retail', 'Wholesale', 'Manufacturing', 'Construction', 'Other'];
     
     // Extract category from any format (string, object, etc.)
     let categoryValue = category;
@@ -120,37 +265,58 @@ export const createBusiness = async (req, res) => {
     const normalizedCategory = categoryValue ? String(categoryValue).trim() : '';
     const lowerCategory = normalizedCategory.toLowerCase();
     
-    // COMPREHENSIVE MAPPING - Map ALL 45+ frontend categories to backend's 6 valid categories
+    // MAPPING - Each category maps to itself (all separate categories)
     const categoryMap = {
-      // Shop category (retail, stores, products)
-      'shop': 'Shop', 'shops': 'Shop', 'store': 'Shop', 'stores': 'Shop', 'retail': 'Shop',
-      'jewelry': 'Shop', 'fashion': 'Shop', 'electronics': 'Shop', 'furniture': 'Shop',
-      'automobile': 'Shop', 'wholesale': 'Shop', 'manufacturing': 'Shop', 'construction': 'Shop',
-      'bakery': 'Shop', 'pharmacy': 'Shop', 'bank': 'Shop',
+      // Direct matches - keep as is
+      'shop': 'Shop', 'shops': 'Shop', 'store': 'Shop', 'stores': 'Shop',
+      'restaurant': 'Restaurant', 'restaurants': 'Restaurant',
+      'hotel': 'Hotel', 'hotels': 'Hotel',
+      'clinic': 'Clinic', 'clinics': 'Clinic',
+      'library': 'Library', 'libraries': 'Library',
+      'services': 'Services', 'service': 'Services',
       
-      // Clinic category (health, medical, beauty)
-      'clinic': 'Clinic', 'clinics': 'Clinic', 'hospital': 'Clinic', 'medical': 'Clinic',
-      'healthcare': 'Clinic', 'spa': 'Clinic', 'salon': 'Clinic', 'beauty': 'Clinic',
+      // All other categories - SEPARATE (map to themselves)
+      'temple': 'Temple', 'temples': 'Temple',
+      'school': 'School', 'schools': 'School',
+      'college': 'College', 'colleges': 'College',
+      'gym': 'Gym', 'gyms': 'Gym',
+      'salon': 'Salon', 'salons': 'Salon',
+      'spa': 'Spa', 'spas': 'Spa',
+      'pharmacy': 'Pharmacy', 'pharmacies': 'Pharmacy',
+      'bank': 'Bank', 'banks': 'Bank',
+      'travel agency': 'Travel Agency', 'travel': 'Travel Agency',
+      'real estate': 'Real Estate',
+      'law firm': 'Law Firm', 'law firms': 'Law Firm',
+      'accounting': 'Accounting',
+      'it services': 'IT Services', 'it service': 'IT Services',
+      'photography': 'Photography',
+      'event management': 'Event Management',
+      'catering': 'Catering',
+      'bakery': 'Bakery', 'bakeries': 'Bakery',
+      'jewelry': 'Jewelry',
+      'fashion': 'Fashion',
+      'electronics': 'Electronics',
+      'furniture': 'Furniture',
+      'automobile': 'Automobile', 'automobiles': 'Automobile',
+      'repair services': 'Repair Services',
+      'education': 'Education', 'educational': 'Education',
+      'healthcare': 'Healthcare',
+      'beauty': 'Beauty',
+      'fitness': 'Fitness',
+      'entertainment': 'Entertainment',
+      'tourism': 'Tourism',
+      'food & beverage': 'Food & Beverage', 'food and beverage': 'Food & Beverage',
+      'retail': 'Retail',
+      'wholesale': 'Wholesale',
+      'manufacturing': 'Manufacturing',
+      'construction': 'Construction',
+      'other': 'Other', 'others': 'Other',
       
-      // Library category (education, learning) - COLLEGE MAPS HERE
-      'library': 'Library', 'libraries': 'Library', 'book': 'Library', 'school': 'Library',
-      'college': 'Library', 'colleges': 'Library', 'education': 'Library', 'educational': 'Library',
-      
-      // Hotel category (hospitality, travel, accommodation)
-      'hotel': 'Hotel', 'hotels': 'Hotel', 'lodging': 'Hotel', 'accommodation': 'Hotel',
-      'tourism': 'Hotel', 'travel agency': 'Hotel', 'travel': 'Hotel',
-      
-      // Restaurant category (food, dining)
-      'restaurant': 'Restaurant', 'restaurants': 'Restaurant', 'food': 'Restaurant', 
-      'dining': 'Restaurant', 'food & beverage': 'Restaurant', 'catering': 'Restaurant',
-      
-      // Services category (everything else - default)
-      'services': 'Services', 'service': 'Services', 'other': 'Services', 'others': 'Services',
-      'general': 'Services', 'misc': 'Services', 'miscellaneous': 'Services', 'default': 'Services',
-      'temple': 'Services', 'gym': 'Services', 'fitness': 'Services', 'real estate': 'Services',
-      'law firm': 'Services', 'accounting': 'Services', 'it services': 'Services',
-      'photography': 'Services', 'event management': 'Services', 'repair services': 'Services',
-      'entertainment': 'Services'
+      // Fallbacks for variations
+      'hospital': 'Clinic', 'medical': 'Clinic',
+      'lodging': 'Hotel', 'accommodation': 'Hotel',
+      'food': 'Restaurant', 'dining': 'Restaurant',
+      'general': 'Services', 'misc': 'Other', 'miscellaneous': 'Other', 'default': 'Services'
     };
     
     // Force to valid category - default to Services if anything fails
@@ -333,7 +499,7 @@ export const createBusiness = async (req, res) => {
     }
 
     // FINAL SAFETY CHECK - ensure category is ALWAYS valid before database
-    const validCategories = ['Shop', 'Clinic', 'Library', 'Hotel', 'Restaurant', 'Services'];
+    const validCategories = ['Shop', 'Restaurant', 'Hotel', 'Clinic', 'Library', 'Services', 'Temple', 'School', 'College', 'Gym', 'Salon', 'Spa', 'Pharmacy', 'Bank', 'Travel Agency', 'Real Estate', 'Law Firm', 'Accounting', 'IT Services', 'Photography', 'Event Management', 'Catering', 'Bakery', 'Jewelry', 'Fashion', 'Electronics', 'Furniture', 'Automobile', 'Repair Services', 'Education', 'Healthcare', 'Beauty', 'Fitness', 'Entertainment', 'Tourism', 'Food & Beverage', 'Retail', 'Wholesale', 'Manufacturing', 'Construction', 'Other'];
     let safeCategory = 'Services'; // Default fallback
     
     // Triple check: if finalCategory is valid, use it; otherwise force to Services
@@ -621,26 +787,26 @@ export const updateBusiness = async (req, res) => {
     // Normalize category if provided (same logic as create)
     let finalCategory = existingBusiness.category; // Default to existing
     if (category) {
-      const validCategories = ['Shop', 'Clinic', 'Library', 'Hotel', 'Restaurant', 'Services'];
+      const validCategories = ['Shop', 'Restaurant', 'Hotel', 'Clinic', 'Library', 'Services', 'Temple', 'School', 'College', 'Gym', 'Salon', 'Spa', 'Pharmacy', 'Bank', 'Travel Agency', 'Real Estate', 'Law Firm', 'Accounting', 'IT Services', 'Photography', 'Event Management', 'Catering', 'Bakery', 'Jewelry', 'Fashion', 'Electronics', 'Furniture', 'Automobile', 'Repair Services', 'Education', 'Healthcare', 'Beauty', 'Fitness', 'Entertainment', 'Tourism', 'Food & Beverage', 'Retail', 'Wholesale', 'Manufacturing', 'Construction', 'Other'];
       const categoryMap = {
-        'shop': 'Shop', 'shops': 'Shop', 'store': 'Shop', 'stores': 'Shop', 'retail': 'Shop',
-        'jewelry': 'Shop', 'fashion': 'Shop', 'electronics': 'Shop', 'furniture': 'Shop',
-        'automobile': 'Shop', 'wholesale': 'Shop', 'manufacturing': 'Shop', 'construction': 'Shop',
-        'bakery': 'Shop', 'pharmacy': 'Shop', 'bank': 'Shop',
-        'clinic': 'Clinic', 'clinics': 'Clinic', 'hospital': 'Clinic', 'medical': 'Clinic',
-        'healthcare': 'Clinic', 'spa': 'Clinic', 'salon': 'Clinic', 'beauty': 'Clinic',
-        'library': 'Library', 'libraries': 'Library', 'book': 'Library', 'school': 'Library',
-        'college': 'Library', 'colleges': 'Library', 'education': 'Library', 'educational': 'Library',
-        'hotel': 'Hotel', 'hotels': 'Hotel', 'lodging': 'Hotel', 'accommodation': 'Hotel',
-        'tourism': 'Hotel', 'travel agency': 'Hotel', 'travel': 'Hotel',
-        'restaurant': 'Restaurant', 'restaurants': 'Restaurant', 'food': 'Restaurant',
-        'dining': 'Restaurant', 'food & beverage': 'Restaurant', 'catering': 'Restaurant',
-        'services': 'Services', 'service': 'Services', 'other': 'Services', 'others': 'Services',
-        'general': 'Services', 'misc': 'Services', 'miscellaneous': 'Services', 'default': 'Services',
-        'temple': 'Services', 'gym': 'Services', 'fitness': 'Services', 'real estate': 'Services',
-        'law firm': 'Services', 'accounting': 'Services', 'it services': 'Services',
-        'photography': 'Services', 'event management': 'Services', 'repair services': 'Services',
-        'entertainment': 'Services'
+        'shop': 'Shop', 'shops': 'Shop', 'store': 'Shop', 'stores': 'Shop',
+        'restaurant': 'Restaurant', 'restaurants': 'Restaurant',
+        'hotel': 'Hotel', 'hotels': 'Hotel',
+        'clinic': 'Clinic', 'clinics': 'Clinic',
+        'library': 'Library', 'libraries': 'Library',
+        'services': 'Services', 'service': 'Services',
+        'temple': 'Temple', 'school': 'School', 'college': 'College', 'gym': 'Gym',
+        'salon': 'Salon', 'spa': 'Spa', 'pharmacy': 'Pharmacy', 'bank': 'Bank',
+        'travel agency': 'Travel Agency', 'real estate': 'Real Estate', 'law firm': 'Law Firm',
+        'accounting': 'Accounting', 'it services': 'IT Services', 'photography': 'Photography',
+        'event management': 'Event Management', 'catering': 'Catering', 'bakery': 'Bakery',
+        'jewelry': 'Jewelry', 'fashion': 'Fashion', 'electronics': 'Electronics',
+        'furniture': 'Furniture', 'automobile': 'Automobile', 'repair services': 'Repair Services',
+        'education': 'Education', 'healthcare': 'Healthcare', 'beauty': 'Beauty',
+        'fitness': 'Fitness', 'entertainment': 'Entertainment', 'tourism': 'Tourism',
+        'food & beverage': 'Food & Beverage', 'retail': 'Retail', 'wholesale': 'Wholesale',
+        'manufacturing': 'Manufacturing', 'construction': 'Construction', 'other': 'Other',
+        'hospital': 'Clinic', 'lodging': 'Hotel', 'food': 'Restaurant', 'general': 'Services', 'misc': 'Other'
       };
       
       const normalizedCategory = String(category).trim();

@@ -201,7 +201,7 @@ export const initializeDatabase = async () => {
         id SERIAL PRIMARY KEY,
         business_name VARCHAR(255) NOT NULL,
         owner_name VARCHAR(255),
-        category VARCHAR(50) NOT NULL CHECK (category IN ('Shop', 'Clinic', 'Library', 'Hotel', 'Restaurant', 'Services')),
+        category VARCHAR(50) NOT NULL CHECK (category IN ('Shop', 'Restaurant', 'Hotel', 'Clinic', 'Library', 'Services', 'Temple', 'School', 'College', 'Gym', 'Salon', 'Spa', 'Pharmacy', 'Bank', 'Travel Agency', 'Real Estate', 'Law Firm', 'Accounting', 'IT Services', 'Photography', 'Event Management', 'Catering', 'Bakery', 'Jewelry', 'Fashion', 'Electronics', 'Furniture', 'Automobile', 'Repair Services', 'Education', 'Healthcare', 'Beauty', 'Fitness', 'Entertainment', 'Tourism', 'Food & Beverage', 'Retail', 'Wholesale', 'Manufacturing', 'Construction', 'Other')),
         mobile VARCHAR(20) NOT NULL,
         email VARCHAR(255) NOT NULL,
         address TEXT NOT NULL,
