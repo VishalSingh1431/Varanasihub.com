@@ -1,5 +1,5 @@
 import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
+import rateLimit, { ipKeyGenerator } from 'express-rate-limit';
 
 /**
  * Security middleware configuration
@@ -32,9 +32,14 @@ export const apiLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   keyGenerator: (req) => {
-    // Use req.ip which is already set correctly by trust proxy
-    // This bypasses the validation warning
-    return req.ip || req.socket.remoteAddress || 'unknown';
+    // Use ipKeyGenerator helper for proper IPv6 handling
+    // This normalizes IPv6 addresses with subnet mask to prevent bypass
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    return ipKeyGenerator(ip);
+  },
+  validate: {
+    trustProxy: false, // Disable validation since we handle it securely with trust proxy: 1
+    keyGeneratorIpFallback: false, // Disable validation since we use ipKeyGenerator
   },
 });
 
@@ -49,9 +54,14 @@ export const authLimiter = rateLimit({
   legacyHeaders: false,
   skipSuccessfulRequests: true,
   keyGenerator: (req) => {
-    // Use req.ip which is already set correctly by trust proxy
-    // This bypasses the validation warning
-    return req.ip || req.socket.remoteAddress || 'unknown';
+    // Use ipKeyGenerator helper for proper IPv6 handling
+    // This normalizes IPv6 addresses with subnet mask to prevent bypass
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    return ipKeyGenerator(ip);
+  },
+  validate: {
+    trustProxy: false, // Disable validation since we handle it securely with trust proxy: 1
+    keyGeneratorIpFallback: false, // Disable validation since we use ipKeyGenerator
   },
 });
 
@@ -65,9 +75,14 @@ export const uploadLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   keyGenerator: (req) => {
-    // Use req.ip which is already set correctly by trust proxy
-    // This bypasses the validation warning
-    return req.ip || req.socket.remoteAddress || 'unknown';
+    // Use ipKeyGenerator helper for proper IPv6 handling
+    // This normalizes IPv6 addresses with subnet mask to prevent bypass
+    const ip = req.ip || req.socket.remoteAddress || 'unknown';
+    return ipKeyGenerator(ip);
+  },
+  validate: {
+    trustProxy: false, // Disable validation since we handle it securely with trust proxy: 1
+    keyGeneratorIpFallback: false, // Disable validation since we use ipKeyGenerator
   },
 });
 
