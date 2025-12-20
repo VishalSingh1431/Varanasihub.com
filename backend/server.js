@@ -16,7 +16,10 @@ import ecommerceRoutes from './routes/ecommerceRoutes.js';
 import abTestRoutes from './routes/abTestRoutes.js';
 import appointmentRoutes from './routes/appointmentRoutes.js';
 import googlePlacesRoutes from './routes/googlePlacesRoutes.js';
+<<<<<<< HEAD
 import sitemapRoutes from './routes/sitemapRoutes.js';
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 
 // Load .env from backend directory (works even when run from different directory)
 const __filename = fileURLToPath(import.meta.url);
@@ -54,10 +57,17 @@ app.use(compression());
 
 // CORS configuration
 const corsOptions = {
+<<<<<<< HEAD
   origin: NODE_ENV === 'production'
     ? (process.env.FRONTEND_URL
       ? [process.env.FRONTEND_URL]
       : ['https://varanasihub.com', 'https://www.varanasihub.com'])
+=======
+  origin: NODE_ENV === 'production' 
+    ? (process.env.FRONTEND_URL 
+        ? [process.env.FRONTEND_URL] 
+        : ['https://varanasihub.com', 'https://www.varanasihub.com'])
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     : ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'],
   credentials: true,
   optionsSuccessStatus: 200,
@@ -84,19 +94,31 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   const hostname = req.hostname || req.headers.host || '';
   const parts = hostname.split('.');
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   // Handle localhost subdomains: subdomain.localhost:PORT
   if (hostname.includes('localhost')) {
     const localhostParts = hostname.split(':')[0].split('.');
     if (localhostParts.length > 1 && localhostParts[1] === 'localhost') {
       req.subdomain = localhostParts[0];
     }
+<<<<<<< HEAD
   }
+=======
+  } 
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   // Handle production subdomains: subdomain.domain.com
   else if (parts.length > 2) {
     req.subdomain = parts[0];
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   next();
 });
 
@@ -105,14 +127,24 @@ app.get('/api/health', async (req, res) => {
   try {
     const pool = (await import('./config/database.js')).default;
     await pool.query('SELECT 1');
+<<<<<<< HEAD
     res.json({
       status: 'OK',
+=======
+    res.json({ 
+      status: 'OK', 
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       message: 'VaranasiHub API is running',
       database: 'connected',
     });
   } catch (error) {
+<<<<<<< HEAD
     res.json({
       status: 'OK',
+=======
+    res.json({ 
+      status: 'OK', 
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       message: 'VaranasiHub API is running',
       database: 'disconnected',
       error: process.env.NODE_ENV === 'development' ? {
@@ -138,20 +170,31 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/google-places', googlePlacesRoutes);
 
+<<<<<<< HEAD
 // Sitemap route (must come before subdomain routing)
 app.use('/', sitemapRoutes);
 
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 // Subdomain routing handler (for business websites)
 // This will be called when accessing: business-slug.varanasihub.com
 app.use(async (req, res, next) => {
   const subdomain = req.subdomain;
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   // If there's a subdomain and it's not 'www' or 'api', treat it as a business slug
   if (subdomain && subdomain !== 'www' && subdomain !== 'api' && !req.path.startsWith('/api')) {
     const { getBusinessBySubdomain } = await import('./controllers/businessController.js');
     return getBusinessBySubdomain(req, res, next);
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   next();
 });
 
@@ -159,37 +202,60 @@ app.use(async (req, res, next) => {
 // This will be called when accessing: varanasihub.com/business-slug
 app.get('/:slug', async (req, res, next) => {
   const { slug } = req.params;
+<<<<<<< HEAD
 
   console.log(`[Subdirectory Route] Checking slug: ${slug}, path: ${req.path}, subdomain: ${req.subdomain}`);
 
+=======
+  
+  console.log(`[Subdirectory Route] Checking slug: ${slug}, path: ${req.path}, subdomain: ${req.subdomain}`);
+  
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   // Skip if it's an API route
   if (req.path.startsWith('/api')) {
     console.log(`[Subdirectory Route] Skipping API route: ${req.path}`);
     return next();
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   // Skip if there's a subdomain (subdomain routing takes precedence)
   if (req.subdomain && req.subdomain !== 'www' && req.subdomain !== 'api') {
     console.log(`[Subdirectory Route] Skipping - subdomain present: ${req.subdomain}`);
     return next();
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   // Skip if the path looks like a file (has an extension)
   if (slug.includes('.')) {
     console.log(`[Subdirectory Route] Skipping - looks like a file: ${slug}`);
     return next();
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   try {
     console.log(`[Subdirectory Route] Looking up business with slug: ${slug}`);
     const Business = (await import('./models/Business.js')).default;
     const business = await Business.findBySlug(slug, ['approved']);
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     if (!business) {
       // Business not found, let it fall through to 404 handler
       console.log(`[Subdirectory Route] Business not found for slug: ${slug}`);
       return next();
     }
+<<<<<<< HEAD
 
     console.log(`[Subdirectory Route] Business found: ${business.businessName}, generating HTML...`);
     // Business found, generate and return HTML
@@ -198,6 +264,13 @@ app.get('/:slug', async (req, res, next) => {
       ? `https://${process.env.BASE_DOMAIN || 'varanasihub.com'}/api`
       : `http://localhost:${PORT}/api`;
     const html = generateBusinessHTML(business, apiBaseUrl);
+=======
+    
+    console.log(`[Subdirectory Route] Business found: ${business.businessName}, generating HTML...`);
+    // Business found, generate and return HTML
+    const { generateBusinessHTML } = await import('./views/businessTemplate.js');
+    const html = generateBusinessHTML(business);
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     res.setHeader('Content-Type', 'text/html');
     return res.send(html);
   } catch (error) {
@@ -224,6 +297,7 @@ app.use((err, req, res, next) => {
     path: req.path,
     method: req.method,
   });
+<<<<<<< HEAD
 
   const statusCode = err.statusCode || err.status || 500;
   const isDevelopment = NODE_ENV === 'development';
@@ -231,6 +305,15 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json({
     error: err.message || 'Internal server error',
     ...(isDevelopment && {
+=======
+  
+  const statusCode = err.statusCode || err.status || 500;
+  const isDevelopment = NODE_ENV === 'development';
+  
+  res.status(statusCode).json({
+    error: err.message || 'Internal server error',
+    ...(isDevelopment && { 
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       stack: err.stack,
       path: req.path,
     }),
@@ -241,7 +324,11 @@ app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
   console.log(`📝 Environment: ${NODE_ENV}`);
   console.log(`📝 Database: PostgreSQL (Aiven)`);
+<<<<<<< HEAD
   const apiUrl = NODE_ENV === 'production'
+=======
+  const apiUrl = NODE_ENV === 'production' 
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     ? `https://${process.env.BASE_DOMAIN || 'varanasihub.com'}/api`
     : `http://localhost:${PORT}/api`;
   console.log(`🌐 API Base URL: ${apiUrl}`);

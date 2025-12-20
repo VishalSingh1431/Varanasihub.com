@@ -1,8 +1,48 @@
 import { Link } from 'react-router-dom';
+<<<<<<< HEAD
 import { MessageCircle, Facebook, Instagram, Mail, Phone, MapPin, Zap, Globe, Shield, Rocket, ArrowRight } from 'lucide-react';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+=======
+import { MessageCircle, Facebook, Instagram, Mail, Phone, MapPin, Zap, Globe, Shield, Rocket, ArrowRight, Send } from 'lucide-react';
+import { useState } from 'react';
+import { newsletterAPI } from '../config/api';
+import { useToast } from '../contexts/ToastContext';
+
+const Footer = () => {
+  const currentYear = new Date().getFullYear();
+  const toast = useToast();
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [emailError, setEmailError] = useState('');
+
+  const handleNewsletterSubmit = async (e) => {
+    e.preventDefault();
+    setEmailError('');
+    
+    // Validate email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError('Please enter a valid email address');
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      await newsletterAPI.subscribe(email);
+      setSubscribed(true);
+      setEmail('');
+      toast.success('Successfully subscribed to newsletter!');
+      setTimeout(() => setSubscribed(false), 5000);
+    } catch (error) {
+      toast.error(error.message || 'Failed to subscribe. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 
   const quickLinks = [
     { name: 'Home', path: '/' },
@@ -34,6 +74,48 @@ const Footer = () => {
   return (
     <footer className="bg-white text-gray-900 border-t-2 border-gray-200 shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.1)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<<<<<<< HEAD
+=======
+        {/* Newsletter Section */}
+        <div className="mb-12 pb-8 border-b border-gray-200">
+          <div className="max-w-2xl mx-auto text-center">
+            <h3 className="text-2xl font-bold text-gray-900 mb-3">Stay Updated</h3>
+            <p className="text-gray-600 mb-6">Get the latest updates and tips for your business</p>
+            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+              <div className="flex-1">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailError('');
+                  }}
+                  placeholder="Enter your email"
+                  required
+                  className={`w-full px-4 py-3 border-2 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all ${
+                    emailError ? 'border-red-300 focus:border-red-500 focus:ring-red-500' : 'border-gray-200'
+                  }`}
+                />
+                {emailError && (
+                  <p className="mt-1 text-sm text-red-600">{emailError}</p>
+                )}
+              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <Send className="w-4 h-4" />
+                {isSubmitting ? 'Subscribing...' : 'Subscribe'}
+              </button>
+            </form>
+            {subscribed && (
+              <p className="mt-4 text-green-600 font-medium">Thank you for subscribing!</p>
+            )}
+          </div>
+        </div>
+
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
         {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand Section */}

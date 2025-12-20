@@ -17,11 +17,14 @@ import EditWebsite from './pages/EditWebsite'
 import Analytics from './pages/Analytics'
 import QRCodeGenerator from './pages/QRCodeGenerator'
 import VaranasiHighlight from './pages/VaranasiHighlight'
+<<<<<<< HEAD
 import WebsiteDesign from './pages/services/WebsiteDesign'
 import WebsiteHosting from './pages/services/WebsiteHosting'
 import OnlinePresence from './pages/services/OnlinePresence'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 import WhatsAppWidget from './components/WhatsAppWidget'
 import { initGoogleAnalytics, trackPageView } from './utils/analytics'
 import './App.css'
@@ -65,11 +68,14 @@ function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/varanasi/:slug" element={<VaranasiHighlight />} />
+<<<<<<< HEAD
           <Route path="/services/website-design-varanasi" element={<WebsiteDesign />} />
           <Route path="/services/website-hosting-varanasi" element={<WebsiteHosting />} />
           <Route path="/services/online-presence-varanasi" element={<OnlinePresence />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
           </Routes>
         </ErrorBoundary>
       </Router>

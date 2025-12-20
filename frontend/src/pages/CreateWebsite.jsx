@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Building2, User, Phone, Mail, MapPin, Link as LinkIcon, MessageCircle, Instagram, Facebook, Globe, Loader2, Youtube, CheckCircle2, XCircle, Sparkles, Navigation, Plus, X, Clock, Calendar, Gift, ShoppingBag, Map, Palette, CheckCircle, AlertCircle, Edit3, Eye, ChevronRight, ChevronLeft } from 'lucide-react';
+=======
+import { useState, useEffect, useRef } from 'react';
+import { Building2, User, Phone, Mail, MapPin, Link as LinkIcon, MessageCircle, Instagram, Facebook, Globe, Loader2, Youtube, CheckCircle2, XCircle, Sparkles, Navigation, Plus, X, Clock, Calendar, Gift, ShoppingBag, Map, Palette, CheckCircle, AlertCircle, Edit3, Eye } from 'lucide-react';
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FormInput from '../components/forms/FormInput';
@@ -9,7 +14,10 @@ import FileUploader from '../components/forms/FileUploader';
 import SubmitButton from '../components/forms/SubmitButton';
 import WebsitePreview from '../components/WebsitePreview';
 import PlacesAutocomplete from '../components/google/PlacesAutocomplete';
+<<<<<<< HEAD
 import HelpTooltip from '../components/forms/HelpTooltip';
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 import { businessAPI } from '../config/api';
 import { API_BASE_URL } from '../config/constants';
 import { formatPhoneNumber } from '../services/googlePlaces';
@@ -217,6 +225,7 @@ const getDefaultFooterDescription = (category, businessName = '') => {
   return descriptions[category] || `${name} is committed to excellence and customer satisfaction.`;
 };
 
+<<<<<<< HEAD
 /**
  * Get default business hours based on category
  * @param {string} category - Business category
@@ -353,6 +362,8 @@ const getDefaultServices = (category) => {
   return defaultServices[category] || [];
 };
 
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 const CreateWebsite = () => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -363,6 +374,7 @@ const CreateWebsite = () => {
   const [showCustomSlug, setShowCustomSlug] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
   const checkTimeoutRef = useRef(null);
+<<<<<<< HEAD
   
   // Form sections/steps state
   const totalSteps = 5;
@@ -376,6 +388,8 @@ const CreateWebsite = () => {
     { id: 4, name: 'Services', icon: ShoppingBag, description: 'Services, offers, and business hours' },
     { id: 5, name: 'Review', icon: CheckCircle, description: 'Review and submit your website' },
   ];
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   const [formData, setFormData] = useState({
     businessName: '',
     ownerName: '',
@@ -463,6 +477,7 @@ const CreateWebsite = () => {
         [name]: value,
       };
       
+<<<<<<< HEAD
       // Enhanced smart defaults based on category
       if (name === 'category' && value) {
         // Auto-fill description if empty
@@ -501,6 +516,19 @@ const CreateWebsite = () => {
         if (prev.navbarTagline && !prev.navbarTagline.includes(value)) {
           updated.navbarTagline = getDefaultTagline(prev.category);
         }
+=======
+      // Auto-fill description, tagline, and footer description based on category if empty
+      if (name === 'category' && value) {
+        if (!prev.description.trim()) {
+          updated.description = getDefaultDescription(value, prev.businessName);
+        }
+        if (!prev.navbarTagline.trim()) {
+          updated.navbarTagline = getDefaultTagline(value);
+        }
+        if (!prev.footerDescription.trim()) {
+          updated.footerDescription = getDefaultFooterDescription(value, prev.businessName);
+        }
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       }
       
       return updated;
@@ -555,6 +583,7 @@ const CreateWebsite = () => {
     }, 500);
   };
 
+<<<<<<< HEAD
   // Auto-save to localStorage
   const saveToLocalStorage = useCallback((data) => {
     try {
@@ -655,14 +684,20 @@ const CreateWebsite = () => {
   }, [formData, customSlug, saveToLocalStorage]);
 
   // Cleanup timeouts on unmount
+=======
+  // Cleanup timeout on unmount
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   useEffect(() => {
     return () => {
       if (checkTimeoutRef.current) {
         clearTimeout(checkTimeoutRef.current);
       }
+<<<<<<< HEAD
       if (autoSaveTimeoutRef.current) {
         clearTimeout(autoSaveTimeoutRef.current);
       }
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     };
   }, []);
 
@@ -988,7 +1023,11 @@ const CreateWebsite = () => {
     <>
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+<<<<<<< HEAD
         <div className="max-w-7xl mx-auto">
+=======
+        <div className="max-w-5xl mx-auto">
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
           {/* Hero Section */}
           <div className="text-center mb-10">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-2xl mb-6 shadow-lg">
@@ -997,11 +1036,16 @@ const CreateWebsite = () => {
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Create Your Website
             </h1>
+<<<<<<< HEAD
             <p className="text-base sm:text-lg text-gray-600 max-w-4xl mx-auto px-4">
+=======
+            <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto px-4">
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
               Build your online presence in minutes. Fill in your business details below and get your professional website ready.
             </p>
           </div>
 
+<<<<<<< HEAD
           {/* Progress Indicator */}
           <div className="mb-8 bg-white rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200">
             <div className="flex items-center justify-between mb-4">
@@ -1075,6 +1119,8 @@ const CreateWebsite = () => {
             </div>
           </div>
 
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
           {/* Success Message */}
           {successMessage && (
             <div className="mb-6 bg-green-50 border-2 border-green-200 rounded-2xl p-6 shadow-lg">
@@ -1302,8 +1348,11 @@ const CreateWebsite = () => {
                 </div>
               </div>
 
+<<<<<<< HEAD
               {/* Step 1: Basic Information */}
               <div className="mb-8">
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
               {/* Theme Selection Section */}
               <div className="border-b border-gray-200 pb-8">
                 <div className="flex items-center gap-3 mb-6">
@@ -1409,6 +1458,7 @@ const CreateWebsite = () => {
                     <Building2 className="w-5 h-5 text-blue-600" />
                   </div>
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Business Information</h2>
+<<<<<<< HEAD
                   <HelpTooltip text="Enter your business name and category. The business name will be used to create your website URL (subdomain)." />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1419,6 +1469,13 @@ const CreateWebsite = () => {
                     </div>
                     <FormInput
                       label=""
+=======
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <FormInput
+                      label="Business Name"
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                       name="businessName"
                       value={formData.businessName}
                       onChange={handleChange}
@@ -1581,6 +1638,7 @@ const CreateWebsite = () => {
                     error={errors.ownerName}
                     icon={User}
                   />
+<<<<<<< HEAD
                   <div>
                     <div className="flex items-center gap-2 mb-2">
                       <label className="block text-sm font-medium text-gray-700">Business Category</label>
@@ -1595,6 +1653,16 @@ const CreateWebsite = () => {
                       error={errors.category}
                     />
                   </div>
+=======
+                  <CategorySelect
+                    label="Business Category"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    required
+                    error={errors.category}
+                  />
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                   <FormInput
                     label="Mobile Number"
                     name="mobileNumber"
@@ -1608,10 +1676,14 @@ const CreateWebsite = () => {
                   />
                 </div>
               </div>
+<<<<<<< HEAD
               </div>
 
               {/* Step 2: Contact Information */}
               <div className="mb-8">
+=======
+
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
               {/* Contact Information Section */}
               <div className="border-b border-gray-200 pb-8">
                 <div className="flex items-center gap-3 mb-6">
@@ -1621,6 +1693,7 @@ const CreateWebsite = () => {
                   <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Contact Information</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+<<<<<<< HEAD
                   <div>
                     <div className="flex items-center gap-2 mb-2">
                       <label className="block text-sm font-medium text-gray-700">Email</label>
@@ -1638,6 +1711,19 @@ const CreateWebsite = () => {
                       icon={Mail}
                     />
                   </div>
+=======
+                  <FormInput
+                    label="Email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="business@example.com"
+                    required
+                    error={errors.email}
+                    icon={Mail}
+                  />
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                   <FormInput
                     label="WhatsApp Number"
                     name="whatsappNumber"
@@ -1719,10 +1805,14 @@ const CreateWebsite = () => {
                   </p>
                 </div>
               </div>
+<<<<<<< HEAD
               </div>
 
               {/* Step 3: Media */}
               <div className="mb-8">
+=======
+
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
               {/* YouTube Video Section */}
               <div className="border-b border-gray-200 pb-8">
                 <div className="flex items-center gap-3 mb-6">
@@ -1859,10 +1949,14 @@ const CreateWebsite = () => {
                   </div>
                 </div>
               </div>
+<<<<<<< HEAD
               </div>
 
               {/* Step 4: Services & Business Hours */}
               <div className="mb-8">
+=======
+
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
               {/* Services / Menu / Pricing Section */}
               <div className="border-b border-gray-200 pb-8">
                 <div className="flex items-center gap-3 mb-6">
@@ -2147,6 +2241,7 @@ const CreateWebsite = () => {
                   </div>
                 </div>
               </div>
+<<<<<<< HEAD
               </div>
 
               {/* Step 5: Review & Submit */}
@@ -2185,6 +2280,8 @@ const CreateWebsite = () => {
                   </div>
                 </div>
               </div>
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 
               {/* Google Maps Section */}
               <div className="border-b border-gray-200 pb-8">
@@ -2208,9 +2305,14 @@ const CreateWebsite = () => {
                   Paste your Google Maps link. An interactive map will be embedded on your website's contact section.
                 </p>
               </div>
+<<<<<<< HEAD
               </div>
 
               {/* Submit Section */}
+=======
+
+              {/* Submit Button */}
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
               <div className="pt-6">
                 <div className="flex flex-col sm:flex-row gap-4 mb-4">
                   <button

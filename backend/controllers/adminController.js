@@ -546,6 +546,7 @@ export const getAllAnalytics = async (req, res) => {
 
     // Get analytics for all businesses
     const analyticsPromises = businesses.map(async (business) => {
+<<<<<<< HEAD
       try {
         const statsResult = await pool.query(
           'SELECT * FROM analytics WHERE business_id = $1',
@@ -587,18 +588,51 @@ export const getAllAnalytics = async (req, res) => {
           totalInteractions: 0,
         };
       }
+=======
+      const statsResult = await pool.query(
+        'SELECT * FROM analytics WHERE business_id = $1',
+        [business.id]
+      );
+
+      const stats = statsResult.rows[0] || {
+        visitor_count: 0,
+        call_clicks: 0,
+        whatsapp_clicks: 0,
+        gallery_views: 0,
+        map_clicks: 0,
+      };
+
+      return {
+        businessId: business.id,
+        businessName: business.business_name,
+        ...stats,
+        totalInteractions: parseInt(stats.call_clicks || 0) + 
+                          parseInt(stats.whatsapp_clicks || 0) + 
+                          parseInt(stats.gallery_views || 0) + 
+                          parseInt(stats.map_clicks || 0),
+      };
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     });
 
     const allAnalytics = await Promise.all(analyticsPromises);
 
     // Calculate totals
     const totals = allAnalytics.reduce((acc, analytics) => ({
+<<<<<<< HEAD
       totalVisitors: acc.totalVisitors + (analytics.visitor_count || 0),
       totalCallClicks: acc.totalCallClicks + (analytics.call_clicks || 0),
       totalWhatsAppClicks: acc.totalWhatsAppClicks + (analytics.whatsapp_clicks || 0),
       totalGalleryViews: acc.totalGalleryViews + (analytics.gallery_views || 0),
       totalMapClicks: acc.totalMapClicks + (analytics.map_clicks || 0),
       totalInteractions: acc.totalInteractions + (analytics.totalInteractions || 0),
+=======
+      totalVisitors: acc.totalVisitors + parseInt(analytics.visitor_count || 0),
+      totalCallClicks: acc.totalCallClicks + parseInt(analytics.call_clicks || 0),
+      totalWhatsAppClicks: acc.totalWhatsAppClicks + parseInt(analytics.whatsapp_clicks || 0),
+      totalGalleryViews: acc.totalGalleryViews + parseInt(analytics.gallery_views || 0),
+      totalMapClicks: acc.totalMapClicks + parseInt(analytics.map_clicks || 0),
+      totalInteractions: acc.totalInteractions + analytics.totalInteractions,
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     }), {
       totalVisitors: 0,
       totalCallClicks: 0,
@@ -614,11 +648,15 @@ export const getAllAnalytics = async (req, res) => {
     });
   } catch (error) {
     console.error('Error fetching all analytics:', error);
+<<<<<<< HEAD
     console.error('Error stack:', error.stack);
     res.status(500).json({ 
       error: 'Failed to fetch analytics',
       details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
+=======
+    res.status(500).json({ error: 'Failed to fetch analytics' });
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   }
 };
 

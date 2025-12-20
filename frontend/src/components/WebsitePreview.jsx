@@ -309,7 +309,11 @@ const WebsitePreview = ({ formData, onClose }) => {
   }
 
   return (
+<<<<<<< HEAD
     <div className="fixed inset-0 bg-transparent z-50 flex items-center justify-center p-4 overflow-y-auto">
+=======
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       <div className="bg-white rounded-2xl shadow-2xl max-w-6xl w-full my-4 sm:my-8 max-h-[90vh] overflow-y-auto">
         {/* Preview Header */}
         <div className="sticky top-0 bg-white border-b border-gray-200 px-4 sm:px-6 py-3 sm:py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 z-10">
@@ -341,6 +345,12 @@ const WebsitePreview = ({ formData, onClose }) => {
                   )}
                   <div className="min-w-0 flex-1">
                     <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 truncate">{formData.businessName}</h1>
+<<<<<<< HEAD
+=======
+                    {formData.navbarTagline && (
+                      <p className="text-xs text-gray-600 truncate">{formData.navbarTagline}</p>
+                    )}
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                   </div>
                 </div>
                 
@@ -417,8 +427,13 @@ const WebsitePreview = ({ formData, onClose }) => {
             </div>
           </nav>
 
+<<<<<<< HEAD
           {/* Enhanced Hero Section - Name/Address Left, Image Right (Circular) */}
           <section id="home" className={`relative bg-gradient-to-r ${theme.primary} text-white py-12 md:py-16 lg:py-20 overflow-hidden`}>
+=======
+          {/* Enhanced Hero Section - Full Width with Better Design */}
+          <section id="home" className={`relative bg-gradient-to-r ${theme.primary} text-white py-20 md:py-28 lg:py-32 overflow-hidden`}>
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
             {/* Animated Background Elements */}
             <div className="absolute inset-0 opacity-10">
               <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
@@ -426,6 +441,7 @@ const WebsitePreview = ({ formData, onClose }) => {
             </div>
             
             <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<<<<<<< HEAD
               <div className="flex flex-col md:flex-row items-center justify-between gap-6 md:gap-8">
                 {/* Left Side - Name and Address */}
                 <div className="flex-1 text-center md:text-left">
@@ -444,10 +460,26 @@ const WebsitePreview = ({ formData, onClose }) => {
                   
                   {formData.category && (
                     <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold mt-3 border border-white/30">
+=======
+              <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
+                {logoUrl ? (
+                  <div className="flex-shrink-0">
+                    <img src={logoUrl} alt={formData.businessName} className="w-40 h-40 md:w-48 md:h-48 object-contain rounded-3xl bg-white/20 backdrop-blur-md p-4 md:p-6 shadow-2xl border-4 border-white/30 transition-transform duration-300 hover:scale-105" />
+                  </div>
+                ) : (
+                  <div className="flex-shrink-0 w-40 h-40 md:w-48 md:h-48 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center shadow-2xl border-4 border-white/30">
+                    <span className="text-white text-6xl md:text-7xl font-bold">{formData.businessName.charAt(0).toUpperCase()}</span>
+                  </div>
+                )}
+                <div className="flex-1 text-center md:text-left max-w-3xl">
+                  {formData.category && (
+                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold mb-4 border border-white/30">
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                       <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
                       {formData.category}
                     </div>
                   )}
+<<<<<<< HEAD
                 </div>
                 
                 {/* Right Side - Quarter Circle Image */}
@@ -479,6 +511,48 @@ const WebsitePreview = ({ formData, onClose }) => {
                       <span className="text-white text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold">
                         {formData.businessName.charAt(0).toUpperCase()}
                       </span>
+=======
+                  
+                  {/* Trust Badge */}
+                  {formData.googlePlacesData?.rating && (
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium mb-4 border border-white/30">
+                      <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                      <span>{formData.googlePlacesData.rating} Rating</span>
+                    </div>
+                  )}
+                  
+                  <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 break-words leading-tight tracking-tight">
+                    {formData.businessName}
+                  </h1>
+                  
+                  {formData.ownerName && (
+                    <p className="text-base sm:text-lg md:text-xl text-white/90 mb-3 font-medium">
+                      Owner: <span className="font-semibold">{formData.ownerName}</span>
+                    </p>
+                  )}
+                  
+                  {formData.navbarTagline && (
+                    <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 md:mb-8 italic font-light leading-relaxed">
+                      {formData.navbarTagline}
+                    </p>
+                  )}
+                  
+                  {/* Enhanced CTAs */}
+                  {(formData.mobileNumber || formData.whatsappNumber) && (
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                      {formData.mobileNumber && (
+                        <a href={`tel:${formData.mobileNumber}`} className={`group px-8 py-4 ${theme.button} text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 hover:shadow-2xl text-base sm:text-lg shadow-lg`}>
+                          <Phone className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                          Call Now
+                        </a>
+                      )}
+                      {formData.whatsappNumber && (
+                        <a href={`https://wa.me/${formData.whatsappNumber.replace(/\D/g, '')}`} target="_blank" rel="noopener noreferrer" className="group px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 hover:shadow-2xl text-base sm:text-lg shadow-lg">
+                          <MessageCircle className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+                          WhatsApp
+                        </a>
+                      )}
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                     </div>
                   )}
                 </div>
@@ -486,6 +560,7 @@ const WebsitePreview = ({ formData, onClose }) => {
             </div>
           </section>
 
+<<<<<<< HEAD
           {/* Quick Contact Info Section */}
           {(formData.businessHours || formData.address) && (
             <section className="py-8 md:py-12 bg-gradient-to-br from-gray-50 to-white border-b border-gray-200">
@@ -558,6 +633,38 @@ const WebsitePreview = ({ formData, onClose }) => {
                           ></iframe>
                         </div>
                       )}
+=======
+          {/* Stats/Metrics Section */}
+          {(stats.yearsInBusiness || stats.customersServed || stats.rating) && (
+            <section className="py-8 md:py-12 bg-white border-b border-gray-200">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+                  {stats.yearsInBusiness && (
+                    <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl border border-blue-100">
+                      <div className="text-3xl md:text-4xl font-black text-blue-600 mb-1">{stats.yearsInBusiness}+</div>
+                      <div className="text-xs md:text-sm text-gray-600 font-medium">Years in Business</div>
+                    </div>
+                  )}
+                  {stats.customersServed && (
+                    <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl border border-green-100">
+                      <div className="text-3xl md:text-4xl font-black text-green-600 mb-1">{stats.customersServed}+</div>
+                      <div className="text-xs md:text-sm text-gray-600 font-medium">Happy Customers</div>
+                    </div>
+                  )}
+                  {stats.rating && (
+                    <div className="text-center p-4 bg-gradient-to-br from-yellow-50 to-amber-50 rounded-xl border border-yellow-100">
+                      <div className="flex items-center justify-center gap-1 mb-1">
+                        <Star className="w-5 h-5 md:w-6 md:h-6 fill-yellow-400 text-yellow-400" />
+                        <span className="text-3xl md:text-4xl font-black text-yellow-600">{stats.rating}</span>
+                      </div>
+                      <div className="text-xs md:text-sm text-gray-600 font-medium">Average Rating</div>
+                    </div>
+                  )}
+                  {stats.totalRatings && (
+                    <div className="text-center p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl border border-purple-100">
+                      <div className="text-3xl md:text-4xl font-black text-purple-600 mb-1">{stats.totalRatings}+</div>
+                      <div className="text-xs md:text-sm text-gray-600 font-medium">Reviews</div>
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                     </div>
                   )}
                 </div>
@@ -565,6 +672,7 @@ const WebsitePreview = ({ formData, onClose }) => {
             </section>
           )}
 
+<<<<<<< HEAD
           {/* Enhanced About Section - Always Visible */}
           <section id="about" className="py-12 md:py-16 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -661,6 +769,68 @@ const WebsitePreview = ({ formData, onClose }) => {
               </div>
             </div>
           </section>
+=======
+          {/* Enhanced Description Section - Two Column Layout */}
+          {formData.description && formData.description.trim() && (
+            <section id="about" className="py-12 md:py-16 bg-gray-50">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+                  About <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Us</span>
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
+                  <div className="order-2 md:order-1">
+                    <div className="prose prose-lg max-w-none">
+                      {formData.description.length > 300 && !showReadMore ? (
+                        <>
+                          <p className="text-base md:text-lg text-gray-700 leading-relaxed whitespace-pre-line">
+                            {formData.description.substring(0, 300)}...
+                          </p>
+                          <button
+                            onClick={() => setShowReadMore(true)}
+                            className="mt-4 text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2"
+                          >
+                            Read More
+                            <ChevronDown className="w-4 h-4" />
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <p className="text-base md:text-lg text-gray-700 leading-relaxed whitespace-pre-line">
+                            {formData.description}
+                          </p>
+                          {formData.description.length > 300 && showReadMore && (
+                            <button
+                              onClick={() => setShowReadMore(false)}
+                              className="mt-4 text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2"
+                            >
+                              Read Less
+                              <ChevronUp className="w-4 h-4" />
+                            </button>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  {images.length > 0 && (
+                    <div className="order-1 md:order-2">
+                      <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                        <img 
+                          src={images[0]} 
+                          alt={formData.businessName} 
+                          className="w-full h-64 md:h-80 object-cover"
+                          onClick={() => openLightbox(0)}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end justify-center pb-4">
+                          <span className="text-white text-sm font-medium">Click to view gallery</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </section>
+          )}
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 
           {/* Enhanced Services Section - Better Cards with Hover Effects */}
           {formData.services && formData.services.length > 0 && (
@@ -831,6 +1001,166 @@ const WebsitePreview = ({ formData, onClose }) => {
             </section>
           )}
 
+<<<<<<< HEAD
+=======
+          {/* Enhanced Business Hours Section - Visual Timeline */}
+          {hasBusinessHours() && (
+            <section className="py-12 md:py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+              <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+                  Business <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Hours</span>
+                </h2>
+                <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 border-2 border-gray-100">
+                  {/* Real-time Status */}
+                  <div className="flex items-center justify-center gap-4 mb-8 p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-blue-200">
+                    <div className={`w-5 h-5 rounded-full ${isOpenNow() ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+                    <span className={`text-xl md:text-2xl font-bold ${isOpenNow() ? 'text-green-700' : 'text-red-700'}`}>
+                      {isOpenNow() ? '🟢 Open Now' : '🔴 Closed Now'}
+                    </span>
+                    {formData.mobileNumber && (
+                      <a 
+                        href={`tel:${formData.mobileNumber}`}
+                        className="ml-auto text-sm text-blue-600 hover:text-blue-700 font-medium underline"
+                      >
+                        Call to Confirm
+                      </a>
+                    )}
+                  </div>
+                  
+                  {/* Hours Timeline */}
+                  <div className="space-y-3">
+                    {['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map((day, index) => {
+                      const hours = formData.businessHours?.[day];
+                      const isToday = new Date().getDay() === (index === 0 ? 6 : index);
+                      return (
+                        <div 
+                          key={day} 
+                          className={`flex items-center justify-between p-4 rounded-xl border-2 transition-all ${
+                            isToday 
+                              ? 'bg-blue-50 border-blue-300 shadow-md' 
+                              : 'bg-gray-50 border-gray-200 hover:border-gray-300'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <span className={`font-bold text-sm md:text-base capitalize min-w-[100px] ${isToday ? 'text-blue-700' : 'text-gray-900'}`}>
+                              {isToday && '📅 '}
+                              {day}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            {hours && hours.open ? (
+                              <>
+                                <Clock className={`w-4 h-4 ${isToday ? 'text-blue-600' : 'text-gray-500'}`} />
+                                <span className={`font-semibold ${isToday ? 'text-blue-700' : 'text-gray-700'}`}>
+                                  {hours.start} - {hours.end}
+                                </span>
+                              </>
+                            ) : (
+                              <span className="text-gray-400 italic font-medium">Closed</span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Enhanced Google Reviews Section - Carousel */}
+          {formData.googlePlacesData?.reviews && formData.googlePlacesData.reviews.length > 0 && (
+            <section className="py-12 md:py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-8 md:mb-12">
+                  <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-6">
+                    Customer <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Reviews</span>
+                  </h2>
+                  {formData.googlePlacesData.rating && (
+                    <div className="inline-flex items-center gap-3 px-6 py-3 bg-white rounded-full shadow-lg border-2 border-blue-200 mb-4">
+                      <div className="flex items-center gap-1">
+                        <Star className="w-6 h-6 fill-yellow-400 text-yellow-400" />
+                        <span className="text-3xl font-black text-gray-900">{formData.googlePlacesData.rating}</span>
+                      </div>
+                      <div className="h-8 w-px bg-gray-300"></div>
+                      <div className="flex text-yellow-400 text-lg">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className={`w-5 h-5 ${i < Math.round(formData.googlePlacesData.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
+                        ))}
+                      </div>
+                      {formData.googlePlacesData.totalRatings > 0 && (
+                        <>
+                          <div className="h-8 w-px bg-gray-300"></div>
+                          <span className="text-gray-600 font-semibold">({formData.googlePlacesData.totalRatings} reviews)</span>
+                        </>
+                      )}
+                    </div>
+                  )}
+                  {formData.googlePlacesData.priceLevel !== null && formData.googlePlacesData.priceLevel !== undefined && (
+                    <p className="text-gray-600 font-medium">Price Level: <span className="text-green-600 font-bold">{'$'.repeat(formData.googlePlacesData.priceLevel + 1)}</span></p>
+                  )}
+                </div>
+                
+                {/* Reviews Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                  {paginatedReviews.map((review, idx) => (
+                    <div key={idx} className="bg-white rounded-2xl shadow-lg p-6 border-2 border-gray-100 hover:border-blue-200 transition-all duration-300 hover:shadow-xl">
+                      <div className="flex items-start gap-4 mb-4">
+                        {review.authorPhoto ? (
+                          <img src={review.authorPhoto} alt={review.authorName} className="w-14 h-14 rounded-full object-cover border-2 border-gray-200" />
+                        ) : (
+                          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center flex-shrink-0 border-2 border-gray-200">
+                            <span className="text-white font-bold text-lg">{review.authorName?.charAt(0) || 'U'}</span>
+                          </div>
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <p className="font-bold text-gray-900 truncate mb-1">{review.authorName || 'Anonymous'}</p>
+                          <div className="flex text-yellow-400 text-sm mb-2">
+                            {[...Array(5)].map((_, i) => (
+                              <Star key={i} className={`w-4 h-4 ${i < review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
+                            ))}
+                          </div>
+                          {review.time && (
+                            <p className="text-gray-500 text-xs">{review.time}</p>
+                          )}
+                        </div>
+                      </div>
+                      {review.text && (
+                        <p className="text-gray-700 text-sm leading-relaxed line-clamp-5">{review.text}</p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                
+                {/* Reviews Pagination */}
+                {totalReviewPages > 1 && (
+                  <div className="flex items-center justify-center gap-4">
+                    <button
+                      onClick={() => setCurrentReviewPage(prev => Math.max(0, prev - 1))}
+                      disabled={currentReviewPage === 0}
+                      className="px-4 py-2 rounded-lg bg-white border-2 border-gray-300 hover:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                    >
+                      <ChevronLeft className="w-5 h-5 inline mr-1" />
+                      Previous
+                    </button>
+                    <span className="text-sm text-gray-600 font-medium px-4">
+                      Page {currentReviewPage + 1} of {totalReviewPages}
+                    </span>
+                    <button
+                      onClick={() => setCurrentReviewPage(prev => Math.min(totalReviewPages - 1, prev + 1))}
+                      disabled={currentReviewPage === totalReviewPages - 1}
+                      className="px-4 py-2 rounded-lg bg-white border-2 border-gray-300 hover:border-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium"
+                    >
+                      Next
+                      <ChevronRight className="w-5 h-5 inline ml-1" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </section>
+          )}
+
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
           {/* Business Attributes Section */}
           {(hasAttributes() || hasPaymentOptions() || hasParkingOptions()) && (
             <section className="py-12 md:py-16 bg-white">
@@ -983,7 +1313,11 @@ const WebsitePreview = ({ formData, onClose }) => {
             <section className="py-12 md:py-16 bg-gradient-to-br from-gray-50 to-blue-50">
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+<<<<<<< HEAD
                   Our <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Video</span>
+=======
+                  Watch Our <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Video</span>
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                 </h2>
                 <div className="relative aspect-video rounded-2xl overflow-hidden shadow-2xl border-4 border-white">
                   <iframe
@@ -1101,6 +1435,7 @@ const WebsitePreview = ({ formData, onClose }) => {
 
           {/* Contact Section */}
           {hasContactInfo() && (
+<<<<<<< HEAD
             <section id="contact" className="py-12 md:py-16 bg-white text-gray-900">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-12 text-center text-gray-900">Contact Us</h2>
@@ -1112,25 +1447,52 @@ const WebsitePreview = ({ formData, onClose }) => {
                         <div className="flex items-center gap-3">
                           <Phone className="w-5 h-5 flex-shrink-0 text-gray-600" />
                           <a href={`tel:${formData.mobileNumber}`} className="text-gray-700 hover:text-blue-600 break-all transition-colors">{formData.mobileNumber}</a>
+=======
+            <section id="contact" className="py-12 md:py-16 bg-gray-900 text-white">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-12 text-center">Contact Us</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div>
+                    <h3 className="text-xl font-semibold mb-4">Get in Touch</h3>
+                    <div className="space-y-4">
+                      {formData.mobileNumber && (
+                        <div className="flex items-center gap-3">
+                          <Phone className="w-5 h-5 flex-shrink-0" />
+                          <a href={`tel:${formData.mobileNumber}`} className="hover:text-blue-400 break-all">{formData.mobileNumber}</a>
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                         </div>
                       )}
                       {formData.email && (
                         <div className="flex items-center gap-3">
+<<<<<<< HEAD
                           <Mail className="w-5 h-5 flex-shrink-0 text-gray-600" />
                           <a href={`mailto:${formData.email}`} className="text-gray-700 hover:text-blue-600 break-all transition-colors">{formData.email}</a>
+=======
+                          <Mail className="w-5 h-5 flex-shrink-0" />
+                          <a href={`mailto:${formData.email}`} className="hover:text-blue-400 break-all">{formData.email}</a>
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                         </div>
                       )}
                       {formData.address && (
                         <div className="flex items-start gap-3">
+<<<<<<< HEAD
                           <MapPin className="w-5 h-5 mt-1 flex-shrink-0 text-gray-600" />
                           <span className="break-words text-gray-700">{formData.address}</span>
+=======
+                          <MapPin className="w-5 h-5 mt-1 flex-shrink-0" />
+                          <span className="break-words">{formData.address}</span>
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                         </div>
                       )}
                     </div>
                   </div>
                   {hasSocialMedia() && (
                     <div>
+<<<<<<< HEAD
                       <h3 className="text-xl font-semibold mb-4 text-gray-900">Follow Us</h3>
+=======
+                      <h3 className="text-xl font-semibold mb-4">Follow Us</h3>
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                       <div className="flex gap-4 flex-wrap">
                         {formData.instagram && (
                           <a href={formData.instagram} target="_blank" rel="noopener noreferrer" className="w-12 h-12 bg-pink-600 rounded-full flex items-center justify-center hover:bg-pink-700 transition-transform hover:scale-110">
@@ -1232,6 +1594,7 @@ const WebsitePreview = ({ formData, onClose }) => {
             </section>
           )}
 
+<<<<<<< HEAD
           {/* Enhanced Google Reviews Section - Carousel */}
           {formData.googlePlacesData?.reviews && formData.googlePlacesData.reviews.length > 0 && (
             <section className="py-12 md:py-16 bg-gradient-to-br from-gray-50 to-blue-50">
@@ -1326,6 +1689,10 @@ const WebsitePreview = ({ formData, onClose }) => {
 
           {/* Enhanced Footer - Multi-column with Newsletter */}
           <footer className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white py-12 md:py-16">
+=======
+          {/* Enhanced Footer - Multi-column with Newsletter */}
+          <footer className={`bg-gradient-to-r ${theme.footer || 'from-gray-900 via-gray-800 to-gray-900'} text-white py-12 md:py-16`}>
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
                 {/* Business Info */}

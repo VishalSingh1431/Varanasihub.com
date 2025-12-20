@@ -2,6 +2,7 @@
  * Generate HTML template for business website
  * This can be used to render business pages for subdomain/subdirectory routing
  */
+<<<<<<< HEAD
 export const generateBusinessHTML = (business, apiBaseUrl = null) => {
   // Determine API base URL
   // Use provided apiBaseUrl, or compute from environment
@@ -15,6 +16,9 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
       ? `http://localhost:${process.env.PORT || 5000}/api`
       : `https://${baseDomain}/api`;
   }
+=======
+export const generateBusinessHTML = (business) => {
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   // Helper function to get first name from full name
   const getFirstName = (fullName) => {
     if (!fullName) return '';
@@ -99,6 +103,17 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
   const businessSlug = business.slug || business.businessName.toLowerCase().replace(/\s+/g, '-');
   const canonicalUrl = business.subdomainUrl || business.subdirectoryUrl || '';
   
+<<<<<<< HEAD
+=======
+  // Determine API base URL
+  // Default to production unless explicitly in development mode
+  const isDevelopment = process.env.NODE_ENV === 'development';
+  const baseDomain = process.env.BASE_DOMAIN || 'varanasihub.com';
+  const apiBaseUrl = isDevelopment 
+    ? `http://localhost:${process.env.PORT || 5000}/api`
+    : `https://${baseDomain}/api`;
+  
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   // Extract location details from address
   const addressParts = business.address ? business.address.split(',') : [];
   const area = addressParts[0]?.trim() || 'Varanasi';
@@ -690,6 +705,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
         min-width: 44px;
       }
     }
+<<<<<<< HEAD
 
     /* Image Lightbox Modal Styles */
     .lightbox-modal {
@@ -937,6 +953,8 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
         display: none;
       }
     }
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     /* Button zoom effects */
     button, .btn, a[class*="button"], a[class*="btn"] {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -980,10 +998,13 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.05); }
     }
+<<<<<<< HEAD
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     .whatsapp-widget {
       position: fixed !important;
       bottom: 20px !important;
@@ -1938,6 +1959,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
       </section>
       ` : ''}
 
+<<<<<<< HEAD
       <!-- Quick Contact Info Section -->
       ${business.address ? `
       <section id="location" class="section-card p-8 md:p-12 mb-12">
@@ -1979,6 +2001,38 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
         </div>
       </section>
       ` : ''}
+=======
+      <!-- Statistics Counter Section -->
+      <section id="stats" class="section-card p-8 md:p-12 mb-12">
+        <div class="section-header">
+          <div class="section-icon">
+            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+            </svg>
+          </div>
+          <h2 class="section-title">Our Achievements</h2>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          ${(() => {
+            const stats = business.stats || [];
+            const defaultStats = [
+              { label: 'Happy Customers', value: '500+', icon: '👥' },
+              { label: 'Years Experience', value: '5+', icon: '⭐' },
+              { label: 'Projects Done', value: '1000+', icon: '🎯' },
+              { label: 'Success Rate', value: '98%', icon: '✅' }
+            ];
+            const displayStats = stats.length > 0 ? stats : defaultStats;
+            return displayStats.map((stat, index) => `
+              <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
+                <div class="text-3xl mb-3">${stat.icon || '📊'}</div>
+                <div class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">${stat.value}</div>
+                <div class="text-gray-600 text-sm md:text-base font-medium">${escapeHtml(stat.label)}</div>
+              </div>
+            `).join('');
+          })()}
+        </div>
+      </section>
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 
       <!-- Trust Badges Section -->
       <section class="section-card p-8 md:p-12 mb-12">
@@ -2048,7 +2102,11 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           ${business.imagesUrl.map((img, idx) => `
+<<<<<<< HEAD
             <div class="group gallery-item overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer aspect-square" onclick="openLightbox(${idx})" data-image-index="${idx}">
+=======
+            <div class="group gallery-item overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer aspect-square">
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
               <img src="${escapeHtml(img)}" alt="${escapeHtml(generateImageAlt(img, idx))}" class="w-full h-full object-cover transition-transform duration-300" loading="lazy" itemProp="image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
               <div class="w-full h-full bg-gray-200 flex items-center justify-center hidden">
                 <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2260,6 +2318,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
           <p class="text-gray-700 text-lg mb-6 text-center">
             Ready to get started? Book your appointment now and we'll get back to you!
           </p>
+<<<<<<< HEAD
           
           <!-- Appointment Booking Form -->
           <div id="appointment-booking-form" class="bg-white rounded-xl p-6 shadow-lg">
@@ -2431,6 +2490,40 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
           });
         })();
       </script>
+=======
+          ${business.appointmentSettings.availableSlots && business.appointmentSettings.availableSlots.length > 0 ? `
+          <div class="mb-6">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Available Time Slots</h3>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+              ${business.appointmentSettings.availableSlots.map(slot => `
+                <div class="p-3 bg-white rounded-lg border-2 border-gray-200 text-center">
+                  <p class="text-sm text-gray-500 mb-1">${escapeHtml(slot.label || '')}</p>
+                  <p class="font-bold text-gray-900">${escapeHtml(slot.time || '')}</p>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+          ` : ''}
+          <div class="text-center">
+            ${business.appointmentSettings.contactMethod === 'whatsapp' && business.whatsapp ? `
+            <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/[^0-9]/g, ''))}?text=${encodeURIComponent('Hello! I would like to book an appointment.')}" target="_blank" class="inline-flex items-center gap-3 px-8 py-4 bg-green-600 text-white rounded-lg font-semibold text-base hover:bg-green-700 transition-all duration-200 shadow-md hover:shadow-lg">
+              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+              </svg>
+              Book via WhatsApp
+            </a>
+            ` : business.appointmentSettings.contactMethod === 'call' && business.mobile ? `
+            <a href="tel:${escapeHtml(business.mobile)}" class="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold text-base hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+              </svg>
+              Call to Book
+            </a>
+            ` : ''}
+          </div>
+        </div>
+      </section>
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       ` : ''}
 
       <!-- E-Commerce / Products Section -->
@@ -2683,6 +2776,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     </div>
   </main>
 
+<<<<<<< HEAD
   <!-- Image Lightbox Modal -->
   ${business.imagesUrl && business.imagesUrl.length > 0 ? `
   <div id="lightboxModal" class="lightbox-modal" onclick="closeLightboxOnBackdrop(event)">
@@ -2779,6 +2873,10 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
 
   <!-- Footer -->
   <footer class="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white mt-16 border-t border-blue-500">
+=======
+  <!-- Footer -->
+  <footer class="bg-gradient-to-br ${theme.footer} text-gray-300 mt-16 border-t border-gray-700">
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
         <!-- Business Info -->
@@ -2914,6 +3012,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
 
     // Share Modal Functions
     function openShareModal() {
+<<<<<<< HEAD
       try {
         const modal = document.getElementById('shareModal');
         if (modal) {
@@ -2924,6 +3023,12 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
         }
       } catch (error) {
         console.error('Error opening share modal:', error);
+=======
+      const modal = document.getElementById('shareModal');
+      if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       }
     }
 
@@ -2945,6 +3050,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     function copyShareLink() {
       const input = document.getElementById('shareLinkInput');
       const btn = document.getElementById('copyShareBtn');
+<<<<<<< HEAD
       if (!input) {
         console.error('Share link input not found');
         return;
@@ -2955,6 +3061,12 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
       // Try modern clipboard API first
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(textToCopy).then(() => {
+=======
+      if (input) {
+        input.select();
+        input.setSelectionRange(0, 99999);
+        navigator.clipboard.writeText(input.value).then(() => {
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
           if (btn) {
             const originalText = btn.textContent;
             btn.textContent = 'Copied!';
@@ -2966,6 +3078,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
           }
           showNotification('Link copied to clipboard!');
         }).catch(function(err) {
+<<<<<<< HEAD
           console.error('Clipboard API failed, trying fallback:', err);
           fallbackCopyTextToClipboard(textToCopy, btn);
         });
@@ -3007,6 +3120,11 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
         showNotification('Failed to copy link', 'error');
       } finally {
         document.body.removeChild(textArea);
+=======
+          console.error('Failed to copy:', err);
+          showNotification('Failed to copy link', 'error');
+        });
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       }
     }
 
@@ -3027,7 +3145,11 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     // Track Share Analytics
     function trackShare(platform) {
       const businessId = ${business.id};
+<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
+=======
+      const API_BASE_URL = '${apiBaseUrl}';
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       
       fetch(API_BASE_URL + '/analytics/track', {
         method: 'POST',
@@ -3125,7 +3247,11 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
   <script>
     (function() {
       const businessId = ${business.id};
+<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
+=======
+      const API_BASE_URL = '${apiBaseUrl}';
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       
       // Track page view (once per session)
       if (!sessionStorage.getItem('analytics_tracked_' + businessId)) {
@@ -3246,7 +3372,11 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     // A/B Testing - Track variant and visitor
     (function() {
       const businessId = ${business.id};
+<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
+=======
+      const API_BASE_URL = '${apiBaseUrl}';
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       const currentVariant = '${business.currentVariant || 'default'}';
       
       // Track variant visit
@@ -3261,7 +3391,11 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     // Shopping Cart Functionality
     (function() {
       const businessSlug = '${business.slug}';
+<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
+=======
+      const API_BASE_URL = '${apiBaseUrl}';
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       let cart = JSON.parse(localStorage.getItem('cart_' + businessSlug) || '[]');
       let products = [];
 
@@ -3562,7 +3696,11 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
       event.preventDefault();
       
       const businessSlug = '${business.slug}';
+<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
+=======
+      const API_BASE_URL = '${apiBaseUrl}';
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       const submitBtn = document.getElementById('inquirySubmitBtn');
       const messageDiv = document.getElementById('inquiryMessageDiv');
       
@@ -3622,7 +3760,11 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     // Contact Form
     (function() {
       const businessSlug = '${business.slug}';
+<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
+=======
+      const API_BASE_URL = '${apiBaseUrl}';
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       const form = document.getElementById('contact-form');
       const messageDiv = document.getElementById('contact-form-message');
 
@@ -3671,6 +3813,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
         });
       }
     })();
+<<<<<<< HEAD
 
     // Image Lightbox Functionality
     (function() {
@@ -3992,6 +4135,8 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
         pullDistance = 0;
       });
     })();
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   </script>
 </body>
 </html>

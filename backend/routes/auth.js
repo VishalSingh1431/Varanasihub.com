@@ -230,7 +230,11 @@ router.post('/verify-otp', async (req, res) => {
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role || 'normal' },
       process.env.JWT_SECRET || 'your-secret-key-change-in-production',
+<<<<<<< HEAD
       { expiresIn: '30d' }
+=======
+      { expiresIn: '7d' }
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     );
 
     res.json({
@@ -328,7 +332,11 @@ router.post('/google', async (req, res) => {
     const authToken = jwt.sign(
       { userId: user.id, email: user.email, role: user.role || 'normal' },
       process.env.JWT_SECRET || 'your-secret-key-change-in-production',
+<<<<<<< HEAD
       { expiresIn: '30d' }
+=======
+      { expiresIn: '7d' }
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     );
 
     res.json({

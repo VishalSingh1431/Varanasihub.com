@@ -188,6 +188,7 @@ export const initializeDatabase = async () => {
       console.log('✅ Added missing "google_id" column to users table');
     }
 
+<<<<<<< HEAD
     // Check and add role column
     const roleColumnCheck = await pool.query(`
       SELECT column_name 
@@ -199,6 +200,8 @@ export const initializeDatabase = async () => {
       console.log('✅ Added missing "role" column to users table');
     }
 
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     // Create otps table if it doesn't exist
     await pool.query(`
       CREATE TABLE IF NOT EXISTS otps (
@@ -232,12 +235,16 @@ export const initializeDatabase = async () => {
         subdomain_url TEXT NOT NULL,
         subdirectory_url TEXT NOT NULL,
         status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'active')),
+<<<<<<< HEAD
         user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
+<<<<<<< HEAD
     // Check and add missing columns to businesses table if they don't exist
     const missingColumns = [
       { name: 'user_id', sql: 'INTEGER REFERENCES users(id) ON DELETE SET NULL' },
@@ -270,6 +277,8 @@ export const initializeDatabase = async () => {
       }
     }
 
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     // Create indexes for better query performance
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
@@ -309,6 +318,7 @@ export const initializeDatabase = async () => {
       EXECUTE FUNCTION update_updated_at_column();
     `);
 
+<<<<<<< HEAD
     // Create analytics table if it doesn't exist
     await pool.query(`
       CREATE TABLE IF NOT EXISTS analytics (
@@ -386,6 +396,8 @@ export const initializeDatabase = async () => {
       EXECUTE FUNCTION update_updated_at_column();
     `);
 
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     console.log('✅ Database tables initialized');
   } catch (error) {
     console.error('❌ Error initializing database:', error);

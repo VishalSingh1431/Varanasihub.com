@@ -660,9 +660,14 @@ export const getBusinessById = async (req, res) => {
       return res.status(404).json({ error: 'Business not found' });
     }
 
+<<<<<<< HEAD
     // Check if user owns this business or is main_admin
     const userRole = req.user?.role;
     if (business.userId !== userId && userRole !== 'main_admin') {
+=======
+    // Check if user owns this business
+    if (business.userId !== userId) {
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       return res.status(403).json({ error: 'You do not have permission to edit this business' });
     }
 
@@ -692,12 +697,17 @@ export const updateBusiness = async (req, res) => {
       return res.status(404).json({ error: 'Business not found' });
     }
 
+<<<<<<< HEAD
     // Fetch user from database to get current role (more reliable than JWT)
     const user = await User.findById(req.user?.userId);
     const userRole = user?.role || req.user?.role || 'normal';
 
     // Check if user owns this business or is main_admin
     if (existingBusiness.userId !== userId && userRole !== 'main_admin') {
+=======
+    // Check if user owns this business
+    if (existingBusiness.userId !== userId) {
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       return res.status(403).json({ error: 'You do not have permission to edit this business' });
     }
 
@@ -784,7 +794,13 @@ export const updateBusiness = async (req, res) => {
     }
 
     // Check user role - content admins need approval for edits
+<<<<<<< HEAD
     // userRole already fetched above
+=======
+    // Fetch user from database to get current role (more reliable than JWT)
+    const user = await User.findById(req.user?.userId);
+    const userRole = user?.role || 'normal';
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     const needsApproval = userRole === 'content_admin';
     
     // Normalize category if provided (same logic as create)
@@ -912,12 +928,16 @@ export const getBusinessBySubdomain = async (req, res) => {
     }
 
     // Return HTML template for business page
+<<<<<<< HEAD
     const NODE_ENV = process.env.NODE_ENV || 'development';
     const PORT = process.env.PORT || 5000;
     const apiBaseUrl = NODE_ENV === 'production' 
       ? `https://${process.env.BASE_DOMAIN || 'varanasihub.com'}/api`
       : `http://localhost:${PORT}/api`;
     const html = generateBusinessHTML(business, apiBaseUrl);
+=======
+    const html = generateBusinessHTML(business);
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     res.setHeader('Content-Type', 'text/html');
     res.send(html);
   } catch (error) {

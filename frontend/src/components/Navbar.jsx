@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ChevronDown, ChevronLeft, ChevronRight, User } from 'lucide-react';
+=======
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { Menu, X, ChevronDown, User } from 'lucide-react';
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 
 const Navbar = () => {
   const location = useLocation();
@@ -9,9 +15,12 @@ const Navbar = () => {
   const [isMobileCategoriesOpen, setIsMobileCategoriesOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [user, setUser] = useState(null);
+<<<<<<< HEAD
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(true);
   const categorySliderRef = useRef(null);
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 
   const checkAuthStatus = () => {
     const token = localStorage.getItem('token');
@@ -108,6 +117,7 @@ const Navbar = () => {
     setIsMobileCategoriesOpen(!isMobileCategoriesOpen);
   };
 
+<<<<<<< HEAD
   // Check scroll position for category slider
   const checkScrollPosition = () => {
     if (categorySliderRef.current) {
@@ -165,6 +175,10 @@ const Navbar = () => {
         }
       `}</style>
       <nav className="sticky top-0 z-[100] bg-white/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.08)] border-b border-gray-200/50 relative transition-all duration-300">
+=======
+  return (
+    <nav className="sticky top-0 z-[100] bg-white/95 backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.08)] border-b border-gray-200/50 relative transition-all duration-300">
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       <div className="w-full px-4 sm:px-4 lg:px-6 relative z-10">
         <div className="flex justify-between items-center h-20">
           {/* Logo with Image at Left */}
@@ -217,7 +231,11 @@ const Navbar = () => {
               About
             </Link>
 
+<<<<<<< HEAD
             {/* Categories Dropdown with Slider */}
+=======
+            {/* Categories Dropdown */}
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
             <div className="relative z-[110]">
               <button
                 onClick={toggleCategories}
@@ -233,11 +251,16 @@ const Navbar = () => {
                 />
               </button>
 
+<<<<<<< HEAD
               {/* Dropdown Menu with Slider */}
+=======
+              {/* Dropdown Menu */}
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
               {isCategoriesOpen && (
                 <div
                   onMouseEnter={() => setIsCategoriesOpen(true)}
                   onMouseLeave={() => setIsCategoriesOpen(false)}
+<<<<<<< HEAD
                   className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.15)] border border-gray-200 py-2 z-[110]"
                 >
                   {/* Category Slider */}
@@ -282,6 +305,19 @@ const Navbar = () => {
                       </button>
                     )}
                   </div>
+=======
+                  className="absolute top-full left-0 mt-2 w-48 bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.15)] border border-gray-200 py-2 z-[110]"
+                >
+                  {categories.map((category) => (
+                    <Link
+                      key={category}
+                      to={`/businesses?category=${category}`}
+                      className="block px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-300 rounded-lg mx-2"
+                    >
+                      {category}
+                    </Link>
+                  ))}
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                 </div>
               )}
             </div>
@@ -366,6 +402,7 @@ const Navbar = () => {
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* Mobile Menu Overlay */}
         {isMobileMenuOpen && (
           <div 
@@ -378,6 +415,11 @@ const Navbar = () => {
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden border-t-2 border-black py-4 relative z-50">
+=======
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden border-t-2 border-black py-4">
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
             <div className="flex flex-col space-y-1">
               <Link
                 to="/"
@@ -413,7 +455,11 @@ const Navbar = () => {
                 About
               </Link>
 
+<<<<<<< HEAD
               {/* Mobile Categories Dropdown with Slider */}
+=======
+              {/* Mobile Categories Dropdown */}
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
               <div>
                 <button
                   onClick={toggleMobileCategories}
@@ -427,6 +473,7 @@ const Navbar = () => {
                   />
                 </button>
 
+<<<<<<< HEAD
                 {/* Mobile Dropdown with Slider */}
                 {isMobileCategoriesOpen && (
                   <div className="pl-4 mt-2 pr-4">
@@ -473,6 +520,24 @@ const Navbar = () => {
                         </button>
                       )}
                     </div>
+=======
+                {/* Mobile Dropdown Items */}
+                {isMobileCategoriesOpen && (
+                  <div className="pl-4 mt-1 space-y-1">
+                    {categories.map((category) => (
+                      <Link
+                        key={category}
+                        to={`/businesses?category=${category}`}
+                        className="block px-4 py-2 text-sm text-black hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200"
+                        onClick={() => {
+                          setIsMobileMenuOpen(false);
+                          setIsMobileCategoriesOpen(false);
+                        }}
+                      >
+                        {category}
+                      </Link>
+                    ))}
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
                   </div>
                 )}
               </div>
@@ -566,7 +631,10 @@ const Navbar = () => {
         )}
       </div>
     </nav>
+<<<<<<< HEAD
     </>
+=======
+>>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   );
 };
 
