@@ -17,14 +17,11 @@ import EditWebsite from './pages/EditWebsite'
 import Analytics from './pages/Analytics'
 import QRCodeGenerator from './pages/QRCodeGenerator'
 import VaranasiHighlight from './pages/VaranasiHighlight'
-<<<<<<< HEAD
 import WebsiteDesign from './pages/services/WebsiteDesign'
 import WebsiteHosting from './pages/services/WebsiteHosting'
 import OnlinePresence from './pages/services/OnlinePresence'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
-=======
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 import WhatsAppWidget from './components/WhatsAppWidget'
 import { initGoogleAnalytics, trackPageView } from './utils/analytics'
 import './App.css'
@@ -36,7 +33,7 @@ const PageTracker = () => {
   useEffect(() => {
     // Initialize Google Analytics
     initGoogleAnalytics();
-    
+
     // Track page view
     const pageName = location.pathname;
     trackPageView(pageName);
@@ -53,33 +50,30 @@ function App() {
           <PageTracker />
           <WhatsAppWidget />
           <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/create-website" element={<CreateWebsite />} />
-          <Route path="/edit-website/:id" element={<EditWebsite />} />
-          <Route path="/analytics/:businessId" element={<Analytics />} />
-          <Route path="/qrcode/:id" element={<QRCodeGenerator />} />
-          <Route path="/businesses" element={<Businesses />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/varanasi/:slug" element={<VaranasiHighlight />} />
-<<<<<<< HEAD
-          <Route path="/services/website-design-varanasi" element={<WebsiteDesign />} />
-          <Route path="/services/website-hosting-varanasi" element={<WebsiteHosting />} />
-          <Route path="/services/online-presence-varanasi" element={<OnlinePresence />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
-=======
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
-          </Routes>
-        </ErrorBoundary>
-      </Router>
-    </ToastProvider>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/create-website" element={<CreateWebsite />} />
+            <Route path="/edit-website/:id" element={<EditWebsite />} />
+            <Route path="/analytics/:businessId" element={<Analytics />} />
+            <Route path="/qrcode/:id" element={<QRCodeGenerator />} />
+            <Route path="/businesses" element={<Businesses />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/varanasi/:slug" element={<VaranasiHighlight />} />
+            <Route path="/services/website-design-varanasi" element={<WebsiteDesign />} />
+            <Route path="/services/website-hosting-varanasi" element={<WebsiteHosting />} />
+            <Route path="/services/online-presence-varanasi" element={<OnlinePresence />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
+          </Routes >
+        </ErrorBoundary >
+      </Router >
+    </ToastProvider >
   )
 }
 
