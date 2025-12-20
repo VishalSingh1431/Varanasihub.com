@@ -11,7 +11,7 @@ import pool from '../config/database.js';
 export const testCreateCollege = async (req, res) => {
   try {
     console.log('🧪 TEST: Creating actual test business with College category');
-    
+
     const {
       businessName = 'Test College Business',
       ownerName = 'Test Owner',
@@ -21,10 +21,10 @@ export const testCreateCollege = async (req, res) => {
       address = 'Test Address, Varanasi, UP',
       description = 'This is a test business with College category to verify it works correctly',
     } = req.body;
-    
+
     // Validate and normalize category using the same logic as createBusiness
     const validCategories = ['Shop', 'Restaurant', 'Hotel', 'Clinic', 'Library', 'Services', 'Temple', 'School', 'College', 'Gym', 'Salon', 'Spa', 'Pharmacy', 'Bank', 'Travel Agency', 'Real Estate', 'Law Firm', 'Accounting', 'IT Services', 'Photography', 'Event Management', 'Catering', 'Bakery', 'Jewelry', 'Fashion', 'Electronics', 'Furniture', 'Automobile', 'Repair Services', 'Education', 'Healthcare', 'Beauty', 'Fitness', 'Entertainment', 'Tourism', 'Food & Beverage', 'Retail', 'Wholesale', 'Manufacturing', 'Construction', 'Other'];
-    
+
     const categoryMap = {
       'shop': 'Shop', 'shops': 'Shop', 'store': 'Shop', 'stores': 'Shop',
       'restaurant': 'Restaurant', 'restaurants': 'Restaurant',
@@ -45,29 +45,29 @@ export const testCreateCollege = async (req, res) => {
       'manufacturing': 'Manufacturing', 'construction': 'Construction', 'other': 'Other',
       'hospital': 'Clinic', 'lodging': 'Hotel', 'food': 'Restaurant', 'general': 'Services', 'misc': 'Other'
     };
-    
+
     let categoryValue = category;
     if (typeof category === 'object' && category !== null) {
       categoryValue = category.value || category.name || category.category || 'Services';
     }
-    
+
     const normalizedCategory = categoryValue ? String(categoryValue).trim() : '';
     const lowerCategory = normalizedCategory.toLowerCase();
-    
+
     let finalCategory = 'Services';
     if (normalizedCategory && validCategories.includes(normalizedCategory)) {
       finalCategory = normalizedCategory;
     } else if (normalizedCategory && lowerCategory && categoryMap[lowerCategory]) {
       finalCategory = categoryMap[lowerCategory];
     }
-    
+
     console.log('🧪 TEST - Category mapping:');
     console.log('  Input:', category);
     console.log('  Normalized:', normalizedCategory);
     console.log('  Lower:', lowerCategory);
     console.log('  Final:', finalCategory);
     console.log('  Is valid?', validCategories.includes(finalCategory));
-    
+
     // Create the test business
     const testBusinessData = {
       businessName,
@@ -100,22 +100,22 @@ export const testCreateCollege = async (req, res) => {
       status: 'pending',
       userId: null,
     };
-    
+
     console.log('🧪 TEST - Creating business with data:', {
       businessName: testBusinessData.businessName,
       category: testBusinessData.category,
       slug: testBusinessData.slug,
     });
-    
+
     const business = await Business.create(testBusinessData);
-    
+
     console.log('✅ TEST SUCCESS - Business created:', {
       id: business.id,
       businessName: business.businessName,
       category: business.category,
       slug: business.slug,
     });
-    
+
     return res.json({
       success: true,
       message: 'Test business created successfully with College category',
@@ -140,8 +140,8 @@ export const testCreateCollege = async (req, res) => {
     console.error('Error code:', error.code);
     console.error('Error message:', error.message);
     console.error('Error stack:', error.stack);
-    
-    return res.status(500).json({ 
+
+    return res.status(500).json({
       success: false,
       error: error.message,
       errorCode: error.code,
@@ -156,7 +156,7 @@ export const testCreateCollege = async (req, res) => {
 export const checkSubdomainAvailability = async (req, res) => {
   try {
     const { slug } = req.query;
-    
+
     if (!slug || typeof slug !== 'string') {
       return res.status(400).json({ error: 'Slug is required' });
     }
@@ -164,14 +164,14 @@ export const checkSubdomainAvailability = async (req, res) => {
     // Validate slug format (alphanumeric only, no hyphens, 3-50 chars)
     const slugRegex = /^[a-z0-9]{3,50}$/;
     if (!slugRegex.test(slug)) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         error: 'Invalid slug format. Use only lowercase letters and numbers (3-50 characters, no spaces or hyphens).',
-        available: false 
+        available: false
       });
     }
 
     const exists = await Business.slugExists(slug);
-    
+
     if (exists) {
       // Generate suggestions with numbers (no hyphens)
       const suggestions = [];
@@ -183,7 +183,7 @@ export const checkSubdomainAvailability = async (req, res) => {
           if (suggestions.length >= 3) break;
         }
       }
-      
+
       return res.json({
         available: false,
         slug,
@@ -254,17 +254,17 @@ export const createBusiness = async (req, res) => {
 
     // Validate and normalize category - ALL categories are separate
     const validCategories = ['Shop', 'Restaurant', 'Hotel', 'Clinic', 'Library', 'Services', 'Temple', 'School', 'College', 'Gym', 'Salon', 'Spa', 'Pharmacy', 'Bank', 'Travel Agency', 'Real Estate', 'Law Firm', 'Accounting', 'IT Services', 'Photography', 'Event Management', 'Catering', 'Bakery', 'Jewelry', 'Fashion', 'Electronics', 'Furniture', 'Automobile', 'Repair Services', 'Education', 'Healthcare', 'Beauty', 'Fitness', 'Entertainment', 'Tourism', 'Food & Beverage', 'Retail', 'Wholesale', 'Manufacturing', 'Construction', 'Other'];
-    
+
     // Extract category from any format (string, object, etc.)
     let categoryValue = category;
     if (typeof category === 'object' && category !== null) {
       categoryValue = category.value || category.name || category.category || 'Services';
     }
-    
+
     // Normalize: convert to string, trim, handle null/undefined
     const normalizedCategory = categoryValue ? String(categoryValue).trim() : '';
     const lowerCategory = normalizedCategory.toLowerCase();
-    
+
     // MAPPING - Each category maps to itself (all separate categories)
     const categoryMap = {
       // Direct matches - keep as is
@@ -274,7 +274,7 @@ export const createBusiness = async (req, res) => {
       'clinic': 'Clinic', 'clinics': 'Clinic',
       'library': 'Library', 'libraries': 'Library',
       'services': 'Services', 'service': 'Services',
-      
+
       // All other categories - SEPARATE (map to themselves)
       'temple': 'Temple', 'temples': 'Temple',
       'school': 'School', 'schools': 'School',
@@ -311,28 +311,28 @@ export const createBusiness = async (req, res) => {
       'manufacturing': 'Manufacturing',
       'construction': 'Construction',
       'other': 'Other', 'others': 'Other',
-      
+
       // Fallbacks for variations
       'hospital': 'Clinic', 'medical': 'Clinic',
       'lodging': 'Hotel', 'accommodation': 'Hotel',
       'food': 'Restaurant', 'dining': 'Restaurant',
       'general': 'Services', 'misc': 'Other', 'miscellaneous': 'Other', 'default': 'Services'
     };
-    
+
     // Force to valid category - default to Services if anything fails
     let finalCategory = 'Services'; // ALWAYS default to Services
-    
+
     console.log('🔍 STEP 1 - Category input:', category);
     console.log('🔍 STEP 2 - Normalized:', normalizedCategory);
     console.log('🔍 STEP 3 - Lower:', lowerCategory);
     console.log('🔍 STEP 4 - CategoryMap has key?', categoryMap.hasOwnProperty(lowerCategory));
     console.log('🔍 STEP 5 - CategoryMap value:', categoryMap[lowerCategory]);
-    
+
     // First check if it's already a valid category (exact match)
     if (normalizedCategory && validCategories.includes(normalizedCategory)) {
       finalCategory = normalizedCategory;
       console.log('✅ Direct match with valid category:', finalCategory);
-    } 
+    }
     // Then check the mapping (case-insensitive) - THIS IS WHERE COLLEGE SHOULD MAP TO LIBRARY
     else if (normalizedCategory && lowerCategory) {
       if (categoryMap[lowerCategory]) {
@@ -346,7 +346,7 @@ export const createBusiness = async (req, res) => {
     else {
       console.log('⚠️ No normalized category, using default Services');
     }
-    
+
     console.log('🔍 FINAL RESULT - Category:', category, '→ Final:', finalCategory);
 
     // Set default email and phone if not provided
@@ -367,7 +367,7 @@ export const createBusiness = async (req, res) => {
           const activeBusinesses = existingBusinesses.filter(
             biz => biz.status === 'approved' || biz.status === 'pending'
           );
-          
+
           if (activeBusinesses.length > 0) {
             return res.status(403).json({
               error: 'Content admins can only create one website. You already have a website. Please contact the main admin if you need to create additional websites.',
@@ -405,12 +405,12 @@ export const createBusiness = async (req, res) => {
       // Auto-generate slug from business name
       slug = slugify(businessName);
     }
-    
+
     // If slug is still not set or exists, append a number
     if (!slug) {
       slug = slugify(businessName);
     }
-    
+
     let slugExists = await Business.slugExists(slug);
     let counter = 1;
     while (slugExists) {
@@ -484,9 +484,9 @@ export const createBusiness = async (req, res) => {
     // Default to production unless explicitly in development mode
     const isDevelopment = process.env.NODE_ENV === 'development';
     const baseDomain = process.env.BASE_DOMAIN || 'varanasihub.com';
-    
+
     let subdomainUrl, subdirectoryUrl;
-    
+
     if (isDevelopment) {
       // For localhost: use http://subdomain.localhost:PORT
       const port = process.env.PORT || 5000;
@@ -501,7 +501,7 @@ export const createBusiness = async (req, res) => {
     // FINAL SAFETY CHECK - ensure category is ALWAYS valid before database
     // validCategories already defined above at line 256, reuse it
     let safeCategory = 'Services'; // Default fallback
-    
+
     // Triple check: if finalCategory is valid, use it; otherwise force to Services
     if (finalCategory && validCategories.includes(finalCategory)) {
       safeCategory = finalCategory;
@@ -509,10 +509,10 @@ export const createBusiness = async (req, res) => {
       safeCategory = 'Services';
       console.log('⚠️ Category was invalid, forcing to Services. Original:', finalCategory);
     }
-    
+
     console.log('🛡️ Final safety check - Category:', finalCategory, '→ Safe:', safeCategory);
     console.log('🛡️ Safe category type:', typeof safeCategory, 'Value:', JSON.stringify(safeCategory));
-    
+
     // Create business record
     const business = await Business.create({
       businessName,
@@ -567,7 +567,7 @@ export const createBusiness = async (req, res) => {
     console.error('Safe category that was used:', typeof safeCategory !== 'undefined' ? safeCategory : 'NOT SET');
     console.error('Request body keys:', Object.keys(req.body || {}));
     console.error('Request files keys:', Object.keys(req.files || {}));
-    
+
     // Handle PostgreSQL unique constraint violation
     if (error.code === '23505') {
       const field = error.constraint?.includes('slug') ? 'slug' : 'email';
@@ -583,7 +583,7 @@ export const createBusiness = async (req, res) => {
       console.error('❌ Error detail:', error.detail);
       console.error('❌ Category that was sent:', safeCategory);
       console.error('❌ Status that was sent:', 'pending');
-      
+
       // Common constraint violations: category or status
       let errorMsg = 'Invalid data provided. ';
       if (error.constraint?.includes('category')) {
@@ -601,8 +601,8 @@ export const createBusiness = async (req, res) => {
       }
       return res.status(400).json({
         error: errorMsg,
-        ...(process.env.NODE_ENV === 'development' && { 
-          constraint: error.constraint, 
+        ...(process.env.NODE_ENV === 'development' && {
+          constraint: error.constraint,
           details: error.message,
           detail: error.detail,
           receivedCategory: category,
@@ -613,11 +613,11 @@ export const createBusiness = async (req, res) => {
     }
 
     // Return detailed error in development, generic in production
-    const errorMessage = process.env.NODE_ENV === 'development' 
+    const errorMessage = process.env.NODE_ENV === 'development'
       ? error.message || 'Failed to create business website'
       : 'Failed to create business website';
-    
-    res.status(500).json({ 
+
+    res.status(500).json({
       error: errorMessage,
       ...(process.env.NODE_ENV === 'development' && { details: error.stack })
     });
@@ -660,14 +660,9 @@ export const getBusinessById = async (req, res) => {
       return res.status(404).json({ error: 'Business not found' });
     }
 
-<<<<<<< HEAD
     // Check if user owns this business or is main_admin
     const userRole = req.user?.role;
     if (business.userId !== userId && userRole !== 'main_admin') {
-=======
-    // Check if user owns this business
-    if (business.userId !== userId) {
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       return res.status(403).json({ error: 'You do not have permission to edit this business' });
     }
 
@@ -697,17 +692,12 @@ export const updateBusiness = async (req, res) => {
       return res.status(404).json({ error: 'Business not found' });
     }
 
-<<<<<<< HEAD
     // Fetch user from database to get current role (more reliable than JWT)
     const user = await User.findById(req.user?.userId);
     const userRole = user?.role || req.user?.role || 'normal';
 
     // Check if user owns this business or is main_admin
     if (existingBusiness.userId !== userId && userRole !== 'main_admin') {
-=======
-    // Check if user owns this business
-    if (existingBusiness.userId !== userId) {
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       return res.status(403).json({ error: 'You do not have permission to edit this business' });
     }
 
@@ -794,15 +784,9 @@ export const updateBusiness = async (req, res) => {
     }
 
     // Check user role - content admins need approval for edits
-<<<<<<< HEAD
     // userRole already fetched above
-=======
-    // Fetch user from database to get current role (more reliable than JWT)
-    const user = await User.findById(req.user?.userId);
-    const userRole = user?.role || 'normal';
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     const needsApproval = userRole === 'content_admin';
-    
+
     // Normalize category if provided (same logic as create)
     let finalCategory = existingBusiness.category; // Default to existing
     if (category) {
@@ -827,10 +811,10 @@ export const updateBusiness = async (req, res) => {
         'manufacturing': 'Manufacturing', 'construction': 'Construction', 'other': 'Other',
         'hospital': 'Clinic', 'lodging': 'Hotel', 'food': 'Restaurant', 'general': 'Services', 'misc': 'Other'
       };
-      
+
       const normalizedCategory = String(category).trim();
       const lowerCategory = normalizedCategory.toLowerCase();
-      
+
       if (validCategories.includes(normalizedCategory)) {
         finalCategory = normalizedCategory;
       } else if (categoryMap[lowerCategory]) {
@@ -838,10 +822,10 @@ export const updateBusiness = async (req, res) => {
       } else {
         finalCategory = 'Services'; // Default fallback
       }
-      
+
       console.log('🔍 Update Category input:', category, '→ Final:', finalCategory);
     }
-    
+
     // Update business
     const updatedBusiness = await Business.update(id, {
       businessName: businessName || existingBusiness.businessName,
@@ -871,10 +855,10 @@ export const updateBusiness = async (req, res) => {
       editApprovalStatus: needsApproval ? 'pending' : 'none',
     });
 
-    const message = needsApproval 
+    const message = needsApproval
       ? 'Your changes have been submitted for admin approval. They will be live once approved.'
       : 'Business updated successfully';
-    
+
     res.json({
       message,
       business: updatedBusiness,
@@ -916,11 +900,11 @@ export const getBusinessBySubdomain = async (req, res) => {
   try {
     // Extract subdomain from hostname
     let subdomain = req.subdomain;
-    
+
     if (!subdomain) {
       return res.status(404).json({ error: 'No subdomain found' });
     }
-    
+
     const business = await Business.findBySlug(subdomain, ['approved']);
 
     if (!business) {
@@ -928,16 +912,12 @@ export const getBusinessBySubdomain = async (req, res) => {
     }
 
     // Return HTML template for business page
-<<<<<<< HEAD
     const NODE_ENV = process.env.NODE_ENV || 'development';
     const PORT = process.env.PORT || 5000;
-    const apiBaseUrl = NODE_ENV === 'production' 
+    const apiBaseUrl = NODE_ENV === 'production'
       ? `https://${process.env.BASE_DOMAIN || 'varanasihub.com'}/api`
       : `http://localhost:${PORT}/api`;
     const html = generateBusinessHTML(business, apiBaseUrl);
-=======
-    const html = generateBusinessHTML(business);
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     res.setHeader('Content-Type', 'text/html');
     res.send(html);
   } catch (error) {
@@ -952,7 +932,7 @@ export const getBusinessBySubdomain = async (req, res) => {
 export const getAllBusinesses = async (req, res) => {
   try {
     const { status } = req.query;
-    
+
     // If status filter is provided, use it; otherwise default to approved
     let businesses;
     if (status) {
@@ -961,7 +941,7 @@ export const getAllBusinesses = async (req, res) => {
       // Default to showing only approved businesses in directory
       businesses = await Business.findAll('approved');
     }
-    
+
     res.json({ businesses });
   } catch (error) {
     console.error('Error fetching businesses:', error);
@@ -991,7 +971,7 @@ export const getPublicStats = async (req, res) => {
 
     // Calculate trust percentage (approved businesses / total businesses * 100)
     // If no businesses, default to 98%
-    const trustPercentage = totalBusinessesCount > 0 
+    const trustPercentage = totalBusinessesCount > 0
       ? Math.round((approvedBusinessesCount / totalBusinessesCount) * 100)
       : 98;
 

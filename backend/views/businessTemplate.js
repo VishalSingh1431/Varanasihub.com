@@ -2,7 +2,6 @@
  * Generate HTML template for business website
  * This can be used to render business pages for subdomain/subdirectory routing
  */
-<<<<<<< HEAD
 export const generateBusinessHTML = (business, apiBaseUrl = null) => {
   // Determine API base URL
   // Use provided apiBaseUrl, or compute from environment
@@ -12,21 +11,18 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
   } else {
     const isDevelopment = process.env.NODE_ENV === 'development';
     const baseDomain = process.env.BASE_DOMAIN || 'varanasihub.com';
-    apiUrl = isDevelopment 
+    apiUrl = isDevelopment
       ? `http://localhost:${process.env.PORT || 5000}/api`
       : `https://${baseDomain}/api`;
   }
-=======
-export const generateBusinessHTML = (business) => {
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
   // Helper function to get first name from full name
   const getFirstName = (fullName) => {
     if (!fullName) return '';
     return fullName.split(' ')[0];
   };
-  
+
   const ownerFirstName = getFirstName(business.ownerName);
-  
+
   // Theme configurations
   const themes = {
     modern: {
@@ -102,25 +98,15 @@ export const generateBusinessHTML = (business) => {
   // Generate SEO-friendly slug for URL
   const businessSlug = business.slug || business.businessName.toLowerCase().replace(/\s+/g, '-');
   const canonicalUrl = business.subdomainUrl || business.subdirectoryUrl || '';
-  
-<<<<<<< HEAD
-=======
-  // Determine API base URL
-  // Default to production unless explicitly in development mode
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  const baseDomain = process.env.BASE_DOMAIN || 'varanasihub.com';
-  const apiBaseUrl = isDevelopment 
-    ? `http://localhost:${process.env.PORT || 5000}/api`
-    : `https://${baseDomain}/api`;
-  
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
+
+
   // Extract location details from address
   const addressParts = business.address ? business.address.split(',') : [];
   const area = addressParts[0]?.trim() || 'Varanasi';
   const city = 'Varanasi';
   const state = 'Uttar Pradesh';
   const country = 'India';
-  
+
   // Generate comprehensive keywords from business data
   const keywords = [
     business.businessName,
@@ -141,7 +127,7 @@ export const generateBusinessHTML = (business) => {
   ].filter(Boolean).join(', ');
 
   // Generate optimized meta description
-  const metaDescription = business.description 
+  const metaDescription = business.description
     ? business.description.substring(0, 155).replace(/\s+/g, ' ').trim() + (business.description.length > 155 ? '...' : '')
     : `${business.businessName} - ${business.category} in ${city}. ${business.ownerName ? `Owner: ${business.ownerName}. ` : ''}Contact us for quality services.`;
 
@@ -245,7 +231,7 @@ export const generateBusinessHTML = (business) => {
       "availableLanguage": ["en", "hi"],
       ...(business.whatsapp ? { "contactOption": "TollFree", "hoursAvailable": { "@type": "OpeningHoursSpecification", "dayOfWeek": "https://schema.org/Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday", "opens": "00:00", "closes": "23:59" } } : {})
     },
-    ...(business.socialLinks?.website ? { 
+    ...(business.socialLinks?.website ? {
       "sameAs": [
         business.socialLinks.website,
         ...(business.socialLinks.instagram ? [`https://instagram.com/${business.socialLinks.instagram.replace(/^https?:\/\/(www\.)?instagram\.com\//, '').replace(/\/$/, '')}`] : []),
@@ -339,7 +325,7 @@ export const generateBusinessHTML = (business) => {
       "serviceUrl": canonicalUrl,
       "servicePhone": business.mobile
     },
-    ...(service.price ? { 
+    ...(service.price ? {
       "offers": {
         "@type": "Offer",
         "price": service.price,
@@ -705,7 +691,6 @@ export const generateBusinessHTML = (business) => {
         min-width: 44px;
       }
     }
-<<<<<<< HEAD
 
     /* Image Lightbox Modal Styles */
     .lightbox-modal {
@@ -953,8 +938,6 @@ export const generateBusinessHTML = (business) => {
         display: none;
       }
     }
-=======
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     /* Button zoom effects */
     button, .btn, a[class*="button"], a[class*="btn"] {
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -998,13 +981,10 @@ export const generateBusinessHTML = (business) => {
       0%, 100% { transform: scale(1); }
       50% { transform: scale(1.05); }
     }
-<<<<<<< HEAD
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-=======
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     .whatsapp-widget {
       position: fixed !important;
       bottom: 20px !important;
@@ -1959,7 +1939,6 @@ export const generateBusinessHTML = (business) => {
       </section>
       ` : ''}
 
-<<<<<<< HEAD
       <!-- Quick Contact Info Section -->
       ${business.address ? `
       <section id="location" class="section-card p-8 md:p-12 mb-12">
@@ -2001,38 +1980,6 @@ export const generateBusinessHTML = (business) => {
         </div>
       </section>
       ` : ''}
-=======
-      <!-- Statistics Counter Section -->
-      <section id="stats" class="section-card p-8 md:p-12 mb-12">
-        <div class="section-header">
-          <div class="section-icon">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-            </svg>
-          </div>
-          <h2 class="section-title">Our Achievements</h2>
-        </div>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-          ${(() => {
-            const stats = business.stats || [];
-            const defaultStats = [
-              { label: 'Happy Customers', value: '500+', icon: '👥' },
-              { label: 'Years Experience', value: '5+', icon: '⭐' },
-              { label: 'Projects Done', value: '1000+', icon: '🎯' },
-              { label: 'Success Rate', value: '98%', icon: '✅' }
-            ];
-            const displayStats = stats.length > 0 ? stats : defaultStats;
-            return displayStats.map((stat, index) => `
-              <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200">
-                <div class="text-3xl mb-3">${stat.icon || '📊'}</div>
-                <div class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">${stat.value}</div>
-                <div class="text-gray-600 text-sm md:text-base font-medium">${escapeHtml(stat.label)}</div>
-              </div>
-            `).join('');
-          })()}
-        </div>
-      </section>
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
 
       <!-- Trust Badges Section -->
       <section class="section-card p-8 md:p-12 mb-12">
@@ -2046,22 +1993,22 @@ export const generateBusinessHTML = (business) => {
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           ${(() => {
-            const badges = business.trustBadges || [];
-            const defaultBadges = [
-              { title: 'Verified Business', icon: '✓', description: 'Authenticated and verified' },
-              { title: 'Premium Quality', icon: '⭐', description: 'Top-notch services' },
-              { title: '24/7 Support', icon: '🕐', description: 'Always here to help' },
-              { title: 'Satisfaction Guaranteed', icon: '💯', description: '100% customer satisfaction' }
-            ];
-            const displayBadges = badges.length > 0 ? badges : defaultBadges;
-            return displayBadges.map((badge, index) => `
+      const badges = business.trustBadges || [];
+      const defaultBadges = [
+        { title: 'Verified Business', icon: '✓', description: 'Authenticated and verified' },
+        { title: 'Premium Quality', icon: '⭐', description: 'Top-notch services' },
+        { title: '24/7 Support', icon: '🕐', description: 'Always here to help' },
+        { title: 'Satisfaction Guaranteed', icon: '💯', description: '100% customer satisfaction' }
+      ];
+      const displayBadges = badges.length > 0 ? badges : defaultBadges;
+      return displayBadges.map((badge, index) => `
               <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-500 transition-all duration-300">
                 <div class="text-4xl mb-4">${badge.icon || '✓'}</div>
                 <h3 class="text-lg font-bold text-gray-900 mb-2">${escapeHtml(badge.title)}</h3>
                 <p class="text-gray-600 text-sm">${escapeHtml(badge.description || '')}</p>
               </div>
             `).join('');
-          })()}
+    })()}
         </div>
       </section>
 
@@ -2102,11 +2049,7 @@ export const generateBusinessHTML = (business) => {
         </div>
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
           ${business.imagesUrl.map((img, idx) => `
-<<<<<<< HEAD
             <div class="group gallery-item overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer aspect-square" onclick="openLightbox(${idx})" data-image-index="${idx}">
-=======
-            <div class="group gallery-item overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer aspect-square">
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
               <img src="${escapeHtml(img)}" alt="${escapeHtml(generateImageAlt(img, idx))}" class="w-full h-full object-cover transition-transform duration-300" loading="lazy" itemProp="image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
               <div class="w-full h-full bg-gray-200 flex items-center justify-center hidden">
                 <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -2132,14 +2075,14 @@ export const generateBusinessHTML = (business) => {
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           ${business.services.map((service, index) => {
-            const serviceName = service.title || service.name || 'Service';
-            const serviceDescription = service.description || '';
-            const servicePrice = service.price || '';
-            // Escape for HTML attributes
-            const serviceNameAttr = escapeHtml(serviceName).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
-            const serviceDescAttr = escapeHtml(serviceDescription).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
-            const servicePriceAttr = escapeHtml(servicePrice).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
-            return `
+      const serviceName = service.title || service.name || 'Service';
+      const serviceDescription = service.description || '';
+      const servicePrice = service.price || '';
+      // Escape for HTML attributes
+      const serviceNameAttr = escapeHtml(serviceName).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+      const serviceDescAttr = escapeHtml(serviceDescription).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+      const servicePriceAttr = escapeHtml(servicePrice).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+      return `
             <div class="service-card-item flex flex-col h-full" 
                  data-service-name="${serviceNameAttr}" 
                  data-service-description="${serviceDescAttr}" 
@@ -2184,7 +2127,7 @@ export const generateBusinessHTML = (business) => {
               </div>
             </div>
           `;
-          }).join('')}
+    }).join('')}
         </div>
       </section>
       ` : ''}
@@ -2202,13 +2145,13 @@ export const generateBusinessHTML = (business) => {
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           ${business.specialOffers.map((offer, index) => {
-            const expiryDate = offer.expiryDate ? new Date(offer.expiryDate) : null;
-            const now = new Date();
-            const isExpired = expiryDate && expiryDate < now;
-            const daysUntilExpiry = expiryDate ? Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24)) : null;
-            const isUrgent = daysUntilExpiry !== null && daysUntilExpiry <= 3 && daysUntilExpiry >= 0;
-            
-            return `
+      const expiryDate = offer.expiryDate ? new Date(offer.expiryDate) : null;
+      const now = new Date();
+      const isExpired = expiryDate && expiryDate < now;
+      const daysUntilExpiry = expiryDate ? Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24)) : null;
+      const isUrgent = daysUntilExpiry !== null && daysUntilExpiry <= 3 && daysUntilExpiry >= 0;
+
+      return `
             <div class="service-card-item">
               ${isUrgent ? `
               <div class="absolute top-4 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
@@ -2239,7 +2182,7 @@ export const generateBusinessHTML = (business) => {
               </div>
             </div>
             `;
-          }).join('')}
+    }).join('')}
         </div>
       </section>
       ` : ''}
@@ -2256,36 +2199,36 @@ export const generateBusinessHTML = (business) => {
           <div class="flex-1">
             <h2 class="section-title">Business Hours</h2>
             ${(() => {
-              const now = new Date();
-              const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getDay()];
-              const currentTime = now.getHours() * 100 + now.getMinutes();
-              const todayHours = business.businessHours[currentDay];
-              let isOpen = false;
-              if (todayHours && todayHours.open) {
-                const start = parseInt(todayHours.start.replace(':', ''));
-                const end = parseInt(todayHours.end.replace(':', ''));
-                isOpen = currentTime >= start && currentTime <= end;
-              }
-              return `
+        const now = new Date();
+        const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getDay()];
+        const currentTime = now.getHours() * 100 + now.getMinutes();
+        const todayHours = business.businessHours[currentDay];
+        let isOpen = false;
+        if (todayHours && todayHours.open) {
+          const start = parseInt(todayHours.start.replace(':', ''));
+          const end = parseInt(todayHours.end.replace(':', ''));
+          isOpen = currentTime >= start && currentTime <= end;
+        }
+        return `
               <div class="mt-2 flex items-center gap-3">
                 <div class="px-4 py-2 rounded-full font-bold text-sm ${isOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
                   ${isOpen ? '🟢 Open Now' : '🔴 Closed Now'}
                 </div>
               </div>
               `;
-            })()}
+      })()}
           </div>
         </div>
         <div class="space-y-3">
           ${['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => {
-            const hours = business.businessHours[day];
-            if (!hours) return '';
-            const isOpen = hours.open;
-            const now = new Date();
-            const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getDay()];
-            const isToday = day === currentDay;
-            
-            return `
+        const hours = business.businessHours[day];
+        if (!hours) return '';
+        const isOpen = hours.open;
+        const now = new Date();
+        const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getDay()];
+        const isToday = day === currentDay;
+
+        return `
             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border-2 ${isToday ? 'border-teal-400 bg-teal-50' : 'border-gray-200'}">
               <span class="text-lg font-semibold text-gray-800 capitalize">${day}</span>
               ${isOpen ? `
@@ -2298,7 +2241,7 @@ export const generateBusinessHTML = (business) => {
               `}
             </div>
             `;
-          }).join('')}
+      }).join('')}
         </div>
       </section>
       ` : ''}
@@ -2318,7 +2261,6 @@ export const generateBusinessHTML = (business) => {
           <p class="text-gray-700 text-lg mb-6 text-center">
             Ready to get started? Book your appointment now and we'll get back to you!
           </p>
-<<<<<<< HEAD
           
           <!-- Appointment Booking Form -->
           <div id="appointment-booking-form" class="bg-white rounded-xl p-6 shadow-lg">
@@ -2490,40 +2432,6 @@ export const generateBusinessHTML = (business) => {
           });
         })();
       </script>
-=======
-          ${business.appointmentSettings.availableSlots && business.appointmentSettings.availableSlots.length > 0 ? `
-          <div class="mb-6">
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">Available Time Slots</h3>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
-              ${business.appointmentSettings.availableSlots.map(slot => `
-                <div class="p-3 bg-white rounded-lg border-2 border-gray-200 text-center">
-                  <p class="text-sm text-gray-500 mb-1">${escapeHtml(slot.label || '')}</p>
-                  <p class="font-bold text-gray-900">${escapeHtml(slot.time || '')}</p>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-          ` : ''}
-          <div class="text-center">
-            ${business.appointmentSettings.contactMethod === 'whatsapp' && business.whatsapp ? `
-            <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/[^0-9]/g, ''))}?text=${encodeURIComponent('Hello! I would like to book an appointment.')}" target="_blank" class="inline-flex items-center gap-3 px-8 py-4 bg-green-600 text-white rounded-lg font-semibold text-base hover:bg-green-700 transition-all duration-200 shadow-md hover:shadow-lg">
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-              </svg>
-              Book via WhatsApp
-            </a>
-            ` : business.appointmentSettings.contactMethod === 'call' && business.mobile ? `
-            <a href="tel:${escapeHtml(business.mobile)}" class="inline-flex items-center gap-3 px-8 py-4 bg-blue-600 text-white rounded-lg font-semibold text-base hover:bg-blue-700 transition-all duration-200 shadow-md hover:shadow-lg">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-              </svg>
-              Call to Book
-            </a>
-            ` : ''}
-          </div>
-        </div>
-      </section>
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       ` : ''}
 
       <!-- E-Commerce / Products Section -->
@@ -2729,30 +2637,30 @@ export const generateBusinessHTML = (business) => {
                   View on Google Maps
                 </a>
                 ${(() => {
-                  // Try to extract embed URL from Google Maps link
-                  let embedUrl = null;
-                  if (business.mapLink.includes('google.com/maps')) {
-                    // Extract place ID or coordinates from URL
-                    const placeIdMatch = business.mapLink.match(/place\/([^\/]+)/);
-                    const queryMatch = business.mapLink.match(/q=([^&]+)/);
-                    if (placeIdMatch) {
-                      embedUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6q4Zb1L3uY&q=place_id:${placeIdMatch[1]}`;
-                    } else if (queryMatch) {
-                      embedUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6q4Zb1L3uY&q=${encodeURIComponent(queryMatch[1])}`;
-                    } else {
-                      // Try to extract coordinates
-                      const coordMatch = business.mapLink.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-                      if (coordMatch) {
-                        embedUrl = `https://www.google.com/maps/embed/v1/view?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6q4Zb1L3uY&center=${coordMatch[1]},${coordMatch[2]}&zoom=15`;
-                      }
-                    }
-                  }
-                  // If it's already an embed URL, use it directly
-                  if (business.mapLink.includes('google.com/maps/embed')) {
-                    embedUrl = business.mapLink;
-                  }
-                  
-                  return embedUrl ? `
+        // Try to extract embed URL from Google Maps link
+        let embedUrl = null;
+        if (business.mapLink.includes('google.com/maps')) {
+          // Extract place ID or coordinates from URL
+          const placeIdMatch = business.mapLink.match(/place\/([^\/]+)/);
+          const queryMatch = business.mapLink.match(/q=([^&]+)/);
+          if (placeIdMatch) {
+            embedUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6q4Zb1L3uY&q=place_id:${placeIdMatch[1]}`;
+          } else if (queryMatch) {
+            embedUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6q4Zb1L3uY&q=${encodeURIComponent(queryMatch[1])}`;
+          } else {
+            // Try to extract coordinates
+            const coordMatch = business.mapLink.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+            if (coordMatch) {
+              embedUrl = `https://www.google.com/maps/embed/v1/view?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6q4Zb1L3uY&center=${coordMatch[1]},${coordMatch[2]}&zoom=15`;
+            }
+          }
+        }
+        // If it's already an embed URL, use it directly
+        if (business.mapLink.includes('google.com/maps/embed')) {
+          embedUrl = business.mapLink;
+        }
+
+        return embedUrl ? `
                   <div class="mt-4 rounded-xl overflow-hidden shadow-lg border-2 border-gray-200">
                     <iframe 
                       src="${escapeHtml(embedUrl)}" 
@@ -2766,7 +2674,7 @@ export const generateBusinessHTML = (business) => {
                     ></iframe>
                   </div>
                   ` : '';
-                })()}
+      })()}
               </div>
               ` : ''}
             </div>
@@ -3012,7 +2920,6 @@ export const generateBusinessHTML = (business) => {
 
     // Share Modal Functions
     function openShareModal() {
-<<<<<<< HEAD
       try {
         const modal = document.getElementById('shareModal');
         if (modal) {
@@ -3023,12 +2930,7 @@ export const generateBusinessHTML = (business) => {
         }
       } catch (error) {
         console.error('Error opening share modal:', error);
-=======
-      const modal = document.getElementById('shareModal');
-      if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
+      }
       }
     }
 
@@ -3050,7 +2952,6 @@ export const generateBusinessHTML = (business) => {
     function copyShareLink() {
       const input = document.getElementById('shareLinkInput');
       const btn = document.getElementById('copyShareBtn');
-<<<<<<< HEAD
       if (!input) {
         console.error('Share link input not found');
         return;
@@ -3061,12 +2962,6 @@ export const generateBusinessHTML = (business) => {
       // Try modern clipboard API first
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(textToCopy).then(() => {
-=======
-      if (input) {
-        input.select();
-        input.setSelectionRange(0, 99999);
-        navigator.clipboard.writeText(input.value).then(() => {
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
           if (btn) {
             const originalText = btn.textContent;
             btn.textContent = 'Copied!';
@@ -3078,7 +2973,6 @@ export const generateBusinessHTML = (business) => {
           }
           showNotification('Link copied to clipboard!');
         }).catch(function(err) {
-<<<<<<< HEAD
           console.error('Clipboard API failed, trying fallback:', err);
           fallbackCopyTextToClipboard(textToCopy, btn);
         });
@@ -3120,11 +3014,6 @@ export const generateBusinessHTML = (business) => {
         showNotification('Failed to copy link', 'error');
       } finally {
         document.body.removeChild(textArea);
-=======
-          console.error('Failed to copy:', err);
-          showNotification('Failed to copy link', 'error');
-        });
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       }
     }
 
@@ -3145,11 +3034,7 @@ export const generateBusinessHTML = (business) => {
     // Track Share Analytics
     function trackShare(platform) {
       const businessId = ${business.id};
-<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
-=======
-      const API_BASE_URL = '${apiBaseUrl}';
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       
       fetch(API_BASE_URL + '/analytics/track', {
         method: 'POST',
@@ -3247,11 +3132,7 @@ export const generateBusinessHTML = (business) => {
   <script>
     (function() {
       const businessId = ${business.id};
-<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
-=======
-      const API_BASE_URL = '${apiBaseUrl}';
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       
       // Track page view (once per session)
       if (!sessionStorage.getItem('analytics_tracked_' + businessId)) {
@@ -3372,11 +3253,7 @@ export const generateBusinessHTML = (business) => {
     // A/B Testing - Track variant and visitor
     (function() {
       const businessId = ${business.id};
-<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
-=======
-      const API_BASE_URL = '${apiBaseUrl}';
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       const currentVariant = '${business.currentVariant || 'default'}';
       
       // Track variant visit
@@ -3391,11 +3268,7 @@ export const generateBusinessHTML = (business) => {
     // Shopping Cart Functionality
     (function() {
       const businessSlug = '${business.slug}';
-<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
-=======
-      const API_BASE_URL = '${apiBaseUrl}';
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       let cart = JSON.parse(localStorage.getItem('cart_' + businessSlug) || '[]');
       let products = [];
 
@@ -3696,11 +3569,7 @@ export const generateBusinessHTML = (business) => {
       event.preventDefault();
       
       const businessSlug = '${business.slug}';
-<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
-=======
-      const API_BASE_URL = '${apiBaseUrl}';
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       const submitBtn = document.getElementById('inquirySubmitBtn');
       const messageDiv = document.getElementById('inquiryMessageDiv');
       
@@ -3760,11 +3629,7 @@ export const generateBusinessHTML = (business) => {
     // Contact Form
     (function() {
       const businessSlug = '${business.slug}';
-<<<<<<< HEAD
       const API_BASE_URL = '${apiUrl}';
-=======
-      const API_BASE_URL = '${apiBaseUrl}';
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
       const form = document.getElementById('contact-form');
       const messageDiv = document.getElementById('contact-form-message');
 
@@ -3813,7 +3678,7 @@ export const generateBusinessHTML = (business) => {
         });
       }
     })();
-<<<<<<< HEAD
+
 
     // Image Lightbox Functionality
     (function() {
@@ -4135,8 +4000,7 @@ export const generateBusinessHTML = (business) => {
         pullDistance = 0;
       });
     })();
-=======
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
+
   </script>
 </body>
 </html>

@@ -17,14 +17,14 @@ if (process.env.DATABASE_URL || process.env.POSTGRES_SERVICE_URI) {
   try {
     // Aiven Service URI format: postgres://user:password@host:port/database?sslmode=require
     const uri = process.env.DATABASE_URL || process.env.POSTGRES_SERVICE_URI;
-    
+
     // Validate URI format
     if (!uri.startsWith('postgres://') && !uri.startsWith('postgresql://')) {
       throw new Error('DATABASE_URL must start with postgres:// or postgresql://');
     }
-    
+
     const url = new URL(uri);
-    
+
     // Validate required components
     if (!url.hostname) {
       throw new Error('DATABASE_URL is missing hostname');
@@ -35,7 +35,7 @@ if (process.env.DATABASE_URL || process.env.POSTGRES_SERVICE_URI) {
     if (!url.password) {
       throw new Error('DATABASE_URL is missing password');
     }
-    
+
     dbConfig = {
       host: url.hostname,
       port: parseInt(url.port) || 5432,
@@ -46,7 +46,7 @@ if (process.env.DATABASE_URL || process.env.POSTGRES_SERVICE_URI) {
         rejectUnauthorized: false
       },
     };
-    
+
     console.log('🔗 Database Config:', {
       host: dbConfig.host,
       port: dbConfig.port,
@@ -188,7 +188,6 @@ export const initializeDatabase = async () => {
       console.log('✅ Added missing "google_id" column to users table');
     }
 
-<<<<<<< HEAD
     // Check and add role column
     const roleColumnCheck = await pool.query(`
       SELECT column_name 
@@ -200,8 +199,6 @@ export const initializeDatabase = async () => {
       console.log('✅ Added missing "role" column to users table');
     }
 
-=======
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     // Create otps table if it doesn't exist
     await pool.query(`
       CREATE TABLE IF NOT EXISTS otps (
@@ -235,16 +232,12 @@ export const initializeDatabase = async () => {
         subdomain_url TEXT NOT NULL,
         subdirectory_url TEXT NOT NULL,
         status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'active')),
-<<<<<<< HEAD
         user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
-=======
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
 
-<<<<<<< HEAD
     // Check and add missing columns to businesses table if they don't exist
     const missingColumns = [
       { name: 'user_id', sql: 'INTEGER REFERENCES users(id) ON DELETE SET NULL' },
@@ -266,7 +259,7 @@ export const initializeDatabase = async () => {
         FROM information_schema.columns 
         WHERE table_name = 'businesses' AND column_name = $1
       `, [column.name]);
-      
+
       if (columnCheck.rows.length === 0) {
         try {
           await pool.query(`ALTER TABLE businesses ADD COLUMN ${column.name} ${column.sql}`);
@@ -277,8 +270,6 @@ export const initializeDatabase = async () => {
       }
     }
 
-=======
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     // Create indexes for better query performance
     await pool.query(`
       CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
@@ -318,7 +309,6 @@ export const initializeDatabase = async () => {
       EXECUTE FUNCTION update_updated_at_column();
     `);
 
-<<<<<<< HEAD
     // Create analytics table if it doesn't exist
     await pool.query(`
       CREATE TABLE IF NOT EXISTS analytics (
@@ -396,8 +386,6 @@ export const initializeDatabase = async () => {
       EXECUTE FUNCTION update_updated_at_column();
     `);
 
-=======
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     console.log('✅ Database tables initialized');
   } catch (error) {
     console.error('❌ Error initializing database:', error);
@@ -406,4 +394,3 @@ export const initializeDatabase = async () => {
 };
 
 export default pool;
-

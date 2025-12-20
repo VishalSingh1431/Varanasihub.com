@@ -17,7 +17,7 @@ let transporter = null;
 
 const initializeEmailTransporter = () => {
   if (transporter) return transporter;
-  
+
   // Try Gmail first if credentials are provided
   if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
     transporter = nodemailer.createTransport({
@@ -29,7 +29,7 @@ const initializeEmailTransporter = () => {
     });
     return transporter;
   }
-  
+
   // Fallback: Use SMTP configuration if provided
   if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
     transporter = nodemailer.createTransport({
@@ -43,7 +43,7 @@ const initializeEmailTransporter = () => {
     });
     return transporter;
   }
-  
+
   return null;
 };
 
@@ -157,7 +157,7 @@ router.post('/send-otp', async (req, res) => {
         console.error('❌ Error sending email:', emailError);
         // Fallback: log OTP if email fails
         console.log(`⚠️ Email sending failed. OTP for ${email}: ${otp}`);
-        return res.json({ 
+        return res.json({
           message: 'OTP sent successfully (check console - email service unavailable)',
           otp: otp,
           warning: 'Email service is not properly configured. Please check your email settings.'
@@ -166,7 +166,7 @@ router.post('/send-otp', async (req, res) => {
     } else {
       // No email transporter configured
       console.log(`⚠️ Email not configured. OTP for ${email}: ${otp}`);
-      return res.json({ 
+      return res.json({
         message: 'OTP generated (email not configured - check console)',
         otp: otp,
         warning: 'Please configure email settings in .env file to receive OTP via email'
@@ -230,11 +230,7 @@ router.post('/verify-otp', async (req, res) => {
     const token = jwt.sign(
       { userId: user.id, email: user.email, role: user.role || 'normal' },
       process.env.JWT_SECRET || 'your-secret-key-change-in-production',
-<<<<<<< HEAD
       { expiresIn: '30d' }
-=======
-      { expiresIn: '7d' }
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     );
 
     res.json({
@@ -263,8 +259,8 @@ router.post('/google', async (req, res) => {
   try {
     // Check if Google Client ID is configured
     if (!process.env.GOOGLE_CLIENT_ID) {
-      return res.status(400).json({ 
-        error: 'Google Sign-In is not configured. Please configure GOOGLE_CLIENT_ID in backend .env file or use email signup.' 
+      return res.status(400).json({
+        error: 'Google Sign-In is not configured. Please configure GOOGLE_CLIENT_ID in backend .env file or use email signup.'
       });
     }
 
@@ -332,11 +328,7 @@ router.post('/google', async (req, res) => {
     const authToken = jwt.sign(
       { userId: user.id, email: user.email, role: user.role || 'normal' },
       process.env.JWT_SECRET || 'your-secret-key-change-in-production',
-<<<<<<< HEAD
       { expiresIn: '30d' }
-=======
-      { expiresIn: '7d' }
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
     );
 
     res.json({
@@ -358,10 +350,10 @@ router.post('/google', async (req, res) => {
     console.error('Error with Google authentication:', error);
     console.error('Error details:', error.message);
     console.error('Error code:', error.code);
-    
+
     // Check if it's a database connection error
     if (
-      error.code === 'ENOTFOUND' || 
+      error.code === 'ENOTFOUND' ||
       error.code === 'ECONNREFUSED' ||
       error.code === 'ETIMEDOUT' ||
       error.code === 'EAI_AGAIN' ||
@@ -373,7 +365,7 @@ router.post('/google', async (req, res) => {
     ) {
       let errorMessage = 'Database connection failed.';
       let helpMessage = 'Please check your database configuration in the .env file.';
-      
+
       if (error.code === 'ENOTFOUND') {
         errorMessage = 'Database hostname not found.';
         helpMessage = 'Get the correct connection string from https://console.aiven.io/ → Your Project → PostgreSQL → Connection Information';
@@ -384,16 +376,16 @@ router.post('/google', async (req, res) => {
         errorMessage = 'Database connection timeout.';
         helpMessage = 'Check your network connection and firewall settings.';
       }
-      
-      return res.status(503).json({ 
+
+      return res.status(503).json({
         error: errorMessage,
         help: helpMessage,
         code: error.code,
         details: process.env.NODE_ENV === 'development' ? error.message : undefined
       });
     }
-    
-    res.status(500).json({ 
+
+    res.status(500).json({
       error: 'Google authentication failed',
       details: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
@@ -415,7 +407,7 @@ router.get('/verify', verifyToken, (req, res) => {
 router.get('/me', verifyToken, async (req, res) => {
   try {
     const user = await User.findById(req.user.userId);
-    
+
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -443,27 +435,27 @@ router.get('/me', verifyToken, async (req, res) => {
 router.put('/profile', verifyToken, async (req, res) => {
   try {
     const { name, phone, bio } = req.body;
-    
+
     console.log('Profile update request:', { userId: req.user.userId, name, phone, bio });
-    
+
     // Prepare update data - only include defined fields, convert empty strings to null
     const updateData = {};
     if (name !== undefined) updateData.name = name || null;
     if (phone !== undefined) updateData.phone = phone || null;
     if (bio !== undefined) updateData.bio = bio || null;
-    
+
     console.log('Update data:', updateData);
-    
+
     // Update user in database
     const user = await User.update(req.user.userId, updateData);
-    
+
     if (!user) {
       console.error('User not found after update:', req.user.userId);
       return res.status(404).json({ error: 'User not found' });
     }
 
     console.log('Profile updated successfully for user:', user.id);
-    
+
     res.json({
       message: 'Profile updated successfully',
       user: {
@@ -482,24 +474,24 @@ router.put('/profile', verifyToken, async (req, res) => {
     console.error('Error stack:', error.stack);
     console.error('Error code:', error.code);
     console.error('Error message:', error.message);
-    
+
     // Check if it's a database connection error
     if (error.code === 'ENOTFOUND' || error.message.includes('getaddrinfo')) {
-      return res.status(503).json({ 
+      return res.status(503).json({
         error: 'Database connection failed. Please check your database configuration.',
         details: 'Cannot connect to database server'
       });
     }
-    
+
     // Check for database column errors
     if (error.code === '42703') {
-      return res.status(500).json({ 
+      return res.status(500).json({
         error: 'Database schema error',
         details: process.env.NODE_ENV === 'development' ? error.message : 'A required database column is missing. Please contact support.'
       });
     }
-    
-    res.status(500).json({ 
+
+    res.status(500).json({
       error: 'Failed to update profile',
       details: process.env.NODE_ENV === 'development' ? error.message : undefined,
       code: error.code
