@@ -251,6 +251,11 @@ export const initializeDatabase = async () => {
       { name: 'is_premium', sql: 'BOOLEAN DEFAULT FALSE' },
       { name: 'google_places_data', sql: 'JSONB' },
       { name: 'edit_approval_status', sql: 'VARCHAR(50) DEFAULT NULL CHECK (edit_approval_status IN (\'pending\', \'approved\', \'rejected\'))' },
+      { name: 'ecommerce_enabled', sql: 'BOOLEAN DEFAULT FALSE' },
+      { name: 'ab_test_enabled', sql: 'BOOLEAN DEFAULT FALSE' },
+      { name: 'current_variant', sql: 'VARCHAR(50) DEFAULT \'default\'' },
+      { name: 'products', sql: 'JSONB DEFAULT \'[]\'::jsonb' },
+      { name: 'verified', sql: 'BOOLEAN DEFAULT FALSE' },
     ];
 
     for (const column of missingColumns) {
@@ -377,13 +382,58 @@ export const initializeDatabase = async () => {
       CREATE INDEX IF NOT EXISTS idx_appointments_business_date ON appointments(business_id, appointment_date);
     `);
 
-    // Create trigger to update appointments updated_at
+    // Create triggers to update appointments updated_at
     await pool.query(`
       DROP TRIGGER IF EXISTS update_appointments_updated_at ON appointments;
       CREATE TRIGGER update_appointments_updated_at
       BEFORE UPDATE ON appointments
       FOR EACH ROW
       EXECUTE FUNCTION update_updated_at_column();
+    `);
+
+    // Create products table if it doesn't exist
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS products (
+        id SERIAL PRIMARY KEY,
+        business_id INTEGER NOT NULL REFERENCES businesses(id) ON DELETE CASCADE,
+        name VARCHAR(255) NOT NULL,
+        description TEXT,
+        price DECIMAL(10, 2) NOT NULL,
+        stock_quantity INTEGER DEFAULT 0,
+        image_url TEXT,
+        category VARCHAR(100),
+        status VARCHAR(50) DEFAULT 'active',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create orders table if it doesn't exist
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS orders (
+        id SERIAL PRIMARY KEY,
+        business_id INTEGER NOT NULL REFERENCES businesses(id) ON DELETE CASCADE,
+        order_number VARCHAR(50) UNIQUE NOT NULL,
+        customer_name VARCHAR(255) NOT NULL,
+        customer_email VARCHAR(255),
+        customer_phone VARCHAR(20) NOT NULL,
+        shipping_address TEXT,
+        total_amount DECIMAL(10, 2) NOT NULL,
+        status VARCHAR(50) DEFAULT 'pending',
+        items JSONB NOT NULL,
+        payment_status VARCHAR(50) DEFAULT 'pending',
+        payment_method VARCHAR(50),
+        notification_sent BOOLEAN DEFAULT FALSE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create indexes for products and orders
+    await pool.query(`
+      CREATE INDEX IF NOT EXISTS idx_products_business_id ON products(business_id);
+      CREATE INDEX IF NOT EXISTS idx_orders_business_id ON orders(business_id);
+      CREATE INDEX IF NOT EXISTS idx_orders_order_number ON orders(order_number);
     `);
 
     console.log('✅ Database tables initialized');

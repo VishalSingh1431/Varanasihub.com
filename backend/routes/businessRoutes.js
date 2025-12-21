@@ -20,7 +20,7 @@ import { upgradeToPremium, removePremium } from '../controllers/premiumControlle
 const router = express.Router();
 
 // Create business website (with file uploads)
-router.post('/create', (req, res, next) => {
+router.post('/create', verifyToken, (req, res, next) => {
   uploadBusinessMedia(req, res, (err) => {
     if (err) {
       // Handle multer errors
@@ -38,8 +38,8 @@ router.post('/create', (req, res, next) => {
 }, processCloudinaryUploads, createBusiness);
 
 // TEST ENDPOINT - Create test business with College category (POST to create, GET to test mapping)
-router.post('/test-college', testCreateCollege);
-router.get('/test-college', testCreateCollege);
+router.post('/test-college', verifyToken, testCreateCollege);
+router.get('/test-college', verifyToken, testCreateCollege);
 
 // Get public statistics (must come before /:slug to avoid conflicts)
 router.get('/stats', getPublicStats);

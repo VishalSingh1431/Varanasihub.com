@@ -550,7 +550,6 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     body, html {
       overflow-x: hidden;
       width: 100%;
-      height: 100%;
       margin: 0;
       padding: 0;
     }
@@ -1287,7 +1286,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
         bottom: 110px !important;
       }
       #mobileBottomNav {
-        bottom: 20px !important;
+        bottom: 10px !important;
       }
     }
   </style>
@@ -1676,7 +1675,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
   </nav>
 
   <!-- Main Content -->
-  <main style="max-width: 100vw; overflow-x: hidden; box-sizing: border-box;">
+  <main class="w-full">
     <!-- Enhanced Hero Section - Name/Address Left, Image Right (Circular) -->
     <section id="home" class="relative bg-gradient-to-r ${theme.primary} text-white py-12 md:py-16 lg:py-20 overflow-hidden">
       <!-- Animated Background Elements -->
@@ -2025,7 +2024,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
 
       <!-- Gallery -->
       ${business.imagesUrl && business.imagesUrl.length > 0 ? `
-      <section id="gallery" class="py-16 sm:py-20 bg-gray-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 mb-12">
+      <section id="gallery" class="py-16 sm:py-20 bg-gray-50 px-4 sm:px-6 lg:px-8 mb-12">
         <div class="max-w-7xl mx-auto">
           <div class="text-center mb-12">
             <h2 class="text-3xl sm:text-4xl font-black text-gray-900 mb-4 text-center">Our Gallery</h2>
@@ -2332,7 +2331,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
       < !--E - Commerce / Products Section-- >
 
   ${business.ecommerceEnabled ? `
-      <section id="products" class="py-16 sm:py-20 bg-white -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 mb-12">
+      <section id="products" class="py-16 sm:py-20 bg-white px-4 sm:px-6 lg:px-8 mb-12">
         <div class="max-w-7xl mx-auto">
           <div class="text-center mb-12">
             <div class="inline-block px-4 py-2 rounded-full ${theme.accent.replace('text-', 'bg-')}/10 ${theme.accent} text-sm font-bold mb-4">
@@ -2381,7 +2380,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     }
 < !--FAQ Section-- >
   ${business.faqs && business.faqs.length > 0 ? `
-      <section id="faq" class="py-16 sm:py-20 bg-gray-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 mb-12">
+      <section id="faq" class="py-16 sm:py-20 bg-gray-50 px-4 sm:px-6 lg:px-8 mb-12">
         <div class="max-w-3xl mx-auto">
           <div class="text-center mb-12">
             <h2 class="text-3xl sm:text-4xl font-black text-gray-900 mb-4 text-center">Common Questions</h2>
@@ -2408,7 +2407,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     }
 
       < !--Contact Section-- >
-  <section id="contact" class="py-16 sm:py-20 bg-white -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 mb-12">
+  <section id="contact" class="py-16 sm:py-20 bg-white px-4 sm:px-6 lg:px-8 mb-12">
     <div class="max-w-7xl mx-auto">
       <div class="text-center mb-12 sm:mb-16">
         <div class="inline-block px-4 py-2 rounded-full ${theme.accent.replace('text-', 'bg-')}/10 ${theme.accent} text-sm font-bold mb-4">
