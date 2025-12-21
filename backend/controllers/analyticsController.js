@@ -6,12 +6,39 @@ import Business from '../models/Business.js';
  */
 export const trackEvent = async (req, res, next) => {
   try {
-    // Accept ANY request - no validation, no checks, just return success immediately
-    // Analytics should NEVER break the app - always succeed
+    const { businessId, eventType } = req.body;
+
+    if (!businessId || !eventType) {
+      return res.json({ success: true, message: 'Missing businessId or eventType' });
+    }
+
+    // Map common event types to their database counterparts (if needed)
+    // Analytics.js uses: visitor, call_click, whatsapp_click, gallery_view, map_click
+    // And metrics: visitor_count, call_clicks, whatsapp_clicks, gallery_views, map_clicks
+
+    const metricMap = {
+      'visitor': 'visitor_count',
+      'call_click': 'call_clicks',
+      'whatsapp_click': 'whatsapp_clicks',
+      'gallery_view': 'gallery_views',
+      'map_click': 'map_clicks'
+    };
+
+    const metric = metricMap[eventType];
+
+    // Log the event in a separate table for time-based tracking
+    await Analytics.logEvent(businessId, eventType);
+
+    // Increment the counter in the main analytics table
+    if (metric) {
+      await Analytics.increment(businessId, metric);
+    }
+
     res.json({ success: true, message: 'Event tracked' });
   } catch (error) {
-    // Even if something fails, return success
-    res.json({ success: true, message: 'Event tracked' });
+    console.error('Analytics tracking error:', error);
+    // Analytics should NEVER break the app - always succeed for the client
+    res.json({ success: true, message: 'Event tracked (with error)' });
   }
 };
 

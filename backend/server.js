@@ -46,12 +46,6 @@ initializeDatabase()
     console.warn('⚠️  Please check your DATABASE_URL in .env file');
   });
 
-// Security middleware
-app.use(securityMiddleware);
-
-// Compression middleware (gzip)
-app.use(compression());
-
 // CORS configuration
 const corsOptions = {
   origin: NODE_ENV === 'production'
@@ -66,6 +60,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Security middleware
+app.use(securityMiddleware);
 
 // Request logging
 if (NODE_ENV === 'production') {

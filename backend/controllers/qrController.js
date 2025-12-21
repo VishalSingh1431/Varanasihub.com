@@ -29,8 +29,8 @@ export const generateQRCode = async (req, res) => {
       }
     }
 
-    // Determine the URL to encode (prefer subdomain, fallback to subdirectory)
-    const qrUrl = business.subdomainUrl || business.subdirectoryUrl;
+    // Determine the URL to encode (strictly use subdomain)
+    const qrUrl = business.subdomainUrl;
 
     if (!qrUrl) {
       return res.status(400).json({ error: 'Business URL not available' });
@@ -86,8 +86,8 @@ export const downloadQRCodePNG = async (req, res) => {
       }
     }
 
-    // Determine the URL to encode
-    const qrUrl = business.subdomainUrl || business.subdirectoryUrl;
+    // Determine the URL to encode (strictly use subdomain)
+    const qrUrl = business.subdomainUrl;
 
     if (!qrUrl) {
       return res.status(400).json({ error: 'Business URL not available' });

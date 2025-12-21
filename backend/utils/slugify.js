@@ -6,14 +6,15 @@
  */
 export const slugify = (text) => {
   if (!text) return '';
-  
+
   return text
     .toString()
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, '')        // Remove spaces (no hyphens)
-    .replace(/[^\w]+/g, '')     // Remove all non-word chars (keep only letters and numbers)
-    .replace(/^[^a-z]+/, '')    // Remove non-letters from start
+    .replace(/\s+/g, '-')        // Use hyphens for spaces
+    .replace(/[^\w-]+/g, '')     // Remove all non-word chars except hyphens
+    .replace(/^-+/, '')          // Remove leading hyphens
+    .replace(/-+$/, '')          // Remove trailing hyphens
     .substring(0, 50);           // Limit to 50 chars
 };
 

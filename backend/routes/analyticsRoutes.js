@@ -5,11 +5,7 @@ import { verifyToken } from '../middleware/auth.js';
 const router = express.Router();
 
 // Track analytics event (public endpoint, no auth required)
-// ALWAYS return success - no validation, no errors
-router.post('/track', (req, res) => {
-  // Immediately return success - don't even call trackEvent
-  res.json({ success: true, message: 'Event tracked' });
-});
+router.post('/track', trackEvent);
 
 // Get analytics for a specific business (requires authentication)
 router.get('/:businessId', verifyToken, getAnalytics);

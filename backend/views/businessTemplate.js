@@ -23,49 +23,34 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
 
   const ownerFirstName = getFirstName(business.ownerName);
 
-  // Theme configurations
+  // Theme configurations - Matching WebsitePreview.jsx
   const themes = {
     modern: {
       primary: 'from-blue-600 via-indigo-600 to-purple-600',
       primarySolid: 'bg-blue-600',
       primaryHover: 'hover:bg-blue-700',
-      secondary: 'bg-indigo-600',
-      accent: 'text-purple-600',
-      navBorder: 'border-blue-200',
-      navBg: 'bg-white',
       button: 'bg-blue-600 hover:bg-blue-700',
-      cardBg: 'bg-white',
-      textPrimary: 'text-gray-900',
-      textSecondary: 'text-gray-600',
-      footer: 'from-gray-900 via-gray-800 to-gray-900',
+      accent: 'text-purple-600',
+      accentBorder: 'border-purple-600',
+      bgGradient: 'bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600'
     },
     classic: {
       primary: 'from-amber-600 via-orange-600 to-red-600',
       primarySolid: 'bg-amber-600',
       primaryHover: 'hover:bg-amber-700',
-      secondary: 'bg-orange-600',
-      accent: 'text-amber-600',
-      navBorder: 'border-amber-200',
-      navBg: 'bg-white',
       button: 'bg-amber-600 hover:bg-amber-700',
-      cardBg: 'bg-white',
-      textPrimary: 'text-gray-900',
-      textSecondary: 'text-gray-600',
-      footer: 'from-amber-900 via-orange-900 to-red-900',
+      accent: 'text-amber-600',
+      accentBorder: 'border-amber-600',
+      bgGradient: 'bg-gradient-to-r from-amber-600 via-orange-600 to-red-600'
     },
     minimal: {
       primary: 'from-gray-100 via-gray-200 to-gray-300',
       primarySolid: 'bg-gray-600',
       primaryHover: 'hover:bg-gray-700',
-      secondary: 'bg-gray-500',
-      accent: 'text-gray-600',
-      navBorder: 'border-gray-200',
-      navBg: 'bg-white',
       button: 'bg-gray-600 hover:bg-gray-700',
-      cardBg: 'bg-white',
-      textPrimary: 'text-gray-900',
-      textSecondary: 'text-gray-600',
-      footer: 'from-gray-800 via-gray-700 to-gray-800',
+      accent: 'text-gray-600',
+      accentBorder: 'border-gray-600',
+      bgGradient: 'bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300'
     },
   };
 
@@ -97,7 +82,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
 
   // Generate SEO-friendly slug for URL
   const businessSlug = business.slug || business.businessName.toLowerCase().replace(/\s+/g, '-');
-  const canonicalUrl = business.subdomainUrl || business.subdirectoryUrl || '';
+  const canonicalUrl = business.subdomainUrl || '';
 
 
   // Extract location details from address
@@ -406,11 +391,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
   <!-- Canonical URL -->
   ${canonicalUrl ? `<link rel="canonical" href="${escapeHtml(canonicalUrl)}">` : ''}
   
-  <!-- Alternate URLs (if subdomain and subdirectory both exist) -->
-  ${business.subdomainUrl && business.subdirectoryUrl && business.subdomainUrl !== business.subdirectoryUrl ? `
-  <link rel="alternate" href="${escapeHtml(business.subdomainUrl)}">
-  <link rel="alternate" href="${escapeHtml(business.subdirectoryUrl)}">
-  ` : ''}
+
   
   <!-- Hreflang Tags for Multi-language Support -->
   <link rel="alternate" hreflang="en" href="${escapeHtml(canonicalUrl)}">
@@ -522,128 +503,94 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
   
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    html { scroll-behavior: smooth; }
-    * {
-      cursor: default;
+    /* Glassmorphism Utilities */
+    .glass {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
+    .glass-dark {
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
     /* Custom Cursor Zoom Effect */
     body {
       cursor: default;
     }
     a, button, .cursor-zoom, img, .card-hover, .service-card, .gallery-item, .share-option {
       cursor: pointer;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-    a:hover, button:hover, .cursor-zoom:hover, img:hover, .card-hover:hover, 
-    .service-card:hover, .gallery-item:hover, .share-option:hover {
-      transform: scale(1.05);
-    }
+
     /* Professional Card Styles */
     .section-card {
       background: white;
-      border-radius: 16px;
-      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      border-radius: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
       border: 1px solid #e5e7eb;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .section-card:hover {
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      transform: translateY(-4px);
     }
-    .service-card-item {
-      background: white;
-      border-radius: 12px;
-      border: 1px solid #e5e7eb;
-      transition: all 0.3s ease;
-    }
-    .service-card-item:hover {
-      border-color: #3b82f6;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-      transform: translateY(-2px);
-    }
-    /* Section Header Consistency */
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 32px;
-    }
-    .section-icon {
-      width: 48px;
-      height: 48px;
-      background: #f3f4f6;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .section-title {
-      font-size: 2rem;
-      font-weight: 700;
-      color: #111827;
-      margin: 0;
-    }
-    @media (min-width: 768px) {
-      .section-title {
-        font-size: 2.5rem;
-      }
-    }
+
     /* Enhanced hover effects for interactive elements */
     .hover-zoom {
       transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
     }
     .hover-zoom:hover {
-      transform: scale(1.08) translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      transform: scale(1.05) translateY(-4px);
     }
-    .hover-zoom-sm {
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .hover-zoom-sm:hover {
-      transform: scale(1.03);
-    }
-    .hover-zoom-lg {
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .hover-zoom-lg:hover {
-      transform: scale(1.1) translateY(-8px);
-    }
-    /* Image handling - prevent overflow */
-    img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-      object-fit: cover;
-    }
-    .image-zoom-container {
-      overflow: hidden;
-      border-radius: 12px;
-      width: 100%;
-      height: 100%;
-    }
-    .image-zoom-container img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.3s ease;
-    }
-    .image-zoom-container img:hover {
-      transform: scale(1.05);
-    }
+
     /* Prevent horizontal overflow */
     body, html {
       overflow-x: hidden;
-      max-width: 100vw;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
     }
     main, section {
-      max-width: 100%;
-      overflow-x: hidden;
-    }
-    /* Container constraints */
-    .max-w-7xl {
-      max-width: 100%;
       width: 100%;
+      position: relative;
     }
+    .max-w-7xl {
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Animation Keyframes */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    .animate-float {
+      animation: float 6s ease-in-out infinite;
+    }
+    .animate-float-delayed {
+      animation: float 8s ease-in-out infinite;
+      animation-delay: 2s;
+    }
+
+    /* Text truncate */
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
     /* Global Responsive Improvements */
     @media (max-width: 640px) {
       body {
@@ -1332,28 +1279,15 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     .share-link-copy-btn.copied {
       background: #10B981;
     }
-    @media (max-width: 640px) {
+    @media (max-width: 768px) {
       .share-button-widget {
-        bottom: 85px;
-        right: 15px;
+        bottom: 120px !important;
       }
-      .share-button-widget.has-edit-button {
-        bottom: 155px;
+      .floating-actions {
+        bottom: 110px !important;
       }
-      .share-button-main {
-        width: 52px;
-        height: 52px;
-      }
-      .share-modal-content {
-        padding: 24px;
-      }
-      .share-options-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 12px;
-      }
-      .qr-code-image {
-        width: 180px;
-        height: 180px;
+      #mobileBottomNav {
+        bottom: 20px !important;
       }
     }
   </style>
@@ -1672,2338 +1606,1349 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     })();
   </script>
   <!-- Navbar -->
-  <nav class="sticky top-0 z-50 ${theme.navBg} shadow-2xl border-b-2 ${theme.navBorder}">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full" style="max-width: 100%; box-sizing: border-box;">
-      <div class="flex justify-between items-center h-20 md:h-24">
-        <!-- Logo/Brand -->
-        <a href="#home" class="flex items-center gap-2 md:gap-4 group hover-zoom-sm">
+  <nav class="bg-white/95 backdrop-blur-md border-b-2 ${theme.accent.replace('text-', 'border-')} sticky top-0 z-50 shadow-lg transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-3 sm:py-4">
+      <div class="flex items-center justify-between gap-2 sm:gap-4">
+        <a href="#home" class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
           ${business.logoUrl ? `
-          <div class="relative flex-shrink-0">
-            <img src="${escapeHtml(business.logoUrl)}" alt="${escapeHtml(generateImageAlt(business.logoUrl || '', 0, 'logo'))}" class="h-12 w-12 md:h-14 md:w-14 object-contain rounded-2xl shadow-lg group-hover:shadow-xl transition-all duration-300 ring-2 ring-gray-100 group-hover:ring-blue-200" style="max-width: 100%; height: auto; display: block;" itemProp="logo">
-          </div>
+            <img src="${escapeHtml(business.logoUrl)}" alt="${escapeHtml(business.businessName)}" class="w-10 h-10 sm:w-12 sm:h-12 object-contain rounded-lg flex-shrink-0 shadow-md" />
           ` : `
-          <div class="h-12 w-12 md:h-14 md:w-14 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 ring-2 ring-gray-100 group-hover:ring-blue-200 flex-shrink-0">
-            <span class="text-white text-xl md:text-2xl font-bold">${escapeHtml(business.businessName.charAt(0).toUpperCase())}</span>
-          </div>
+            <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
+              <span class="text-white font-bold text-lg sm:text-xl">${escapeHtml(business.businessName.charAt(0).toUpperCase())}</span>
+            </div>
           `}
           <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-1 md:gap-2">
-              <div class="text-lg md:text-2xl font-bold text-gray-900 truncate ${theme.accent === 'text-purple-600' ? 'group-hover:text-purple-600' : theme.accent === 'text-amber-600' ? 'group-hover:text-amber-600' : 'group-hover:text-gray-600'} transition-colors">${escapeHtml(business.businessName)}</div>
-              ${business.isPremium ? '<svg class="w-4 h-4 md:w-5 md:h-5 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" title="Verified Premium Business"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>' : ''}
-            </div>
-            <div class="flex items-center gap-1 md:gap-2 flex-wrap">
-              <div class="text-xs md:text-sm text-gray-500 font-medium truncate">${escapeHtml(business.category)}</div>
-              ${business.ownerName ? `<span class="text-xs text-gray-400 hidden sm:inline">• ${escapeHtml(ownerFirstName)}</span>` : ''}
-            </div>
-            ${business.navbarTagline ? `<div class="text-xs text-gray-400 mt-0.5 md:mt-1 italic hidden md:block truncate">${escapeHtml(business.navbarTagline)}</div>` : ''}
+            <h1 class="text-base sm:text-lg md:text-xl font-bold text-gray-900 truncate">${escapeHtml(business.businessName)}</h1>
           </div>
         </a>
 
         <!-- Desktop Navigation -->
-        <div class="hidden lg:flex items-center gap-1">
-          <a href="#home" class="nav-link hover-zoom-sm px-4 xl:px-5 py-2.5 text-gray-700 ${theme.accent.replace('text-', 'hover:text-')} hover:bg-gray-50 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-            </svg>
-            <span class="hidden xl:inline">Home</span>
-          </a>
-          <a href="#about" class="nav-link hover-zoom-sm px-4 xl:px-5 py-2.5 text-gray-700 ${theme.accent === 'text-purple-600' ? 'hover:text-purple-600' : theme.accent === 'text-amber-600' ? 'hover:text-amber-600' : 'hover:text-gray-600'} hover:bg-gray-50 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span class="hidden xl:inline">About</span>
-          </a>
-          ${business.services && business.services.length > 0 ? `<a href="#services" class="nav-link hover-zoom-sm px-4 xl:px-5 py-2.5 text-gray-700 ${theme.accent === 'text-purple-600' ? 'hover:text-purple-600' : theme.accent === 'text-amber-600' ? 'hover:text-amber-600' : 'hover:text-gray-600'} hover:bg-gray-50 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-            </svg>
-            <span class="hidden xl:inline">Services</span>
-          </a>` : ''}
-          ${business.imagesUrl && business.imagesUrl.length > 0 ? `<a href="#gallery" class="nav-link hover-zoom-sm px-4 xl:px-5 py-2.5 text-gray-700 ${theme.accent === 'text-purple-600' ? 'hover:text-purple-600' : theme.accent === 'text-amber-600' ? 'hover:text-amber-600' : 'hover:text-gray-600'} hover:bg-gray-50 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-            <span class="hidden xl:inline">Gallery</span>
-          </a>` : ''}
-          ${business.faqs && business.faqs.length > 0 ? `<a href="#faq" class="nav-link hover-zoom-sm px-4 xl:px-5 py-2.5 text-gray-700 ${theme.accent === 'text-purple-600' ? 'hover:text-purple-600' : theme.accent === 'text-amber-600' ? 'hover:text-amber-600' : 'hover:text-gray-600'} hover:bg-gray-50 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <span class="hidden xl:inline">FAQ</span>
-          </a>` : ''}
-          <a href="#contact" class="nav-link hover-zoom-sm px-4 xl:px-5 py-2.5 text-gray-700 ${theme.accent.replace('text-', 'hover:text-')} hover:bg-gray-50 rounded-xl transition-all duration-200 font-semibold text-sm flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-            </svg>
-            <span class="hidden xl:inline">Contact</span>
-          </a>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="hidden md:flex items-center gap-2 lg:gap-3">
+        <div class="hidden md:flex items-center gap-4 text-sm">
+          <a href="#home" class="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-colors">Home</a>
+          ${business.description ? `<a href="#about" class="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-colors">About</a>` : ''}
+          ${business.services && business.services.length > 0 ? `<a href="#services" class="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-colors">Services</a>` : ''}
+          ${business.imagesUrl && business.imagesUrl.length > 0 ? `<a href="#gallery" class="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-colors">Gallery</a>` : ''}
+          <a href="#contact" class="text-gray-700 hover:text-blue-600 font-medium whitespace-nowrap transition-colors">Contact</a>
+          
+          <!-- Quick Contact Icons -->
           ${business.mobile ? `
-          <a href="tel:${escapeHtml(business.mobile)}" class="hover-zoom-sm flex items-center gap-2 px-4 lg:px-5 py-2.5 ${theme.button} text-white rounded-xl transition-all duration-200 font-semibold text-xs lg:text-sm shadow-lg hover:shadow-xl">
-            <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-            </svg>
-            <span class="hidden lg:inline">Call</span>
-          </a>
+            <a href="tel:${escapeHtml(business.mobile)}" class="p-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors" title="Call Now">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+            </a>
           ` : ''}
           ${business.whatsapp ? `
-          <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/[^0-9]/g, ''))}" target="_blank" class="hover-zoom-sm flex items-center gap-2 px-4 lg:px-5 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl hover:from-green-600 hover:to-green-700 transition-all duration-200 font-semibold text-xs lg:text-sm shadow-lg hover:shadow-xl">
-            <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-            </svg>
-            <span class="hidden lg:inline">WhatsApp</span>
-          </a>
+            <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/\D/g, ''))}" target="_blank" rel="noopener noreferrer" class="p-2 rounded-lg bg-green-50 hover:bg-green-100 text-green-600 transition-colors" title="WhatsApp">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+            </a>
           ` : ''}
         </div>
 
         <!-- Mobile Menu Button -->
-        <button id="mobileMenuBtn" class="lg:hidden p-2 rounded-xl text-gray-700 hover:bg-gray-100 transition-colors">
-          <svg id="menuIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-          </svg>
-          <svg id="closeIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-          </svg>
+        <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors" aria-label="Toggle menu">
+          <svg id="menuIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+          <svg id="closeIcon" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
         </button>
       </div>
 
       <!-- Mobile Menu -->
-      <div id="mobileMenu" class="hidden lg:hidden border-t border-gray-200 py-4 bg-white">
-        <div class="flex flex-col space-y-2">
-          <a href="#home" class="px-4 py-3 text-gray-700 hover:bg-gray-50 ${theme.accent === 'text-purple-600' ? 'hover:text-purple-600' : theme.accent === 'text-amber-600' ? 'hover:text-amber-600' : 'hover:text-gray-600'} rounded-xl transition-all font-semibold flex items-center gap-3">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-            </svg>
-            Home
-          </a>
-          <a href="#about" class="px-4 py-3 text-gray-700 hover:bg-gray-50 ${theme.accent === 'text-purple-600' ? 'hover:text-purple-600' : theme.accent === 'text-amber-600' ? 'hover:text-amber-600' : 'hover:text-gray-600'} rounded-xl transition-all font-semibold flex items-center gap-3">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            About
-          </a>
-          ${business.services && business.services.length > 0 ? `<a href="#services" class="px-4 py-3 text-gray-700 hover:bg-gray-50 ${theme.accent === 'text-purple-600' ? 'hover:text-purple-600' : theme.accent === 'text-amber-600' ? 'hover:text-amber-600' : 'hover:text-gray-600'} rounded-xl transition-all font-semibold flex items-center gap-3">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-            </svg>
-            Services
-          </a>` : ''}
-          ${business.imagesUrl && business.imagesUrl.length > 0 ? `<a href="#gallery" class="px-4 py-3 text-gray-700 hover:bg-gray-50 ${theme.accent === 'text-purple-600' ? 'hover:text-purple-600' : theme.accent === 'text-amber-600' ? 'hover:text-amber-600' : 'hover:text-gray-600'} rounded-xl transition-all font-semibold flex items-center gap-3">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-            Gallery
-          </a>` : ''}
-          ${business.faqs && business.faqs.length > 0 ? `<a href="#faq" class="px-4 py-3 text-gray-700 hover:bg-gray-50 ${theme.accent === 'text-purple-600' ? 'hover:text-purple-600' : theme.accent === 'text-amber-600' ? 'hover:text-amber-600' : 'hover:text-gray-600'} rounded-xl transition-all font-semibold flex items-center gap-3">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            FAQ
-          </a>` : ''}
-          <a href="#contact" class="px-4 py-3 text-gray-700 hover:bg-gray-50 ${theme.accent === 'text-purple-600' ? 'hover:text-purple-600' : theme.accent === 'text-amber-600' ? 'hover:text-amber-600' : 'hover:text-gray-600'} rounded-xl transition-all font-semibold flex items-center gap-3">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-            </svg>
-            Contact
-          </a>
-          <div class="pt-2 space-y-2">
-            ${business.mobile ? `
-            <a href="tel:${escapeHtml(business.mobile)}" class="flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl font-semibold shadow-lg">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-              </svg>
-              Call Us
+      <div id="mobileMenu" class="hidden md:hidden mt-4 pt-4 border-t border-gray-200 space-y-2">
+        <a href="#home" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">Home</a>
+        ${business.description ? `<a href="#about" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">About</a>` : ''}
+        ${business.services && business.services.length > 0 ? `<a href="#services" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">Services</a>` : ''}
+        ${business.imagesUrl && business.imagesUrl.length > 0 ? `<a href="#gallery" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">Gallery</a>` : ''}
+        <a href="#contact" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">Contact</a>
+        <div class="flex gap-2 pt-2">
+          ${business.mobile ? `
+            <a href="tel:${escapeHtml(business.mobile)}" class="flex-1 px-4 py-2 bg-blue-600 text-white rounded-lg text-center font-medium hover:bg-blue-700 transition-colors">
+              <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+              Call
             </a>
-            ` : ''}
-            ${business.whatsapp ? `
-            <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/[^0-9]/g, ''))}" target="_blank" class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-xl font-semibold shadow-lg">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-              </svg>
+          ` : ''}
+          ${business.whatsapp ? `
+            <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/\D/g, ''))}" target="_blank" rel="noopener noreferrer" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg text-center font-medium hover:bg-green-700 transition-colors">
+              <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
               WhatsApp
             </a>
-            ` : ''}
-          </div>
+          ` : ''}
         </div>
       </div>
     </div>
   </nav>
 
-    <!-- Main Content -->
-    <main style="max-width: 100vw; overflow-x: hidden; box-sizing: border-box;">
-    <!-- Enhanced Hero Section - Full Width with Better Design -->
-    <section id="home" class="relative bg-gradient-to-r ${theme.primary} text-white py-20 md:py-28 lg:py-32 overflow-hidden">
+  <!-- Main Content -->
+  <main style="max-width: 100vw; overflow-x: hidden; box-sizing: border-box;">
+    <!-- Enhanced Hero Section - Name/Address Left, Image Right (Circular) -->
+    <section id="home" class="relative bg-gradient-to-r ${theme.primary} text-white py-12 md:py-16 lg:py-20 overflow-hidden">
       <!-- Animated Background Elements -->
       <div class="absolute inset-0 opacity-10">
         <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
       </div>
       
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full" style="max-width: 100%; box-sizing: border-box;">
-        <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12">
-          ${business.logoUrl ? `
-          <div class="flex-shrink-0">
-            <img src="${escapeHtml(business.logoUrl)}" alt="${escapeHtml(generateImageAlt(business.logoUrl || '', 0, 'logo'))}" class="w-40 h-40 md:w-48 md:h-48 object-contain rounded-3xl bg-white/20 backdrop-blur-md p-4 md:p-6 shadow-2xl border-4 border-white/30" style="max-width: 100%; height: auto;" itemProp="logo">
-          </div>
-          ` : `
-          <div class="flex-shrink-0 w-40 h-40 md:w-48 md:h-48 bg-white/20 backdrop-blur-md rounded-3xl flex items-center justify-center shadow-2xl border-4 border-white/30">
-            <span class="text-white text-6xl md:text-7xl font-bold">${escapeHtml(business.businessName.charAt(0).toUpperCase())}</span>
-          </div>
-          `}
-          <div class="flex-1 text-center md:text-left max-w-3xl">
+      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+          <!-- Left Side - Content -->
+          <div class="order-2 md:order-1 text-center md:text-left">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-3 md:mb-4 break-words leading-tight tracking-tight">
+              ${escapeHtml(business.businessName)}
+            </h1>
+            
+            ${business.address ? `
+            <div class="flex items-start justify-center md:justify-start gap-2 text-white/90 mb-2">
+              <svg class="w-5 h-5 md:w-6 md:h-6 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              <p class="text-base sm:text-lg md:text-xl font-medium leading-relaxed">${escapeHtml(business.address)}</p>
+            </div>
+            ` : ''}
+
+            ${(business.navbarTagline || (business.category === 'Temple' ? 'A Place of Peace and Devotion' : '')) ? `
+            <p class="text-xl md:text-2xl text-white/90 font-medium italic mb-4 drop-shadow-md">
+              ${escapeHtml(business.navbarTagline || (business.category === 'Temple' ? 'A Place of Peace and Devotion' : ''))}
+            </p>
+            ` : ''}
+
             ${business.category ? `
-            <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold mb-4 border border-white/30">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold mt-3 border border-white/30">
               <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
               ${escapeHtml(business.category)}
             </div>
             ` : ''}
-            
-            <!-- Trust Badge -->
-            ${business.googlePlacesData?.rating ? `
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-xs font-medium mb-4 border border-white/30">
-              <svg class="w-3 h-3 fill-yellow-400 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-              </svg>
-              <span>${business.googlePlacesData.rating} Rating</span>
-            </div>
-            ` : ''}
-            
-            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black mb-4 break-words leading-tight tracking-tight" itemProp="name">
-              ${escapeHtml(business.businessName)}
-            </h1>
-            
-            ${business.ownerName ? `
-            <p class="text-base sm:text-lg md:text-xl text-white/90 mb-3 font-medium">
-              Owner: <span class="font-semibold">${escapeHtml(business.ownerName)}</span>
-            </p>
-            ` : ''}
-            
-            ${business.navbarTagline ? `
-            <p class="text-lg sm:text-xl md:text-2xl text-white/90 mb-6 md:mb-8 italic font-light leading-relaxed">
-              ${escapeHtml(business.navbarTagline)}
-            </p>
-            ` : ''}
-            
-            <!-- Enhanced CTAs -->
-            ${(business.mobile || business.whatsapp) ? `
-            <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+
+            <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 mt-8">
               ${business.mobile ? `
-              <a href="tel:${escapeHtml(business.mobile)}" class="group px-8 py-4 ${theme.button} text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 hover:shadow-2xl text-base sm:text-lg shadow-lg">
-                <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                </svg>
+              <a href="tel:${escapeHtml(business.mobile)}" class="group flex items-center justify-center gap-3 px-8 py-4 bg-white ${theme.accent} rounded-2xl font-black text-lg shadow-2xl hover:bg-white/90 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105">
+                <svg class="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
                 Call Now
               </a>
               ` : ''}
-              ${business.whatsapp ? `
-              <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/[^0-9]/g, ''))}" target="_blank" rel="noopener noreferrer" class="group px-8 py-4 bg-green-600 hover:bg-green-700 text-white rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300 hover:scale-105 hover:shadow-2xl text-base sm:text-lg shadow-lg">
-                <svg class="w-5 h-5 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                </svg>
-                WhatsApp
-              </a>
-              ` : ''}
             </div>
-            ` : ''}
+          </div>
+
+          <!-- Right Side - Hero Image -->
+          <div class="order-1 md:order-2 relative">
+            <!-- Decorative shapes -->
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
+            
+            ${business.logoUrl ? `
+            <div class="relative group">
+              <div class="absolute inset-0 bg-gradient-to-tr ${theme.primary} rounded-3xl rotate-3 scale-105 opacity-20 group-hover:rotate-0 group-hover:scale-100 transition-all duration-500"></div>
+              <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+                <img src="${escapeHtml(business.logoUrl)}" alt="${escapeHtml(business.businessName)}" 
+                     class="w-full h-[400px] md:h-[500px] object-cover cursor-pointer transition-transform duration-700 group-hover:scale-110" 
+                     onclick="openLightbox(0)" />
+                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold shadow-xl transform scale-90 group-hover:scale-100 transition-all duration-300">
+                    View Gallery
+                  </span>
+                </div>
+              </div>
+            </div>
+            ` : `
+            <div class="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-12">
+              <div class="text-center space-y-6">
+                <div class="w-32 h-32 bg-gradient-to-br ${theme.primary} rounded-full flex items-center justify-center mx-auto shadow-2xl animate-pulse">
+                  <span class="text-white text-6xl font-black">${escapeHtml(business.businessName.charAt(0).toUpperCase())}</span>
+                </div>
+                <h4 class="text-2xl font-black text-gray-900">${escapeHtml(business.businessName)}</h4>
+                <p class="text-gray-500 font-bold">Trusted Varanasi Business</p>
+              </div>
+            </div>
+            `}
           </div>
         </div>
       </div>
     </section>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full" style="max-width: 100%; box-sizing: border-box;">
-
-      <!-- About Section -->
-      ${business.description && business.description.trim() ? `
-      <section id="about" class="section-card p-8 md:p-12 mb-12">
-        <div class="section-header">
-          <div class="section-icon">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-          </div>
-          <h2 class="section-title">About Us</h2>
-        </div>
-        <div class="prose prose-lg max-w-none">
-          <p class="text-gray-700 whitespace-pre-line leading-relaxed text-base md:text-lg text-center md:text-left">${escapeHtml(business.description)}</p>
-        </div>
-        ${business.ownerName ? `
-        <div class="mt-8 p-6 bg-gray-50 rounded-lg border-l-4 border-blue-600">
-          <p class="text-gray-700 font-semibold text-base md:text-lg">
-            <span class="text-blue-600">Owner:</span> ${escapeHtml(ownerFirstName)}
-          </p>
-        </div>
-        ` : ''}
-      </section>
-      ` : ''}
-
-      <!-- Quick Contact Info Section -->
-      ${business.address ? `
-      <section id="location" class="section-card p-8 md:p-12 mb-12">
-        <div class="section-header">
-          <div class="section-icon">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-            </svg>
-          </div>
-          <h2 class="section-title">Find Us</h2>
-        </div>
-        <div class="bg-gradient-to-br from-gray-50 to-white rounded-xl p-6 md:p-8 border-2 border-gray-200 shadow-lg">
-          <div class="flex items-start gap-4">
-            <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg flex items-center justify-center flex-shrink-0">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              </svg>
-            </div>
-            <div class="flex-1">
-              <h3 class="text-xl md:text-2xl font-bold text-gray-900 mb-3">Our Location</h3>
-              <p class="text-gray-700 text-base md:text-lg leading-relaxed mb-4">${escapeHtml(business.address)}</p>
-              <div class="mt-4 rounded-lg overflow-hidden border-2 border-gray-200 shadow-md">
-                <iframe
-                  width="100%"
-                  height="300"
-                  style="border: 0;"
-                  loading="lazy"
-                  allowfullscreen
-                  referrerpolicy="no-referrer-when-downgrade"
-                  src="https://www.google.com/maps?q=${encodeURIComponent(business.address)}&output=embed"
-                  title="Map showing ${escapeHtml(business.address)}"
-                  class="w-full"
-                ></iframe>
+    <!-- Quick Contact Info Section -->
+    ${(business.businessHours || business.address) ? `
+    <section class="py-8 md:py-12 bg-gradient-to-br from-gray-50 to-white border-b border-gray-200">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+          ${business.businessHours && Object.keys(business.businessHours).length > 0 ? `
+          <div class="bg-white rounded-xl p-6 border-2 border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
               </div>
+              <h3 class="text-xl md:text-2xl font-bold text-gray-900">Business Hours</h3>
+            </div>
+            <div class="space-y-2">
+              ${['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => {
+    const hours = business.businessHours[day];
+    if (!hours) return '';
+    const now = new Date();
+    const daysArr = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const isToday = day === daysArr[now.getDay()];
+    return `
+                  <div class="flex items-center justify-between p-3 rounded-lg border ${isToday ? `${theme.accent.replace('text-', 'bg-')}/10 ${theme.accent.replace('text-', 'border-')}` : 'bg-gray-50 border-gray-200'}">
+                    <span class="font-semibold text-sm md:text-base capitalize ${isToday ? theme.accent : 'text-gray-700'}">${day}</span>
+                    ${hours.open ? `
+                      <span class="font-medium text-sm md:text-base ${isToday ? theme.accent : 'text-gray-600'}">${escapeHtml(hours.start)} - ${escapeHtml(hours.end)}</span>
+                    ` : `
+                      <span class="text-gray-400 italic text-sm md:text-base">Closed</span>
+                    `}
+                  </div>
+                `;
+  }).join('')}
             </div>
           </div>
+          ` : ''}
+          ${business.address ? `
+          <div class="bg-white rounded-xl p-6 border-2 border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              </div>
+              <h3 class="text-xl md:text-2xl font-bold text-gray-900">Location</h3>
+            </div>
+            <div class="text-gray-700 text-sm md:text-base leading-relaxed mb-4">
+              ${escapeHtml(business.address)}
+            </div>
+            <div class="mt-4 rounded-lg overflow-hidden border-2 border-gray-200 shadow-md">
+              <iframe width="100%" height="300" style="border:0;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=${encodeURIComponent(business.address)}&output=embed"></iframe>
+            </div>
+          </div>
+          ` : ''}
         </div>
-      </section>
-      ` : ''}
+      </div>
+    </section>
+    ` : ''}
+
+    <!-- Enhanced About Section -->
+    <section id="about" class="py-12 md:py-20 bg-gray-50 overflow-hidden">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12 md:mb-16">
+          <h2 class="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+            About <span class="bg-gradient-to-r ${theme.primary} bg-clip-text text-transparent">Us</span>
+          </h2>
+          <div class="w-24 h-2 bg-gradient-to-r ${theme.primary} mx-auto rounded-full"></div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
+          <div class="order-2 md:order-1 space-y-8">
+            <div class="space-y-4">
+              <h3 class="text-2xl md:text-4xl font-bold text-gray-900 mb-2">${escapeHtml(business.businessName)}</h3>
+              ${business.category ? `
+                <span class="inline-block px-4 py-2 bg-gradient-to-r ${theme.primary} text-white rounded-xl text-sm font-bold shadow-lg">
+                  ${escapeHtml(business.category)}
+                </span>
+              ` : ''}
+            </div>
+
+            ${business.ownerName ? `
+              <div class="p-6 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center gap-6 group hover:shadow-md transition-all duration-300">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">👤</div>
+                <div>
+                  <p class="text-gray-500 text-sm font-bold uppercase tracking-wider mb-1">Business Owner</p>
+                  <p class="text-xl font-bold text-gray-900">${escapeHtml(business.ownerName)}</p>
+                </div>
+              </div>
+            ` : ''}
+
+            <div class="relative">
+              ${business.description ? `
+                <div class="description-container relative bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                  <p id="description-text" class="text-lg text-gray-700 leading-relaxed whitespace-pre-line">
+                    ${escapeHtml(business.description.length > 400 ? business.description.substring(0, 400) + '...' : business.description)}
+                  </p>
+                  ${business.description.length > 400 ? `
+                    <button onclick="toggleReadMore()" id="read-more-btn" class="mt-6 text-blue-600 hover:text-blue-700 font-bold flex items-center gap-2 group transition-all">
+                      Read Full Story
+                      <svg class="w-5 h-5 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </button>
+                  ` : ''}
+                </div>
+              ` : `
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
+                  <p class="text-lg text-gray-600 leading-relaxed italic">
+                    Welcome to ${escapeHtml(business.businessName)}! We are committed to providing excellent service and quality products to our customers in Varanasi. Our dedication to excellence and customer satisfaction drives everything we do.
+                  </p>
+                </div>
+              `}
+            </div>
+          </div>
+
+          <div class="order-1 md:order-2 relative">
+            <!-- Decorative shapes -->
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
+            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
+            
+            ${business.imagesUrl && business.imagesUrl.length > 0 ? `
+              <div class="relative group">
+                <div class="absolute inset-0 bg-gradient-to-tr ${theme.primary} rounded-3xl rotate-3 scale-105 opacity-20 group-hover:rotate-0 group-hover:scale-100 transition-all duration-500"></div>
+                <div class="relative rounded-3xl overflow-hidden shadow-2xl">
+                  <img src="${escapeHtml(business.imagesUrl[0])}" alt="${escapeHtml(business.businessName)}" 
+                       class="w-full h-[400px] md:h-[500px] object-cover cursor-pointer transition-transform duration-700 group-hover:scale-110" 
+                       onclick="openLightbox(0)" />
+                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold shadow-xl transform scale-90 group-hover:scale-100 transition-all duration-300">
+                      View Gallery
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ` : `
+              <div class="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-12">
+                <div class="text-center space-y-6">
+                  <div class="w-32 h-32 bg-gradient-to-br ${theme.primary} rounded-full flex items-center justify-center mx-auto shadow-2xl animate-pulse">
+                    <span class="text-white text-6xl font-black">${escapeHtml(business.businessName.charAt(0).toUpperCase())}</span>
+                  </div>
+                  <h4 class="text-2xl font-black text-gray-900">${escapeHtml(business.businessName)}</h4>
+                  <p class="text-gray-500 font-bold">Trusted Varanasi Business</p>
+                </div>
+              </div>
+            `}
+          </div>
+        </div>
+      </div>
+    </section>
+
+
 
       <!-- Trust Badges Section -->
-      <section class="section-card p-8 md:p-12 mb-12">
-        <div class="section-header">
-          <div class="section-icon">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-            </svg>
-          </div>
-          <h2 class="section-title">Why Trust Us</h2>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          ${(() => {
-      const badges = business.trustBadges || [];
+      <section class="py-12 md:py-16 bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            ${(() => {
       const defaultBadges = [
-        { title: 'Verified Business', icon: '✓', description: 'Authenticated and verified' },
-        { title: 'Premium Quality', icon: '⭐', description: 'Top-notch services' },
-        { title: '24/7 Support', icon: '🕐', description: 'Always here to help' },
-        { title: 'Satisfaction Guaranteed', icon: '💯', description: '100% customer satisfaction' }
+        { title: 'Verified', icon: 'M5 13l4 4L19 7', color: 'text-green-600', bg: 'bg-green-50' },
+        { title: 'Safe & Secure', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', color: 'text-blue-600', bg: 'bg-blue-50' },
+        { title: 'Top Rated', icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z', color: 'text-yellow-600', bg: 'bg-yellow-50' },
+        { title: 'Best Quality', icon: 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z', color: 'text-purple-600', bg: 'bg-purple-50' }
       ];
-      const displayBadges = badges.length > 0 ? badges : defaultBadges;
-      return displayBadges.map((badge, index) => `
-              <div class="text-center p-6 bg-gray-50 rounded-lg border border-gray-200 hover:border-blue-500 transition-all duration-300">
-                <div class="text-4xl mb-4">${badge.icon || '✓'}</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">${escapeHtml(badge.title)}</h3>
-                <p class="text-gray-600 text-sm">${escapeHtml(badge.description || '')}</p>
-              </div>
-            `).join('');
+      return defaultBadges.map(badge => `
+                <div class="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-gray-50 transition-colors group">
+                  <div class="w-14 h-14 ${badge.bg} ${badge.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-sm">
+                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${badge.icon}"></path></svg>
+                  </div>
+                  <h4 class="text-sm font-black text-gray-900 uppercase tracking-wider">${badge.title}</h4>
+                </div>
+              `).join('');
     })()}
+          </div>
         </div>
       </section>
 
-      <!-- YouTube Video -->
+      <!-- Enhanced Video Section -->
       ${embedUrl ? `
-      <section class="section-card p-8 md:p-12 mb-12">
-        <div class="section-header">
-          <div class="section-icon">
-            <svg class="w-6 h-6 text-gray-700" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-            </svg>
+      <section class="py-12 md:py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+            Watch <span class="bg-gradient-to-r ${theme.primary} bg-clip-text text-transparent">Our Story</span>
+          </h2>
+          <div class="max-w-4xl mx-auto relative group">
+            <div class="absolute -inset-1 bg-gradient-to-r ${theme.primary} rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+            <div class="relative aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black">
+              <iframe src="${embedUrl}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="mt-4 flex justify-center">
+              <a href="https://youtube.com/watch?v=${getYouTubeId(business.videoUrl)}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-red-600 font-bold hover:text-red-700 transition-colors">
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 4-8 4z"/></svg>
+                Watch on YouTube
+              </a>
+            </div>
           </div>
-          <h2 class="section-title">Watch Our Video</h2>
         </div>
-        <div class="aspect-video rounded-xl overflow-hidden shadow-xl w-full max-w-full">
-          <iframe 
-            src="${embedUrl}" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-            class="w-full h-full max-w-full"
-            style="max-width: 100%;"
-          ></iframe>
+      </section>
+      ` : ''}
+
+      <!-- Amenities & Features Section -->
+      ${(business.amenities?.length || business.paymentMethods?.length || business.parkingInfo?.length) ? `
+      <section class="py-12 md:py-16 bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+            Amenities & <span class="bg-gradient-to-r ${theme.primary} bg-clip-text text-transparent">Features</span>
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Amenities -->
+            ${business.amenities?.length ? `
+            <div class="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 ${theme.accent.replace('text-', 'bg-')}/10 ${theme.accent} rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900">Amenities</h3>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                ${business.amenities.map(item => `
+                  <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <span class="w-1.5 h-1.5 ${theme.primarySolid.replace('bg-', 'bg-')} rounded-full"></span>
+                    ${escapeHtml(item)}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+
+            <!-- Payment Methods -->
+            ${business.paymentMethods?.length ? `
+            <div class="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900">Payment Modes</h3>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                ${business.paymentMethods.map(mode => `
+                  <span class="px-3 py-1 bg-white border border-gray-200 rounded-lg text-xs font-bold text-gray-700 shadow-sm">
+                    ${escapeHtml(mode)}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+
+            <!-- Parking & Others -->
+            ${business.parkingInfo?.length ? `
+            <div class="bg-gray-50 rounded-2xl p-6 md:p-8 border border-gray-100 shadow-sm">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 bg-green-100 text-green-600 rounded-lg flex items-center justify-center">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900">Parking & More</h3>
+              </div>
+              <div class="space-y-3">
+                ${business.parkingInfo.map(info => `
+                  <div class="flex items-center gap-2 text-sm text-gray-600">
+                    <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                    ${escapeHtml(info)}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            ` : ''}
+          </div>
         </div>
       </section>
       ` : ''}
 
       <!-- Gallery -->
       ${business.imagesUrl && business.imagesUrl.length > 0 ? `
-      <section id="gallery" class="section-card p-8 md:p-12 mb-12">
-        <div class="section-header">
-          <div class="section-icon">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
+      <section id="gallery" class="py-16 sm:py-20 bg-gray-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 mb-12">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-black text-gray-900 mb-4 text-center">Our Gallery</h2>
+            <div class="h-1.5 w-24 ${theme.primarySolid.replace('bg-', 'bg-')} mx-auto rounded-full"></div>
           </div>
-          <h2 class="section-title">Our Gallery</h2>
-        </div>
-        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
-          ${business.imagesUrl.map((img, idx) => `
-            <div class="group gallery-item overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer aspect-square" onclick="openLightbox(${idx})" data-image-index="${idx}">
-              <img src="${escapeHtml(img)}" alt="${escapeHtml(generateImageAlt(img, idx))}" class="w-full h-full object-cover transition-transform duration-300" loading="lazy" itemProp="image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-              <div class="w-full h-full bg-gray-200 flex items-center justify-center hidden">
-                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            ${business.imagesUrl.map((img, idx) => `
+              <div class="group gallery-item overflow-hidden rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 cursor-pointer aspect-square relative" onclick="openLightbox(${idx})">
+                <img src="${escapeHtml(img)}" alt="${escapeHtml(generateImageAlt(img, idx))}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
+                <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div class="w-12 h-12 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
+                  </div>
+                </div>
               </div>
-            </div>
-          `).join('')}
+            `).join('')}
+          </div>
         </div>
       </section>
       ` : ''}
 
-      <!-- Services / Menu / Pricing Section -->
+      <!-- Enhanced Services Section -->
       ${business.services && business.services.length > 0 ? `
-      <section id="services" class="section-card p-8 md:p-12 mb-12">
-        <div class="section-header">
-          <div class="section-icon">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-            </svg>
+      <section id="services" class="py-12 md:py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12 md:mb-16">
+            <h2 class="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+              Our <span class="bg-gradient-to-r ${theme.primary} bg-clip-text text-transparent">Services</span>
+            </h2>
+            <div class="w-24 h-2 bg-gradient-to-r ${theme.primary} mx-auto rounded-full"></div>
           </div>
-          <h2 class="section-title">Our Services</h2>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          ${business.services.map((service, index) => {
-      const serviceName = service.title || service.name || 'Service';
-      const serviceDescription = service.description || '';
-      const servicePrice = service.price || '';
-      // Escape for HTML attributes
-      const serviceNameAttr = escapeHtml(serviceName).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
-      const serviceDescAttr = escapeHtml(serviceDescription).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
-      const servicePriceAttr = escapeHtml(servicePrice).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
-      return `
-            <div class="service-card-item flex flex-col h-full" 
-                 data-service-name="${serviceNameAttr}" 
-                 data-service-description="${serviceDescAttr}" 
-                 data-service-price="${servicePriceAttr}"
-                 onclick="handleServiceCardClick(this)">
-              ${service.imageUrl ? `
-              <div class="h-48 w-full overflow-hidden rounded-t-lg relative">
-                <img src="${escapeHtml(service.imageUrl)}" alt="${escapeHtml(`${business.businessName} - ${serviceName} service in ${city}`)}" class="w-full h-full object-cover" loading="lazy" itemProp="image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                <div class="w-full h-full bg-gray-100 flex items-center justify-center hidden absolute inset-0">
-                  <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-                  </svg>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+            ${business.services.map((service, index) => `
+              <div class="group bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border-2 ${service.featured ? 'border-yellow-400 ring-4 ring-yellow-50' : 'border-gray-100 hover:border-blue-200'} flex flex-col h-full transform hover:-translate-y-2">
+                <div class="relative h-64 overflow-hidden">
+                  ${service.imageUrl ? `
+                    <img src="${escapeHtml(service.imageUrl)}" alt="${escapeHtml(service.title || service.name)}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                  ` : `
+                    <div class="w-full h-full bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center">
+                      <svg class="w-16 h-16 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-1.343 3-3s-1.343-3-3-3m0 12c-1.657 0-3-1.343-3-3s1.343-3 3-3m-3-3a3 3 0 100-6 3 3 0 000 6zm6 6a3 3 0 100-6 3 3 0 000 6z"></path></svg>
+                    </div>
+                  `}
+                  ${service.featured ? `
+                    <div class="absolute top-4 left-4 px-4 py-2 bg-yellow-400 text-yellow-900 text-xs font-black rounded-full shadow-lg flex items-center gap-2">
+                      <span class="animate-pulse">⭐</span> FEATURED
+                    </div>
+                  ` : ''}
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                    <button onclick="openServiceInquiry('${escapeHtml(service.title || service.name)}')" class="w-full py-3 bg-white text-gray-900 rounded-xl font-bold shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">
+                      Inquire Now
+                    </button>
+                  </div>
                 </div>
-              </div>
-              ` : `
-              <div class="h-48 w-full bg-gray-100 flex items-center justify-center rounded-t-lg">
-                <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-                </svg>
-              </div>
-              `}
-              <div class="p-6 flex-1 flex flex-col">
-                ${service.featured ? `
-                <div class="mb-3">
-                  <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-semibold">
-                    ⭐ Featured
-                  </span>
-                </div>
-                ` : ''}
-                <h3 class="text-xl font-bold text-gray-900 mb-2 break-words">${escapeHtml(serviceName)}</h3>
-                <p class="text-gray-600 text-sm mb-4 line-clamp-3 flex-1">${escapeHtml(serviceDescription)}</p>
-                ${service.price ? `
-                <div class="flex items-center justify-between pt-4 border-t border-gray-200 mt-auto">
-                  <span class="text-xl font-bold text-blue-600 break-words">${escapeHtml(servicePrice)}</span>
-                </div>
-                ` : ''}
-                <div class="mt-4 pt-4 border-t border-gray-200">
-                  <button class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all text-sm" onclick="event.stopPropagation(); handleServiceCardClick(this.closest('.service-card-item'))">
-                    Inquire About This Service
-                  </button>
-                </div>
-              </div>
-            </div>
-          `;
-    }).join('')}
-        </div>
-      </section>
-      ` : ''}
-
-      <!-- Special Offers / Deals Section -->
-      ${business.specialOffers && business.specialOffers.length > 0 ? `
-      <section id="offers" class="section-card p-8 md:p-12 mb-12">
-        <div class="section-header">
-          <div class="section-icon">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path>
-            </svg>
-          </div>
-          <h2 class="section-title">Special Offers</h2>
-        </div>
-        <div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-          ${business.specialOffers.map((offer, index) => {
-      const expiryDate = offer.expiryDate ? new Date(offer.expiryDate) : null;
-      const now = new Date();
-      const isExpired = expiryDate && expiryDate < now;
-      const daysUntilExpiry = expiryDate ? Math.ceil((expiryDate - now) / (1000 * 60 * 60 * 24)) : null;
-      const isUrgent = daysUntilExpiry !== null && daysUntilExpiry <= 3 && daysUntilExpiry >= 0;
-
-      return `
-            <div class="service-card-item">
-              ${isUrgent ? `
-              <div class="absolute top-4 right-4 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
-                🔥 Urgent!
-              </div>
-              ` : ''}
-              ${isExpired ? `
-              <div class="absolute top-4 right-4 bg-gray-600 text-white px-3 py-1 rounded-full text-xs font-bold z-10">
-                Expired
-              </div>
-              ` : ''}
-              <div class="p-6">
-                <h3 class="text-xl font-bold text-gray-900 mb-3">${escapeHtml(offer.title)}</h3>
-                <p class="text-gray-600 mb-4">${escapeHtml(offer.description || '')}</p>
-                ${expiryDate && !isExpired ? `
-                <div class="flex items-center gap-2 text-sm pt-4 border-t border-gray-200">
-                  <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                  </svg>
-                  <span class="text-gray-600 font-medium">Expires: ${expiryDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                  ${daysUntilExpiry !== null ? `
-                  <span class="ml-auto px-3 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-semibold">
-                    ${daysUntilExpiry} day${daysUntilExpiry !== 1 ? 's' : ''} left
-                  </span>
+                
+                <div class="p-8 flex flex-col flex-1">
+                  <h3 class="text-2xl font-black text-gray-900 mb-4 group-hover:text-blue-600 transition-colors">${escapeHtml(service.title || service.name)}</h3>
+                  <p class="text-gray-600 leading-relaxed mb-6 flex-1 line-clamp-3">${escapeHtml(service.description || '')}</p>
+                  ${service.price ? `
+                    <div class="flex items-center justify-between pt-6 border-t border-gray-100">
+                      <div>
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-wider mb-1">Starting from</p>
+                        <p class="text-3xl font-black text-blue-600">₹${escapeHtml(service.price)}</p>
+                      </div>
+                      <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                      </div>
+                    </div>
                   ` : ''}
                 </div>
-                ` : ''}
               </div>
-            </div>
-            `;
-    }).join('')}
+            `).join('')}
+          </div>
         </div>
       </section>
       ` : ''}
 
-      <!-- Business Hours Section -->
-      ${business.businessHours && Object.keys(business.businessHours).length > 0 && Object.values(business.businessHours).some(day => day && day.open) ? `
-      <section id="hours" class="section-card p-8 md:p-12 mb-12">
-        <div class="section-header">
-          <div class="section-icon">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
+      < !--Special Offers Section-- >
+  ${business.specialOffers && business.specialOffers.length > 0 ? `
+      <section id="offers" class="py-12 md:py-20 bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5">
+          <div class="absolute top-0 left-0 w-64 h-64 bg-red-500 rounded-full blur-[100px]"></div>
+          <div class="absolute bottom-0 right-0 w-64 h-64 bg-yellow-500 rounded-full blur-[100px]"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12 md:mb-16">
+            <h2 class="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+              Special <span class="bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">Offers</span>
+            </h2>
+            <p class="text-gray-600 font-bold uppercase tracking-widest text-sm">Limited Time Opportunities</p>
           </div>
-          <div class="flex-1">
-            <h2 class="section-title">Business Hours</h2>
-            ${(() => {
-        const now = new Date();
-        const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getDay()];
-        const currentTime = now.getHours() * 100 + now.getMinutes();
-        const todayHours = business.businessHours[currentDay];
-        let isOpen = false;
-        if (todayHours && todayHours.open) {
-          const start = parseInt(todayHours.start.replace(':', ''));
-          const end = parseInt(todayHours.end.replace(':', ''));
-          isOpen = currentTime >= start && currentTime <= end;
-        }
-        return `
-              <div class="mt-2 flex items-center gap-3">
-                <div class="px-4 py-2 rounded-full font-bold text-sm ${isOpen ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
-                  ${isOpen ? '🟢 Open Now' : '🔴 Closed Now'}
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10">
+            ${business.specialOffers.map((offer, index) => {
+      const daysLeft = offer.expiryDate ? Math.ceil((new Date(offer.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)) : null;
+      const isUrgent = daysLeft !== null && daysLeft <= 3 && daysLeft > 0;
+      const isExpired = daysLeft !== null && daysLeft <= 0;
+
+      return `
+                <div class="group relative bg-white rounded-3xl p-8 md:p-10 shadow-xl border-2 transition-all duration-300 transform hover:-translate-y-2 ${isUrgent ? 'border-red-400 ring-8 ring-red-50' : isExpired ? 'border-gray-200 opacity-60' : 'border-orange-200 hover:border-orange-400'}">
+                  ${isUrgent ? `
+                    <div class="absolute -top-4 -right-4 bg-gradient-to-r from-red-600 to-red-700 text-white px-6 py-2 rounded-2xl shadow-xl transform rotate-12 flex items-center gap-2">
+                       <span class="animate-pulse">⚡</span> <span class="font-black text-sm uppercase tracking-tighter">URGENT</span>
+                    </div>
+                  ` : ''}
+                  
+                  ${isExpired ? `
+                    <div class="absolute -top-4 -right-4 bg-gray-600 text-white px-6 py-2 rounded-2xl shadow-xl transform rotate-12">
+                       <span class="font-black text-sm uppercase tracking-tighter">EXPIRED</span>
+                    </div>
+                  ` : ''}
+
+                  <div class="flex items-start gap-6 mb-8">
+                    <div class="w-16 h-16 ${isUrgent ? 'bg-red-50 text-red-600' : isExpired ? 'bg-gray-50 text-gray-400' : 'bg-orange-50 text-orange-600'} rounded-2xl flex items-center justify-center shrink-0 shadow-inner group-hover:scale-110 transition-transform">
+                      <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"></path></svg>
+                    </div>
+                    <div>
+                      <h3 class="text-2xl md:text-3xl font-black text-gray-900 mb-2">${escapeHtml(offer.title)}</h3>
+                      <p class="text-gray-600 leading-relaxed">${escapeHtml(offer.description || '')}</p>
+                    </div>
+                  </div>
+
+                  ${offer.expiryDate ? `
+                    <div class="flex items-center justify-between p-6 ${isUrgent ? 'bg-red-50' : isExpired ? 'bg-gray-100' : 'bg-orange-50'} rounded-2xl border ${isUrgent ? 'border-red-100' : 'border-orange-100'}">
+                      <div class="flex items-center gap-3">
+                        <svg class="w-5 h-5 ${isUrgent ? 'text-red-500' : 'text-orange-500'}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span class="font-bold text-gray-700 text-sm">
+                          ${isExpired ? 'Offer Ended' : `Expires: ${new Date(offer.expiryDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`}
+                        </span>
+                      </div>
+                      ${!isExpired ? `
+                        <div class="px-4 py-1 rounded-full font-black text-xs uppercase tracking-widest ${isUrgent ? 'bg-red-200 text-red-700 animate-pulse' : 'bg-orange-200 text-orange-700'}">
+                          ${daysLeft} Days Left
+                        </div>
+                      ` : ''}
+                    </div>
+                  ` : ''}
+                </div>
+              `;
+    }).join('')}
+          </div>
+        </div>
+      </section>
+      ` : ''
+    }
+
+      < !--Reviews Section - Carousel Layout-- >
+      <section id="reviews" class="py-12 md:py-20 bg-gray-50 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="text-center mb-12 md:mb-16">
+            <h2 class="text-3xl md:text-5xl font-black text-gray-900 mb-4">
+              What Our <span class="bg-gradient-to-r ${theme.primary} bg-clip-text text-transparent">Clients Say</span>
+            </h2>
+            <div class="w-24 h-2 bg-gradient-to-r ${theme.primary} mx-auto rounded-full"></div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+            <!-- Summary Card -->
+            <div class="bg-white rounded-[40px] p-8 md:p-10 shadow-xl border-2 border-white flex flex-col items-center text-center relative overflow-hidden group">
+              <div class="absolute inset-0 bg-gradient-to-br ${theme.primary} opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
+              <div class="text-6xl font-black text-gray-900 mb-2">4.9</div>
+              <div class="flex gap-1 mb-4">
+                ${[1, 2, 3, 4, 5].map(() => `<svg class="w-6 h-6 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join('')}
+              </div>
+              <p class="text-gray-500 font-bold uppercase tracking-wider text-xs">Based on Verified Reviews</p>
+              <div class="mt-10 space-y-4 w-full">
+                ${[5, 4, 3, 2, 1].map(star => `
+                  <div class="flex items-center gap-3">
+                    <span class="text-sm font-black text-gray-400 w-4">${star}</span>
+                    <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+                      <div class="h-full bg-yellow-400 rounded-full shadow-sm" style="width: ${star === 5 ? '85' : star === 4 ? '10' : '5'}%"></div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Review Carousel -->
+            <div class="lg:col-span-2 relative">
+              <div id="review-carousel" class="flex transition-transform duration-500 ease-in-out">
+                ${(business.reviews || [
+      { name: 'Rahul Sharma', rating: 5, comment: 'Excellent service! The team was professional and the results exceeded my expectations. Highly recommend!', date: '2 days ago' },
+      { name: 'Priya Verma', rating: 5, comment: 'Great experience from start to finish. Very communicative and skilled at what they do.', date: '1 week ago' },
+      { name: 'Amit Singh', rating: 5, comment: 'Best in the business! Quality is top-notch and prices are very reasonable.', date: '3 weeks ago' }
+    ]).map((review, idx) => `
+                  <div class="min-w-full px-2">
+                    <div class="bg-white rounded-[40px] p-8 md:p-12 shadow-xl border border-gray-100 flex flex-col h-full relative overflow-hidden group">
+                      <div class="absolute top-0 right-0 p-8 text-gray-100 group-hover:text-blue-50 transition-colors">
+                        <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19C19.5523 16 20 15.5523 20 15V9C20 8.44772 19.5523 8 19 8H15C14.4477 8 14 7.55228 14 7V5C14 4.44772 14.4477 4 15 4H20C21.1046 4 22 4.89543 22 6V15C22 18.3137 19.3137 21 16 21H14.017ZM4.017 21L4.017 18C4.017 16.8954 4.91243 16 6.017 16H9C9.55228 16 10 15.5523 10 15V9C10 8.44772 9.55228 8 9 8H5C4.44772 8 4 7.55228 4 7V5C4 4.44772 4.44772 4 5 4H10C11.1046 4 12 4.89543 12 6V15C12 18.3137 9.31371 21 6 21H4.017Z"/></svg>
+                      </div>
+                      <div class="flex items-center gap-6 mb-8 relative">
+                        <div class="w-16 h-16 bg-gradient-to-br ${theme.primary} rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-lg">
+                          ${escapeHtml(review.name.charAt(0))}
+                        </div>
+                        <div>
+                          <h4 class="text-xl font-black text-gray-900">${escapeHtml(review.name)}</h4>
+                          <div class="flex gap-1 mt-1">
+                            ${[1, 2, 3, 4, 5].map(s => `<svg class="w-4 h-4 ${s <= (review.rating || 5) ? 'text-yellow-400 fill-current' : 'text-gray-300'}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join('')}
+                          </div>
+                        </div>
+                      </div>
+                      <p class="text-lg text-gray-600 leading-relaxed italic relative mb-4">"${escapeHtml(review.comment || '')}"</p>
+                      <span class="text-sm text-gray-400 font-bold uppercase tracking-widest mt-auto">${escapeHtml(review.date || 'Member')}</span>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+              
+              <!-- Carousel Controls -->
+              <div class="flex justify-center gap-3 mt-10">
+                ${(business.reviews || [1, 2, 3]).map((_, idx) => `
+                  <button onclick="scrollReview(${idx})" class="w-10 h-2 rounded-full transition-all duration-300 review-dot ${idx === 0 ? 'bg-blue-600 w-16' : 'bg-gray-200'}"></button>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!--Appointment Section-- >
+  ${business.appointmentSettings && business.appointmentSettings.enabled ? `
+      <section id="appointments" class="py-12 md:py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-20 items-center">
+            <div class="space-y-8">
+              <div class="space-y-4">
+                <h2 class="text-3xl md:text-5xl font-black text-gray-900 leading-tight">
+                  Ready to Experience <span class="bg-gradient-to-r ${theme.primary} bg-clip-text text-transparent">Excellence?</span>
+                </h2>
+                <div class="w-24 h-2 bg-gradient-to-r ${theme.primary} rounded-full"></div>
+              </div>
+              <p class="text-lg text-gray-600 leading-relaxed">
+                Book your personalized session today. Our experts are ready to provide you with the best service in Varanasi. Quick, easy, and guaranteed satisfaction.
+              </p>
+              <div class="space-y-4">
+                <div class="flex items-center gap-4 p-4 bg-blue-50 rounded-2xl border border-blue-100">
+                  <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-blue-600">⚡</div>
+                  <p class="font-bold text-blue-900 text-sm">Instant Confirmation</p>
+                </div>
+                <div class="flex items-center gap-4 p-4 bg-green-50 rounded-2xl border border-green-100">
+                  <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-green-600">🛡️</div>
+                  <p class="font-bold text-green-900 text-sm">Verified Professional Service</p>
                 </div>
               </div>
-              `;
-      })()}
-          </div>
-        </div>
-        <div class="space-y-3">
-          ${['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => {
-        const hours = business.businessHours[day];
-        if (!hours) return '';
-        const isOpen = hours.open;
-        const now = new Date();
-        const currentDay = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][now.getDay()];
-        const isToday = day === currentDay;
-
-        return `
-            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border-2 ${isToday ? 'border-teal-400 bg-teal-50' : 'border-gray-200'}">
-              <span class="text-lg font-semibold text-gray-800 capitalize">${day}</span>
-              ${isOpen ? `
-              <div class="flex items-center gap-3">
-                <span class="text-gray-700 font-medium">${escapeHtml(hours.start)} - ${escapeHtml(hours.end)}</span>
-                ${isToday ? '<span class="px-3 py-1 bg-teal-600 text-white rounded-full text-xs font-bold">Today</span>' : ''}
-              </div>
-              ` : `
-              <span class="text-gray-400 italic">Closed</span>
-              `}
             </div>
-            `;
-      }).join('')}
-        </div>
-      </section>
-      ` : ''}
 
-      <!-- Appointment / Booking Section -->
-      ${business.appointmentSettings && business.appointmentSettings.contactMethod ? `
-      <section id="booking" class="section-card p-8 md:p-12 mb-12">
-        <div class="section-header">
-          <div class="section-icon">
-            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-            </svg>
-          </div>
-          <h2 class="section-title">Book an Appointment</h2>
-        </div>
-        <div class="max-w-2xl mx-auto">
-          <p class="text-gray-700 text-lg mb-6 text-center">
-            Ready to get started? Book your appointment now and we'll get back to you!
-          </p>
-          
-          <!-- Appointment Booking Form -->
-          <div id="appointment-booking-form" class="bg-white rounded-xl p-6 shadow-lg">
-            <form id="appointment-form" class="space-y-4">
-              <!-- Date Selection -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-2">Select Date *</label>
-                <input type="date" id="appointment-date" required min="${new Date().toISOString().split('T')[0]}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" />
+            <div class="bg-white rounded-[40px] shadow-2xl border border-gray-100 p-8 md:p-10 relative overflow-hidden group">
+              <div class="absolute -top-20 -right-20 w-64 h-64 bg-blue-50 rounded-full blur-3xl opacity-50 group-hover:scale-110 transition-transform duration-700"></div>
+              
+              <div id="appointment-booking-form" class="relative">
+                <form id="appointment-form" class="space-y-6">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                      <label class="text-sm font-black text-gray-700 uppercase tracking-wider ml-1">Your Name</label>
+                      <input type="text" id="customer-name" required class="w-full px-6 py-4 bg-gray-50 border-2 border-gray-50 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all" placeholder="John Doe">
+                    </div>
+                    <div class="space-y-2">
+                      <label class="text-sm font-black text-gray-700 uppercase tracking-wider ml-1">Phone Number</label>
+                      <input type="tel" id="customer-phone" required class="w-full px-6 py-4 bg-gray-50 border-2 border-gray-50 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all" placeholder="+91 00000 00000">
+                    </div>
+                  </div>
+
+                  <div class="space-y-2">
+                    <label class="text-sm font-black text-gray-700 uppercase tracking-wider ml-1">Preferred Date</label>
+                    <input type="date" id="appointment-date" required class="w-full px-6 py-4 bg-gray-50 border-2 border-gray-50 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all" min="${new Date().toISOString().split('T')[0]}">
+                  </div>
+
+                  <div id="time-selection-container" class="space-y-4" style="display: none;">
+                    <label class="text-sm font-black text-gray-700 uppercase tracking-wider ml-1">Select Time Slot</label>
+                    <div id="slots-loading" class="text-center py-4 hidden">
+                      <div class="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+                    </div>
+                    <div id="available-slots" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+                    <p id="no-slots" class="text-center py-4 text-red-500 font-bold hidden text-sm">No slots available for this date.</p>
+                  </div>
+
+                  <div class="space-y-2">
+                    <label class="text-sm font-black text-gray-700 uppercase tracking-wider ml-1">Additional Notes</label>
+                    <textarea id="appointment-notes" rows="3" class="w-full px-6 py-4 bg-gray-50 border-2 border-gray-50 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all resize-none" placeholder="Any special requests?"></textarea>
+                  </div>
+
+                  <button type="submit" id="submit-appointment" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-lg shadow-xl hover:bg-blue-700 hover:shadow-blue-200 transition-all transform hover:-translate-y-1 active:scale-95">
+                    Confirm Booking
+                  </button>
+                </form>
               </div>
 
-              <!-- Time Selection -->
-              <div id="time-selection-container" style="display: none;">
-                <label class="block text-sm font-semibold text-gray-800 mb-2">Select Time *</label>
-                <div id="available-slots" class="grid grid-cols-3 gap-2"></div>
-                <div id="slots-loading" class="text-center py-4 text-gray-500" style="display: none;">Loading available slots...</div>
-                <div id="no-slots" class="text-center py-4 text-red-500" style="display: none;">No available slots for this date. Please select another date.</div>
+              <div id="appointment-success" class="hidden text-center py-10 relative">
+                <div class="w-24 h-24 bg-green-100 rounded-[32px] flex items-center justify-center mx-auto mb-6 shadow-green-100 shadow-xl">
+                  <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h3 class="text-3xl font-black text-gray-900 mb-2">Wonderful!</h3>
+                <p class="text-gray-500 mb-8 font-medium">Your request has been received. Our team will contact you shortly.</p>
+                <button onclick="window.location.reload()" class="px-10 py-4 bg-gray-900 text-white rounded-2xl font-black hover:bg-black transition-all shadow-xl">Great, Thanks!</button>
               </div>
-
-              <!-- Customer Name -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-2">Your Name *</label>
-                <input type="text" id="customer-name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="John Doe" />
-              </div>
-
-              <!-- Phone -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-2">Phone Number *</label>
-                <input type="tel" id="customer-phone" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="+91 9305715031" />
-              </div>
-
-              <!-- Email -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-2">Email (Optional)</label>
-                <input type="email" id="customer-email" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none" placeholder="john@example.com" />
-              </div>
-
-              <!-- Service Type -->
-              ${business.appointmentSettings.serviceTypes && business.appointmentSettings.serviceTypes.length > 0 ? `
-              <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-2">Service Type</label>
-                <select id="service-type" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                  <option value="">Select a service</option>
-                  ${business.appointmentSettings.serviceTypes.map(service => `
-                    <option value="${escapeHtml(service)}">${escapeHtml(service)}</option>
-                  `).join('')}
-                </select>
-              </div>
-              ` : ''}
-
-              <!-- Notes -->
-              <div>
-                <label class="block text-sm font-semibold text-gray-800 mb-2">Additional Notes (Optional)</label>
-                <textarea id="appointment-notes" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none" placeholder="Any special requirements or notes..."></textarea>
-              </div>
-
-              <!-- Submit Button -->
-              <button type="submit" id="submit-appointment" class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-6 rounded-lg font-semibold transition-all duration-300 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">Book Appointment</button>
-            </form>
-
-            <!-- Success Message -->
-            <div id="appointment-success" class="hidden text-center py-6">
-              <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-              </div>
-              <h3 class="text-2xl font-bold text-gray-900 mb-2">Appointment Booked!</h3>
-              <p class="text-gray-600 mb-4">Your appointment has been confirmed. We'll send you a confirmation email shortly.</p>
-              <button onclick="document.getElementById('appointment-form').reset(); document.getElementById('appointment-success').classList.add('hidden'); document.getElementById('appointment-booking-form').classList.remove('hidden');" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Book Another Appointment</button>
             </div>
           </div>
         </div>
       </section>
+      ` : ''
+    }
 
-      <script>
-        (function() {
-          const businessId = ${business.id};
-          const API_BASE_URL = '${apiUrl}';
-          const appointmentDateInput = document.getElementById('appointment-date');
-          const timeSelectionContainer = document.getElementById('time-selection-container');
-          const availableSlotsDiv = document.getElementById('available-slots');
-          const slotsLoading = document.getElementById('slots-loading');
-          const noSlots = document.getElementById('no-slots');
-          const appointmentForm = document.getElementById('appointment-form');
-          const submitButton = document.getElementById('submit-appointment');
-          let selectedTime = '';
+      < !--E - Commerce / Products Section-- >
 
-          appointmentDateInput.addEventListener('change', async function() {
-            const selectedDate = this.value;
-            selectedTime = '';
-            if (!selectedDate) {
-              timeSelectionContainer.style.display = 'none';
-              return;
-            }
-            timeSelectionContainer.style.display = 'block';
-            availableSlotsDiv.innerHTML = '';
-            slotsLoading.style.display = 'block';
-            noSlots.style.display = 'none';
-            try {
-              const response = await fetch(API_BASE_URL + '/appointments/business/' + businessId + '/available-slots?date=' + selectedDate);
-              const data = await response.json();
-              slotsLoading.style.display = 'none';
-              if (response.ok && data.availableSlots && data.availableSlots.length > 0) {
-                availableSlotsDiv.innerHTML = data.availableSlots.map(slot => 
-                  '<button type="button" class="slot-btn px-4 py-2 rounded-lg border-2 transition-all bg-white text-gray-700 border-gray-300 hover:border-blue-500" data-time="' + slot + '">' + slot + '</button>'
-                ).join('');
-                document.querySelectorAll('.slot-btn').forEach(btn => {
-                  btn.addEventListener('click', function() {
-                    document.querySelectorAll('.slot-btn').forEach(b => {
-                      b.classList.remove('bg-blue-600', 'text-white', 'border-blue-600');
-                      b.classList.add('bg-white', 'text-gray-700', 'border-gray-300');
-                    });
-                    this.classList.remove('bg-white', 'text-gray-700', 'border-gray-300');
-                    this.classList.add('bg-blue-600', 'text-white', 'border-blue-600');
-                    selectedTime = this.dataset.time;
-                  });
-                });
-              } else {
-                noSlots.style.display = 'block';
-              }
-            } catch (error) {
-              console.error('Error fetching slots:', error);
-              slotsLoading.style.display = 'none';
-              noSlots.style.display = 'block';
-              noSlots.textContent = 'Failed to load available slots. Please try again.';
-            }
-          });
-
-          appointmentForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            if (!selectedTime) {
-              alert('Please select a time slot');
-              return;
-            }
-            const formData = {
-              customerName: document.getElementById('customer-name').value,
-              customerPhone: document.getElementById('customer-phone').value,
-              customerEmail: document.getElementById('customer-email').value,
-              appointmentDate: appointmentDateInput.value,
-              appointmentTime: selectedTime,
-              serviceType: document.getElementById('service-type')?.value || '',
-              notes: document.getElementById('appointment-notes').value
-            };
-            submitButton.disabled = true;
-            submitButton.textContent = 'Booking...';
-            try {
-              const response = await fetch(API_BASE_URL + '/appointments/business/' + businessId, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(formData)
-              });
-              const data = await response.json();
-              if (response.ok) {
-                document.getElementById('appointment-booking-form').classList.add('hidden');
-                document.getElementById('appointment-success').classList.remove('hidden');
-                appointmentForm.reset();
-                timeSelectionContainer.style.display = 'none';
-              } else {
-                alert(data.error || 'Failed to book appointment. Please try again.');
-                submitButton.disabled = false;
-                submitButton.textContent = 'Book Appointment';
-              }
-            } catch (error) {
-              console.error('Error booking appointment:', error);
-              alert('Failed to book appointment. Please try again.');
-              submitButton.disabled = false;
-              submitButton.textContent = 'Book Appointment';
-            }
-          });
-        })();
-      </script>
-      ` : ''}
-
-      <!-- E-Commerce / Products Section -->
-      ${business.ecommerceEnabled ? `
-      <section id="products" class="bg-white rounded-2xl shadow-2xl p-10 md:p-12 mb-12 border border-gray-100">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="w-12 h-12 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-xl flex items-center justify-center">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-            </svg>
+  ${business.ecommerceEnabled ? `
+      <section id="products" class="py-16 sm:py-20 bg-white -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 mb-12">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-12">
+            <div class="inline-block px-4 py-2 rounded-full ${theme.accent.replace('text-', 'bg-')}/10 ${theme.accent} text-sm font-bold mb-4">
+              Our Shop
+            </div>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-6">Our Products</h2>
+            <div class="h-1.5 w-24 ${theme.primarySolid.replace('bg-', 'bg-')} mx-auto rounded-full"></div>
           </div>
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900">Our Products</h2>
-        </div>
-        <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <p class="text-gray-500">Loading products...</p>
+          <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div class="col-span-full text-center py-12 text-gray-500 animate-pulse">Loading amazing products...</div>
+          </div>
         </div>
       </section>
 
       <!-- Shopping Cart Sidebar -->
-      <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl z-[100] transform translate-x-full transition-transform duration-300">
+      <div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full md:w-96 bg-white shadow-2xl z-[100] transform translate-x-full transition-transform duration-500">
         <div class="flex flex-col h-full">
-          <div class="flex items-center justify-between p-6 border-b border-gray-200">
-            <h3 class="text-2xl font-bold text-gray-900">Shopping Cart</h3>
-            <button onclick="window.closeCart()" class="text-gray-500 hover:text-gray-700">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
+          <div class="flex items-center justify-between p-8 border-b border-gray-100">
+            <h3 class="text-2xl font-black text-gray-900">Your Cart</h3>
+            <button onclick="window.closeCart()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+              <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
           </div>
-          <div id="cart-items" class="flex-1 overflow-y-auto p-6">
-            <p class="text-gray-500 text-center">Your cart is empty</p>
+          <div id="cart-items" class="flex-1 overflow-y-auto p-8 space-y-6">
+            <p class="text-gray-400 text-center italic">Your cart is empty.</p>
           </div>
-          <div class="border-t border-gray-200 p-6 space-y-4">
-            <div class="flex justify-between text-lg font-bold">
-              <span>Total:</span>
+          <div class="border-t border-gray-100 p-8 bg-gray-50/50">
+            <div class="flex justify-between items-center text-xl font-black text-gray-900 mb-6">
+              <span>Total Amount:</span>
               <span id="cart-total">₹0</span>
             </div>
-            <button onclick="window.checkout()" id="checkout-btn" class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold hover:from-blue-700 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+            <button onclick="window.checkout()" id="checkout-btn" disabled class="w-full ${theme.primarySolid} text-white py-4 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
               Proceed to Checkout
             </button>
           </div>
         </div>
       </div>
-      <div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-[90] hidden" onclick="window.closeCart()"></div>
+      <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-[90] hidden backdrop-blur-sm transition-opacity duration-500" onclick="window.closeCart()"></div>
 
       <!-- Cart Button -->
-      <button onclick="window.openCart()" id="cart-button" class="fixed ${business.whatsapp ? 'bottom-24' : 'bottom-6'} right-6 w-16 h-16 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 flex items-center justify-center z-40">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-        </svg>
-        <span id="cart-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center hidden">0</span>
+      <button onclick="window.openCart()" id="cart-button" class="fixed ${business.whatsapp ? 'bottom-24' : 'bottom-6'} right-6 w-16 h-16 ${theme.primarySolid} text-white rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 flex items-center justify-center z-40">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+        <span id="cart-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black rounded-full w-6 h-6 flex items-center justify-center border-2 border-white hidden">0</span>
       </button>
-      ` : ''}
-
-      <!-- FAQ Section -->
-      ${business.faqs && business.faqs.length > 0 ? `
-      <section id="faq" class="bg-white rounded-2xl shadow-2xl p-10 md:p-12 mb-12 border border-gray-100">
-        <div class="flex items-center gap-4 mb-8">
-          <div class="w-12 h-12 bg-gradient-to-br from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
+      ` : ''
+    }
+< !--FAQ Section-- >
+  ${business.faqs && business.faqs.length > 0 ? `
+      <section id="faq" class="py-16 sm:py-20 bg-gray-50 -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 mb-12">
+        <div class="max-w-3xl mx-auto">
+          <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-black text-gray-900 mb-4 text-center">Common Questions</h2>
+            <div class="h-1.5 w-24 ${theme.primarySolid.replace('bg-', 'bg-')} mx-auto rounded-full"></div>
           </div>
-          <h2 class="text-4xl md:text-5xl font-bold text-gray-900">Frequently Asked Questions</h2>
-        </div>
-        <div class="max-w-3xl mx-auto space-y-4">
-          ${business.faqs.map((faq, index) => `
-            <div class="faq-item border-2 border-gray-200 rounded-xl overflow-hidden hover:border-${theme.primarySolid.replace('bg-', '')} transition-all duration-300">
-              <button class="faq-question w-full px-6 py-4 text-left flex items-center justify-between bg-gray-50 hover:bg-gray-100 transition-colors duration-200" onclick="toggleFaq(${index})">
-                <span class="font-bold text-lg text-gray-900">${escapeHtml(faq.question || '')}</span>
-                <svg class="faq-icon w-6 h-6 text-gray-600 transform transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                </svg>
-              </button>
-              <div class="faq-answer hidden px-6 py-4 bg-white text-gray-700 leading-relaxed">
-                ${escapeHtml(faq.answer || '').replace(/\n/g, '<br>')}
+          <div class="space-y-4">
+            ${business.faqs.map((faq, index) => `
+              <div class="faq-item bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300">
+                <button class="faq-question w-full px-8 py-6 text-left flex items-center justify-between group" onclick="toggleFaq(${index})">
+                  <span class="font-bold text-lg text-gray-900 group-hover:${theme.accent} transition-colors">${escapeHtml(faq.question || '')}</span>
+                  <div class="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center transition-transform duration-300 faq-icon-box">
+                    <svg class="w-5 h-5 text-gray-400 faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                  </div>
+                </button>
+                <div class="faq-answer hidden px-8 pb-8 text-gray-600 leading-relaxed">
+                  ${escapeHtml(faq.answer || '')}
+                </div>
               </div>
-            </div>
-          `).join('')}
+            `).join('')}
+          </div>
         </div>
       </section>
-      ` : ''}
+      ` : ''
+    }
 
-      <!-- Contact Section -->
-      <section id="contact" class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 lg:p-12 mb-8 sm:mb-12 border border-gray-100">
-        <div class="flex items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
-          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-xl flex items-center justify-center flex-shrink-0">
-            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-            </svg>
-          </div>
-          <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900">Contact Us</h2>
+      < !--Contact Section-- >
+  <section id="contact" class="py-16 sm:py-20 bg-white -mx-4 sm:-mx-6 lg:-mx-8 px-4 sm:px-6 lg:px-8 mb-12">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12 sm:mb-16">
+        <div class="inline-block px-4 py-2 rounded-full ${theme.accent.replace('text-', 'bg-')}/10 ${theme.accent} text-sm font-bold mb-4">
+          Get in touch
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-          <!-- Contact Information -->
-          <div class="space-y-6">
-            <div>
-              <h3 class="text-2xl font-bold text-gray-800 mb-6">Get in Touch</h3>
-              <p class="text-gray-600 mb-6">We'd love to hear from you. Reach out to us through any of the following channels.</p>
-            </div>
-            <div class="space-y-5">
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-6">Contact Us</h2>
+        <div class="h-1.5 w-24 ${theme.primarySolid.replace('bg-', 'bg-')} mx-auto rounded-full"></div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+        <!-- Contact Details -->
+        <div class="space-y-6 order-2 lg:order-1">
+          <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100">
+            <h3 class="text-2xl font-black text-gray-900 mb-8">Contact Information</h3>
+            <div class="space-y-6">
+              ${business.address ? `
+                  <div class="flex items-start gap-5">
+                    <div class="w-12 h-12 rounded-2xl ${theme.primarySolid} flex items-center justify-center text-white shadow-lg flex-shrink-0">
+                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    </div>
+                    <div>
+                      <p class="text-sm font-black text-gray-400 uppercase tracking-widest mb-1">Address</p>
+                      <p class="text-lg font-bold text-gray-900">${escapeHtml(business.address)}</p>
+                    </div>
+                  </div>
+                  ` : ''}
+
               ${business.mobile ? `
-              <div class="flex items-start gap-4 p-5 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors border border-blue-100">
-                <div class="flex-shrink-0 w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
-                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                  </svg>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm text-gray-500 font-medium mb-1">Phone</p>
-                  <a href="tel:${escapeHtml(business.mobile)}" class="text-lg font-bold text-blue-600 hover:text-blue-700 transition-colors">${escapeHtml(business.mobile)}</a>
-                </div>
-              </div>
-              ` : ''}
+                  <div class="flex items-start gap-5">
+                    <div class="w-12 h-12 rounded-2xl ${theme.primarySolid} flex items-center justify-center text-white shadow-lg flex-shrink-0">
+                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                    </div>
+                    <div>
+                      <p class="text-sm font-black text-gray-400 uppercase tracking-widest mb-1">Phone</p>
+                      <a href="tel:${escapeHtml(business.mobile)}" class="text-lg font-bold text-gray-900 hover:${theme.accent} transition-colors">${escapeHtml(business.mobile)}</a>
+                    </div>
+                  </div>
+                  ` : ''}
+
               ${business.email ? `
-              <div class="flex items-start gap-4 p-5 bg-indigo-50 rounded-xl hover:bg-indigo-100 transition-colors border border-indigo-100">
-                <div class="flex-shrink-0 w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
-                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                  </svg>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm text-gray-500 font-medium mb-1">Email</p>
-                  <a href="mailto:${escapeHtml(business.email)}" class="text-lg font-bold text-indigo-600 hover:text-indigo-700 transition-colors break-all">${escapeHtml(business.email)}</a>
+                  <div class="flex items-start gap-5">
+                    <div class="w-12 h-12 rounded-2xl ${theme.primarySolid} flex items-center justify-center text-white shadow-lg flex-shrink-0">
+                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div>
+                      <p class="text-sm font-black text-gray-400 uppercase tracking-widest mb-1">Email</p>
+                      <a href="mailto:${escapeHtml(business.email)}" class="text-lg font-bold text-gray-900 hover:${theme.accent} transition-colors break-all">${escapeHtml(business.email)}</a>
+                    </div>
+                  </div>
+                  ` : ''}
+
+              <div class="pt-4 border-t border-gray-100">
+                <p class="text-sm font-black text-gray-400 uppercase tracking-widest mb-3">Follow Us</p>
+                <div class="flex flex-wrap gap-4">
+                  ${['instagram', 'facebook', 'website'].map(key => business[key] ? `
+                        <a href="${escapeHtml(business[key])}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 ${theme.primarySolid} text-white rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            ${key === 'instagram' ? '<path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.247 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.332 2.633-1.308 3.608-.975.975-2.242 1.247-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.247-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.247 3.608-1.308 1.266-.058 1.646-.07 4.85-.07m0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>' : ''}
+                            ${key === 'facebook' ? '<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>' : ''}
+                            ${key === 'website' ? '<path d="M12 0a12 12 0 100 24 12 12 0 000-24zm0 21.6A9.6 9.6 0 1112 2.4a9.6 9.6 0 010 19.2zm-1.2-13.2a1.2 1.2 0 012.4 0v4.8a1.2 1.2 0 01-2.4 0V8.4zm0 7.2a1.2 1.2 0 112.4 0 1.2 1.2 0 01-2.4 0z"/>' : ''}
+                          </svg>
+                        </a>
+                      ` : '').join('')}
                 </div>
               </div>
-              ` : ''}
-              ${business.whatsapp ? `
-              <div class="flex items-start gap-4 p-5 bg-green-50 rounded-xl hover:bg-green-100 transition-colors border border-green-100">
-                <div class="flex-shrink-0 w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center">
-                  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                  </svg>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm text-gray-500 font-medium mb-1">WhatsApp</p>
-                  <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/[^0-9]/g, ''))}" target="_blank" class="text-lg font-bold text-green-600 hover:text-green-700 transition-colors">${escapeHtml(business.whatsapp)}</a>
-                </div>
-              </div>
-              ` : ''}
             </div>
           </div>
 
-          <!-- Contact Form -->
-          <div class="space-y-6">
-            <div>
-              <h3 class="text-2xl font-bold text-gray-800 mb-6">Send us a Message</h3>
-              <p class="text-gray-600 mb-6">Fill out the form below and we'll get back to you as soon as possible.</p>
-            </div>
-            <form id="contact-form" class="space-y-4">
-              <div>
-                <label for="contact-name" class="block text-sm font-medium text-gray-700 mb-2">Name *</label>
-                <input type="text" id="contact-name" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
-              </div>
-              <div>
-                <label for="contact-email" class="block text-sm font-medium text-gray-700 mb-2">Email *</label>
-                <input type="email" id="contact-email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
-              </div>
-              <div>
-                <label for="contact-phone" class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-                <input type="tel" id="contact-phone" name="phone" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
-              </div>
-              <div>
-                <label for="contact-subject" class="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-                <input type="text" id="contact-subject" name="subject" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
-              </div>
-              <div>
-                <label for="contact-message" class="block text-sm font-medium text-gray-700 mb-2">Message *</label>
-                <textarea id="contact-message" name="message" rows="5" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all resize-none"></textarea>
-              </div>
-              <button type="submit" class="hover-zoom w-full px-6 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-bold text-base sm:text-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-xl">
-                Send Message
-              </button>
-              <div id="contact-form-message" class="hidden mt-4 p-4 rounded-xl"></div>
-            </form>
-          </div>
-
-          <!-- Location Information -->
-          <div class="space-y-6">
-            <div>
-              <h3 class="text-2xl font-bold text-gray-800 mb-6">Visit Us</h3>
-              <p class="text-gray-600 mb-6">Come and visit our location. We're always happy to welcome you!</p>
-            </div>
-            <div class="p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl border border-gray-200">
-              <div class="flex items-start gap-4 mb-6">
-                <div class="flex-shrink-0 w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center">
-                  <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                  </svg>
-                </div>
-                <div class="flex-1">
-                  <p class="text-sm text-gray-500 font-medium mb-2">Address</p>
-                  <p class="text-gray-800 font-semibold text-lg leading-relaxed">${escapeHtml(business.address)}</p>
-                </div>
-              </div>
-              ${business.mapLink ? `
-              <div class="space-y-4">
-                <a href="${escapeHtml(business.mapLink)}" target="_blank" class="inline-flex items-center justify-center gap-3 w-full px-6 py-4 bg-purple-600 text-white rounded-xl font-bold text-lg hover:bg-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
-                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                  </svg>
-                  View on Google Maps
-                </a>
+          ${business.mapLink ? `
+              <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 h-64 sm:h-80 bg-gray-50">
                 ${(() => {
-        // Try to extract embed URL from Google Maps link
         let embedUrl = null;
         if (business.mapLink.includes('google.com/maps')) {
-          // Extract place ID or coordinates from URL
           const placeIdMatch = business.mapLink.match(/place\/([^\/]+)/);
           const queryMatch = business.mapLink.match(/q=([^&]+)/);
           if (placeIdMatch) {
             embedUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6q4Zb1L3uY&q=place_id:${placeIdMatch[1]}`;
           } else if (queryMatch) {
-            embedUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6q4Zb1L3uY&q=${encodeURIComponent(queryMatch[1])}`;
-          } else {
-            // Try to extract coordinates
-            const coordMatch = business.mapLink.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-            if (coordMatch) {
-              embedUrl = `https://www.google.com/maps/embed/v1/view?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6q4Zb1L3uY&center=${coordMatch[1]},${coordMatch[2]}&zoom=15`;
-            }
+            embedUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6d_s6q4Zb1L3uY&get_places=1&q=${encodeURIComponent(queryMatch[1])}`;
           }
         }
-        // If it's already an embed URL, use it directly
-        if (business.mapLink.includes('google.com/maps/embed')) {
-          embedUrl = business.mapLink;
-        }
+        if (business.mapLink && business.mapLink.includes('google.com/maps/embed')) embedUrl = business.mapLink;
 
         return embedUrl ? `
-                  <div class="mt-4 rounded-xl overflow-hidden shadow-lg border-2 border-gray-200">
-                    <iframe 
-                      src="${escapeHtml(embedUrl)}" 
-                      width="100%" 
-                      height="300" 
-                      style="border:0;" 
-                      allowfullscreen="" 
-                      loading="lazy" 
-                      referrerpolicy="no-referrer-when-downgrade"
-                      class="w-full"
-                    ></iframe>
-                  </div>
-                  ` : '';
+                    <iframe src="${escapeHtml(embedUrl)}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                  ` : `
+                    <div class="w-full h-full flex flex-col items-center justify-center gap-4">
+                      <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
+                      <a href="${escapeHtml(business.mapLink)}" target="_blank" class="px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold shadow-lg">View on Maps</a>
+                    </div>
+                  `;
       })()}
               </div>
               ` : ''}
             </div>
+
+            <!-- Contact Form -->
+            <div class="order-1 lg:order-2">
+              <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 h-full">
+                <h3 class="text-2xl font-black text-gray-900 mb-8">Send a Message</h3>
+                <form id="contact-form" class="space-y-6">
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Full Name *</label>
+                    <input type="text" name="name" required class="w-full px-4 py-4 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 outline-none" placeholder="Your name" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Email Address *</label>
+                    <input type="email" name="email" required class="w-full px-4 py-4 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 outline-none" placeholder="your@email.com" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Message *</label>
+                    <textarea name="message" rows="6" required class="w-full px-4 py-4 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 outline-none resize-none" placeholder="How can we help?"></textarea>
+                  </div>
+                  <button type="submit" class="w-full ${theme.primarySolid} text-white py-5 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300">
+                    Send Now
+                  </button>
+                  <p id="contact-success" class="hidden text-center text-sm font-bold mt-4 text-green-600">Message sent successfully!</p>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </section>
-    </div>
-  </main>
+    </main>
 
-<<<<<<< HEAD
-  <!-- Image Lightbox Modal -->
-  ${business.imagesUrl && business.imagesUrl.length > 0 ? `
-  <div id="lightboxModal" class="lightbox-modal" onclick="closeLightboxOnBackdrop(event)">
-    <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close lightbox">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-      </svg>
-    </button>
-    <button class="lightbox-prev" onclick="changeLightboxImage(-1)" aria-label="Previous image">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-      </svg>
-    </button>
-    <button class="lightbox-next" onclick="changeLightboxImage(1)" aria-label="Next image">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-      </svg>
-    </button>
-    <div class="lightbox-content" onclick="event.stopPropagation()">
-      <img id="lightboxImage" class="lightbox-image" src="" alt="" />
-      <div class="lightbox-counter">
-        <span id="lightboxCurrent">1</span> / <span id="lightboxTotal">${business.imagesUrl.length}</span>
-      </div>
-      <div class="lightbox-zoom-controls">
-        <button class="lightbox-zoom-btn" onclick="zoomIn()" aria-label="Zoom in">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-          </svg>
-        </button>
-        <button class="lightbox-zoom-btn" onclick="zoomOut()" aria-label="Zoom out">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-          </svg>
-        </button>
-        <button class="lightbox-zoom-btn" onclick="resetZoom()" aria-label="Reset zoom">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
-  ` : ''}
 
-  <!-- Mobile Bottom Navigation Bar -->
-  <nav id="mobileBottomNav" class="mobile-bottom-nav">
-    <a href="#home" class="mobile-nav-item" onclick="handleMobileNavClick(event, '#home')">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-      </svg>
-      <span>Home</span>
-    </a>
-    ${business.description ? `
-    <a href="#about" class="mobile-nav-item" onclick="handleMobileNavClick(event, '#about')">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-      </svg>
-      <span>About</span>
-    </a>
-    ` : ''}
-    ${business.imagesUrl && business.imagesUrl.length > 0 ? `
-    <a href="#gallery" class="mobile-nav-item" onclick="handleMobileNavClick(event, '#gallery')">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-      </svg>
-      <span>Gallery</span>
-    </a>
-    ` : ''}
-    ${business.services && business.services.length > 0 ? `
-    <a href="#services" class="mobile-nav-item" onclick="handleMobileNavClick(event, '#services')">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path>
-      </svg>
-      <span>Services</span>
-    </a>
-    ` : ''}
-    <a href="#contact" class="mobile-nav-item" onclick="handleMobileNavClick(event, '#contact')">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-      </svg>
-      <span>Contact</span>
-    </a>
-  </nav>
 
-  <!-- Pull to Refresh Indicator -->
-  <div id="pullToRefresh" class="pull-to-refresh">
-    <div class="pull-to-refresh-spinner">
-      <svg class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-      </svg>
-    </div>
-    <span class="pull-to-refresh-text">Pull to refresh</span>
-  </div>
 
-  <!-- Footer -->
-  <footer class="bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 text-white mt-16 border-t border-blue-500">
-=======
-  <!-- Footer -->
-  <footer class="bg-gradient-to-br ${theme.footer} text-gray-300 mt-16 border-t border-gray-700">
->>>>>>> 36b21241eb5ef038c7a0d71180ae6768fa1d273e
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-        <!-- Business Info -->
-        <div>
-          <h3 class="text-white font-bold text-xl mb-4">${escapeHtml(business.businessName)}</h3>
-          <p class="text-gray-400 mb-2 font-medium">${escapeHtml(business.category)}</p>
-          <p class="text-gray-400 text-sm leading-relaxed mb-4">${escapeHtml(business.address)}</p>
-          ${business.footerDescription ? `<p class="text-gray-400 text-sm leading-relaxed italic border-l-2 border-blue-600 pl-4">${escapeHtml(business.footerDescription)}</p>` : ''}
-        </div>
 
-        <!-- Quick Links -->
-        <div>
-          <h4 class="text-white font-semibold text-lg mb-4">Quick Links</h4>
-          <ul class="space-y-3">
-            <li><a href="#home" class="hover:text-blue-400 transition-colors duration-200 flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-              </svg>
-              Home
-            </a></li>
-            <li><a href="#about" class="hover:text-blue-400 transition-colors duration-200 flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-              About
-            </a></li>
-            ${business.imagesUrl && business.imagesUrl.length > 0 ? `<li><a href="#gallery" class="hover:text-blue-400 transition-colors duration-200 flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-              </svg>
-              Gallery
-            </a></li>` : ''}
-            <li><a href="#contact" class="hover:text-blue-400 transition-colors duration-200 flex items-center gap-2">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-              </svg>
-              Contact
-            </a></li>
-          </ul>
-        </div>
-
-        <!-- Contact & Social -->
-        <div>
-          <h4 class="text-white font-semibold text-lg mb-4">Connect With Us</h4>
-          <div class="space-y-4 mb-6">
-            ${business.mobile ? `
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                </svg>
-              </div>
-              <a href="tel:${escapeHtml(business.mobile)}" class="hover:text-blue-400 transition-colors duration-200 font-medium">${escapeHtml(business.mobile)}</a>
-            </div>
-            ` : ''}
-            ${business.email ? `
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
-                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                </svg>
-              </div>
-              <a href="mailto:${escapeHtml(business.email)}" class="hover:text-blue-400 transition-colors duration-200 font-medium break-all">${escapeHtml(business.email)}</a>
-            </div>
-            ` : ''}
-            ${business.whatsapp ? `
-            <div class="flex items-center gap-3">
-              <div class="w-10 h-10 bg-green-600/20 rounded-lg flex items-center justify-center">
-                <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-                </svg>
-              </div>
-              <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/[^0-9]/g, ''))}" target="_blank" class="hover:text-green-400 transition-colors duration-200 font-medium">${escapeHtml(business.whatsapp)}</a>
-            </div>
-            ` : ''}
+      < !--Mobile Bottom Navigation Bar-- >
+      <nav id="mobileBottomNav" class="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 w-[90%] max-w-md bg-white/80 backdrop-blur-xl border border-white/20 shadow-2xl rounded-3xl flex items-center justify-around py-4 px-6 z-50 transition-all duration-300">
+        <a href="#home" class="flex flex-col items-center gap-1 group transition-all" onclick="handleMobileNavClick(event, '#home')">
+          <div class="p-2 rounded-2xl group-hover:${theme.accent.replace('text-', 'bg-')}/10 transition-colors">
+            <svg class="w-6 h-6 ${theme.accent}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
           </div>
-          ${(business.socialLinks?.instagram || business.socialLinks?.facebook || business.socialLinks?.website) ? `
-          <div class="flex gap-3">
-            ${business.socialLinks.instagram ? `
-            <a href="${escapeHtml(business.socialLinks.instagram)}" target="_blank" class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-gradient-to-br hover:from-pink-500 hover:to-purple-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-110" aria-label="Instagram">
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-              </svg>
-            </a>
-            ` : ''}
-            ${business.socialLinks.facebook ? `
-            <a href="${escapeHtml(business.socialLinks.facebook)}" target="_blank" class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-blue-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-110" aria-label="Facebook">
-              <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-              </svg>
-            </a>
-            ` : ''}
-            ${business.socialLinks.website ? `
-            <a href="${escapeHtml(business.socialLinks.website)}" target="_blank" class="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-gray-600 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-110" aria-label="Website">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
-              </svg>
-            </a>
-            ` : ''}
+        </a>
+        ${business.services && business.services.length > 0 ? `
+        <a href="#services" class="flex flex-col items-center gap-1 group transition-all" onclick="handleMobileNavClick(event, '#services')">
+          <div class="p-2 rounded-2xl group-hover:${theme.accent.replace('text-', 'bg-')}/10 transition-colors">
+            <svg class="w-6 h-6 text-gray-400 group-hover:${theme.accent}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
           </div>
-          ` : ''}
+        </a>
+        ` : ''}
+        ${business.ecommerceEnabled ? `
+        <a href="#products" class="flex flex-col items-center gap-1 group transition-all" onclick="handleMobileNavClick(event, '#products')">
+          <div class="p-2 rounded-2xl group-hover:${theme.accent.replace('text-', 'bg-')}/10 transition-colors">
+            <svg class="w-6 h-6 text-gray-400 group-hover:${theme.accent}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+          </div>
+        </a>
+        ` : ''}
+        <a href="#contact" class="flex flex-col items-center gap-1 group transition-all" onclick="handleMobileNavClick(event, '#contact')">
+          <div class="p-2 rounded-2xl group-hover:${theme.accent.replace('text-', 'bg-')}/10 transition-colors">
+            <svg class="w-6 h-6 text-gray-400 group-hover:${theme.accent}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          </div>
+        </a>
+      </nav>
+
+      <!--Pull to Refresh Indicator-- >
+      <div id="pullToRefresh" class="fixed top-0 left-0 w-full h-16 flex items-center justify-center -translate-y-full z-[100] transition-transform duration-300">
+        <div class="bg-white p-3 rounded-full shadow-xl border border-gray-100 flex items-center gap-3">
+          <svg class="w-6 h-6 animate-spin ${theme.accent}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+          <span class="text-sm font-black text-gray-900">Refreshing...</span>
         </div>
       </div>
 
-      <!-- Bottom Bar -->
-      <div class="border-t border-gray-700 mt-8 pt-8 text-center">
-        <p class="text-gray-400 text-base">
-          © ${new Date().getFullYear()} <span class="font-semibold text-white">${escapeHtml(business.businessName)}</span>. All rights reserved.
-        </p>
-        <p class="text-gray-500 text-sm mt-3">
-          Powered by <a href="https://varanasihub.com" target="_blank" class="text-blue-400 hover:text-blue-300 transition-colors duration-200 font-medium">VaranasiHub</a>
-        </p>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    // FAQ Toggle Function
-    function toggleFaq(index) {
-      const faqItem = document.querySelectorAll('.faq-item')[index];
-      if (faqItem) {
-        const isActive = faqItem.classList.contains('active');
-        // Close all FAQs
-        document.querySelectorAll('.faq-item').forEach(item => {
-          item.classList.remove('active');
-        });
-        // Toggle current FAQ
-        if (!isActive) {
-          faqItem.classList.add('active');
-        }
-      }
-    }
-
-    // Share Modal Functions
-    function openShareModal() {
-      try {
-        const modal = document.getElementById('shareModal');
-        if (modal) {
-          modal.classList.add('active');
-          document.body.style.overflow = 'hidden';
-        } else {
-          console.error('Share modal not found');
-        }
-      } catch (error) {
-        console.error('Error opening share modal:', error);
-      }
-      }
-    }
-
-    function closeShareModal() {
-      const modal = document.getElementById('shareModal');
-      if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-    }
-
-    function closeShareModalOnBackdrop(event) {
-      if (event.target.id === 'shareModal') {
-        closeShareModal();
-      }
-    }
-
-    // Copy Share Link Function
-    function copyShareLink() {
-      const input = document.getElementById('shareLinkInput');
-      const btn = document.getElementById('copyShareBtn');
-      if (!input) {
-        console.error('Share link input not found');
-        return;
-      }
-      
-      const textToCopy = input.value;
-      
-      // Try modern clipboard API first
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(textToCopy).then(() => {
-          if (btn) {
-            const originalText = btn.textContent;
-            btn.textContent = 'Copied!';
-            btn.classList.add('copied');
-            setTimeout(function() {
-              btn.textContent = originalText;
-              btn.classList.remove('copied');
-            }, 2000);
-          }
-          showNotification('Link copied to clipboard!');
-        }).catch(function(err) {
-          console.error('Clipboard API failed, trying fallback:', err);
-          fallbackCopyTextToClipboard(textToCopy, btn);
-        });
-      } else {
-        // Fallback for older browsers
-        fallbackCopyTextToClipboard(textToCopy, btn);
-      }
-    }
-    
-    // Fallback copy function for older browsers
-    function fallbackCopyTextToClipboard(text, btn) {
-      const textArea = document.createElement('textarea');
-      textArea.value = text;
-      textArea.style.position = 'fixed';
-      textArea.style.left = '-999999px';
-      textArea.style.top = '-999999px';
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-      
-      try {
-        const successful = document.execCommand('copy');
-        if (successful) {
-          if (btn) {
-            const originalText = btn.textContent;
-            btn.textContent = 'Copied!';
-            btn.classList.add('copied');
-            setTimeout(function() {
-              btn.textContent = originalText;
-              btn.classList.remove('copied');
-            }, 2000);
-          }
-          showNotification('Link copied to clipboard!');
-        } else {
-          showNotification('Failed to copy link', 'error');
-        }
-      } catch (err) {
-        console.error('Fallback copy failed:', err);
-        showNotification('Failed to copy link', 'error');
-      } finally {
-        document.body.removeChild(textArea);
-      }
-    }
-
-    // Download QR Code
-    function downloadQRCode() {
-      const qrImage = document.getElementById('qrCodeImage');
-      if (qrImage) {
-        const link = document.createElement('a');
-        link.href = qrImage.src;
-        link.download = '${escapeHtml(business.businessName).replace(/[^a-z0-9]/gi, '-')}-QR-Code.png';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        showNotification('QR Code downloaded!');
-      }
-    }
-
-    // Track Share Analytics
-    function trackShare(platform) {
-      const businessId = ${business.id};
-      const API_BASE_URL = '${apiUrl}';
-      
-      fetch(API_BASE_URL + '/analytics/track', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          businessId: businessId,
-          eventType: 'share_' + platform
-        })
-      }).catch(function(err) {
-        console.log('Analytics tracking error:', err);
-      });
-    }
-
-    // Close modal on Escape key
-    document.addEventListener('keydown', function(event) {
-      if (event.key === 'Escape') {
-        closeShareModal();
-      }
-    });
-
-    // Show Notification
-    function showNotification(message, type) {
-      type = type || 'success';
-      const notification = document.createElement('div');
-      const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
-      notification.className = 'fixed top-20 right-5 z-[99999] px-6 py-4 rounded-xl shadow-2xl transform transition-all duration-300 ' + bgColor + ' text-white';
-      notification.textContent = message;
-      document.body.appendChild(notification);
-      
-      setTimeout(function() {
-        notification.style.opacity = '0';
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(function() { notification.remove(); }, 300);
-      }, 3000);
-    }
-
-    // Mobile menu toggle
-    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    const menuIcon = document.getElementById('menuIcon');
-    const closeIcon = document.getElementById('closeIcon');
-    
-    if (mobileMenuBtn && mobileMenu && menuIcon && closeIcon) {
-      mobileMenuBtn.addEventListener('click', () => {
-        const isHidden = mobileMenu.classList.contains('hidden');
-        mobileMenu.classList.toggle('hidden');
-        menuIcon.classList.toggle('hidden');
-        closeIcon.classList.toggle('hidden');
-      });
-    }
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // Close mobile menu if open
-          if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
-            mobileMenu.classList.add('hidden');
-            if (menuIcon) menuIcon.classList.remove('hidden');
-            if (closeIcon) closeIcon.classList.add('hidden');
-          }
-        }
-      });
-    });
-
-    // Highlight active nav link on scroll
-    window.addEventListener('scroll', () => {
-      const sections = document.querySelectorAll('section[id]');
-      const navLinks = document.querySelectorAll('.nav-link');
-      
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (window.pageYOffset >= sectionTop - 100) {
-          current = section.getAttribute('id');
-        }
-      });
-
-      navLinks.forEach(link => {
-        link.classList.remove('nav-active');
-        if (link.getAttribute('href') === '#' + current) {
-          link.classList.add('nav-active');
-        }
-      });
-    });
-  </script>
-
-  <!-- Analytics Tracking Script -->
-  <script>
-    (function() {
-      const businessId = ${business.id};
-      const API_BASE_URL = '${apiUrl}';
-      
-      // Track page view (once per session)
-      if (!sessionStorage.getItem('analytics_tracked_' + businessId)) {
-        fetch(API_BASE_URL + '/analytics/track', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            businessId: businessId,
-            eventType: 'visitor'
-          })
-        }).catch(err => console.log('Analytics tracking error:', err));
-        
-        sessionStorage.setItem('analytics_tracked_' + businessId, 'true');
-      }
-
-      // Track Call button clicks
-      document.querySelectorAll('a[href^="tel:"]').forEach(link => {
-        link.addEventListener('click', function() {
-          fetch(API_BASE_URL + '/analytics/track', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              businessId: businessId,
-              eventType: 'call_click'
-            })
-          }).catch(err => console.log('Analytics tracking error:', err));
-        });
-      });
-
-      // Track WhatsApp button clicks (including widget)
-      document.querySelectorAll('a[href*="wa.me"], a[href*="whatsapp"]').forEach(link => {
-        link.addEventListener('click', function() {
-          const isWidget = this.closest('#whatsappWidget') !== null;
-          fetch(API_BASE_URL + '/analytics/track', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              businessId: businessId,
-              eventType: isWidget ? 'whatsapp_widget_click' : 'whatsapp_click'
-            })
-          }).catch(err => console.log('Analytics tracking error:', err));
-        });
-      });
-
-      // Track Gallery views (when gallery section comes into viewport)
-      const gallerySection = document.getElementById('gallery');
-      if (gallerySection) {
-        let galleryViewed = false;
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting && !galleryViewed) {
-              galleryViewed = true;
-              fetch(API_BASE_URL + '/analytics/track', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  businessId: businessId,
-                  eventType: 'gallery_view'
-                })
-              }).catch(err => console.log('Analytics tracking error:', err));
-              observer.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.5 });
-        
-        observer.observe(gallerySection);
-      }
-
-      // Track Map clicks
-      document.querySelectorAll('a[href*="google.com/maps"]').forEach(link => {
-        link.addEventListener('click', function() {
-          fetch(API_BASE_URL + '/analytics/track', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              businessId: businessId,
-              eventType: 'map_click'
-            })
-          }).catch(err => console.log('Analytics tracking error:', err));
-        });
-      });
-
-      // Track iframe map clicks (add overlay)
-      document.querySelectorAll('iframe[src*="google.com/maps"]').forEach(iframe => {
-        const mapContainer = iframe.closest('div');
-        if (mapContainer) {
-          mapContainer.style.position = 'relative';
-          const overlay = document.createElement('div');
-          overlay.style.cssText = 'position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; cursor: pointer;';
-          overlay.addEventListener('click', function() {
-            overlay.remove();
-            fetch(API_BASE_URL + '/analytics/track', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                businessId: businessId,
-                eventType: 'map_click'
-              })
-            }).catch(err => console.log('Analytics tracking error:', err));
-          });
-          mapContainer.appendChild(overlay);
-        }
-      });
-    })();
-
-    // A/B Testing - Track variant and visitor
-    (function() {
-      const businessId = ${business.id};
-      const API_BASE_URL = '${apiUrl}';
-      const currentVariant = '${business.currentVariant || 'default'}';
-      
-      // Track variant visit
-      if (businessId && currentVariant) {
-        fetch(\`\${API_BASE_URL}/ab-test/track-visitor/\${businessId}/\${currentVariant}\`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
-        }).catch(err => console.log('A/B test tracking error:', err));
-      }
-    })();
-
-    // Shopping Cart Functionality
-    (function() {
-      const businessSlug = '${business.slug}';
-      const API_BASE_URL = '${apiUrl}';
-      let cart = JSON.parse(localStorage.getItem('cart_' + businessSlug) || '[]');
-      let products = [];
-
-      // Load products
-      async function loadProducts() {
-        try {
-          const response = await fetch(\`\${API_BASE_URL}/ecommerce/\${businessSlug}/products\`);
-          const data = await response.json();
-          products = data.products || [];
-          renderProducts();
-        } catch (error) {
-          console.error('Error loading products:', error);
-          document.getElementById('products-container').innerHTML = '<p class="text-red-500">Error loading products. Please try again later.</p>';
-        }
-      }
-
-      // Render products
-      function renderProducts() {
-        const container = document.getElementById('products-container');
-        if (!container) return;
-        
-        if (products.length === 0) {
-          container.innerHTML = '<p class="text-gray-500">No products available at the moment.</p>';
-          return;
-        }
-
-        container.innerHTML = products.map(product => \`
-          <div class="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all border border-gray-200 overflow-hidden">
-            \${product.imageUrl ? \`<img src="\${product.imageUrl}" alt="\${product.name}" class="w-full h-48 object-cover">\` : \`<div class="w-full h-48 bg-gray-200 flex items-center justify-center"><svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>\`}
-            <div class="p-6">
-              <h3 class="text-xl font-bold text-gray-900 mb-2">\${product.name}</h3>
-              \${product.description ? \`<p class="text-gray-600 text-sm mb-4 line-clamp-2">\${product.description}</p>\` : ''}
-              <div class="flex items-center justify-between mb-4">
-                <div>
-                  <span class="text-2xl font-bold text-blue-600">₹\${(typeof product.price === 'number' ? product.price : parseFloat(product.price) || 0).toFixed(2)}</span>
-                  \${product.compareAtPrice ? \`<span class="text-sm text-gray-400 line-through ml-2">₹\${(typeof product.compareAtPrice === 'number' ? product.compareAtPrice : parseFloat(product.compareAtPrice) || 0).toFixed(2)}</span>\` : ''}
-                </div>
-                \${product.stockQuantity > 0 ? \`<span class="text-sm text-green-600 font-medium">In Stock</span>\` : \`<span class="text-sm text-red-600 font-medium">Out of Stock</span>\`}
+      <!--Enhanced Footer-- >
+      <footer class="bg-gray-900 pt-16 pb-8 text-white relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-900/20 to-purple-900/20 opacity-50"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <!-- Brand Column -->
+            <div class="space-y-6">
+              <div class="flex items-center gap-3">
+                ${business.logoUrl ? `
+                  <img src="${escapeHtml(business.logoUrl)}" alt="${escapeHtml(business.businessName)}" class="w-12 h-12 rounded-xl object-contain bg-white p-1" />
+                ` : `
+                  <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">
+                    ${escapeHtml(business.businessName.charAt(0).toUpperCase())}
+                  </div>
+                `}
+                <span class="text-xl font-black tracking-tight">${escapeHtml(business.businessName)}</span>
               </div>
-              <button onclick="window.addToCart(\${product.id})" \${product.stockQuantity <= 0 ? 'disabled' : ''} class="w-full px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed">
-                Add to Cart
-              </button>
+              <p class="text-gray-400 text-sm leading-relaxed">
+                ${business.description ? escapeHtml(business.description.substring(0, 120)) + '...' : `Connecting businesses with customers through premium digital experiences.`}
+              </p>
+              <div class="flex gap-4">
+                ${[
+      { key: 'facebook', icon: '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>' },
+      { key: 'instagram', icon: '<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.247 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.332 2.633-1.308 3.608-.975.975-2.242 1.247-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.247-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.247 3.608-1.308 1.266-.058 1.646-.07 4.85-.07m0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>' }
+    ].map(social => business[social.key] ? `
+                  <a href="${escapeHtml(business[social.key])}" target="_blank" class="w-8 h-8 bg-white/5 rounded-lg flex items-center justify-center hover:bg-blue-600 hover:scale-110 transition-all">
+                    ${social.icon}
+                  </a>
+                ` : '').join('')}
+              </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div>
+              <h4 class="text-white font-bold mb-6">Explore</h4>
+              <ul class="space-y-3 text-sm text-gray-400">
+                <li><a href="#home" class="hover:text-blue-500 transition-colors">Home</a></li>
+                <li><a href="#about" class="hover:text-blue-500 transition-colors">About</a></li>
+                <li><a href="#services" class="hover:text-blue-500 transition-colors">Services</a></li>
+                <li><a href="#gallery" class="hover:text-blue-500 transition-colors">Gallery</a></li>
+                <li><a href="#contact" class="hover:text-blue-500 transition-colors">Contact</a></li>
+              </ul>
+            </div>
+
+            <!-- Contact Info -->
+            <div>
+              <h4 class="text-white font-bold mb-6">Contact</h4>
+              <ul class="space-y-4 text-sm text-gray-400">
+                ${business.mobile ? `<li class="flex items-start gap-3"><svg class="w-5 h-5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>${escapeHtml(business.mobile)}</li>` : ''}
+                ${business.email ? `<li class="flex items-start gap-3"><svg class="w-5 h-5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>${escapeHtml(business.email)}</li>` : ''}
+                ${business.address ? `<li class="flex items-start gap-3"><svg class="w-5 h-5 text-blue-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>${escapeHtml(business.address)}</li>` : ''}
+              </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div>
+              <h4 class="text-white font-bold mb-6">Stay Updated</h4>
+              <form class="space-y-3" onsubmit="event.preventDefault(); alert('Subscribed!')">
+                <input type="email" placeholder="Email Address" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500 transition-all" />
+                <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg text-sm transition-all">Subscribe Now</button>
+              </form>
             </div>
           </div>
-        \`).join('');
-      }
 
-      // Add to cart
-      window.addToCart = function(productId) {
-        const product = products.find(p => p.id === productId);
-        if (!product || product.stockQuantity <= 0) return;
-
-        const existingItem = cart.find(item => item.productId === productId);
-        if (existingItem) {
-          if (existingItem.quantity >= product.stockQuantity) {
-            alert('Maximum stock available reached');
-            return;
-          }
-          existingItem.quantity++;
-        } else {
-          cart.push({ 
-            productId: product.id, 
-            name: product.name, 
-            price: parseFloat(product.price), 
-            quantity: 1, 
-            imageUrl: product.imageUrl 
-          });
-        }
-
-        saveCart();
-        updateCartUI();
-      };
-
-      // Remove from cart
-      window.removeFromCart = function(productId) {
-        cart = cart.filter(item => item.productId !== productId);
-        saveCart();
-        updateCartUI();
-      };
-
-      // Update quantity
-      window.updateQuantity = function(productId, change) {
-        const item = cart.find(i => i.productId === productId);
-        if (!item) return;
-        
-        const product = products.find(p => p.id === productId);
-        const newQuantity = item.quantity + change;
-        
-        if (newQuantity <= 0) {
-          window.removeFromCart(productId);
-          return;
-        }
-        
-        if (product && newQuantity > product.stockQuantity) {
-          alert('Maximum stock available reached');
-          return;
-        }
-        
-        item.quantity = newQuantity;
-        saveCart();
-        updateCartUI();
-      };
-
-      // Save cart
-      function saveCart() {
-        localStorage.setItem('cart_' + businessSlug, JSON.stringify(cart));
-      }
-
-      // Update cart UI
-      function updateCartUI() {
-        const cartItems = document.getElementById('cart-items');
-        const cartTotal = document.getElementById('cart-total');
-        const cartBadge = document.getElementById('cart-badge');
-        const checkoutBtn = document.getElementById('checkout-btn');
-        
-        if (!cartItems) return;
-
-        const total = cart.reduce((sum, item) => {
-          const price = typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0;
-          const qty = typeof item.quantity === 'number' ? item.quantity : parseInt(item.quantity) || 0;
-          return sum + (price * qty);
-        }, 0);
-
-        if (cart.length === 0) {
-          cartItems.innerHTML = '<p class="text-gray-500 text-center">Your cart is empty</p>';
-          if (checkoutBtn) checkoutBtn.disabled = true;
-        } else {
-          cartItems.innerHTML = cart.map(item => \`
-            <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-lg mb-4">
-              \${item.imageUrl ? \`<img src="\${item.imageUrl}" alt="\${item.name}" class="w-16 h-16 object-cover rounded-lg">\` : \`<div class="w-16 h-16 bg-gray-200 rounded-lg"></div>\`}
-              <div class="flex-1">
-                <h4 class="font-semibold text-gray-900">\${item.name}</h4>
-                <p class="text-blue-600 font-bold">₹\${(typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0).toFixed(2)} × \${item.quantity} = ₹\${((typeof item.price === 'number' ? item.price : parseFloat(item.price) || 0) * (typeof item.quantity === 'number' ? item.quantity : parseInt(item.quantity) || 0)).toFixed(2)}</p>
-              </div>
-              <div class="flex items-center gap-2">
-                <button onclick="window.updateQuantity(\${item.productId}, -1)" class="w-8 h-8 bg-gray-200 rounded-lg hover:bg-gray-300">-</button>
-                <span class="w-8 text-center font-semibold">\${item.quantity}</span>
-                <button onclick="window.updateQuantity(\${item.productId}, 1)" class="w-8 h-8 bg-gray-200 rounded-lg hover:bg-gray-300">+</button>
-                <button onclick="window.removeFromCart(\${item.productId})" class="ml-2 text-red-500 hover:text-red-700">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                  </svg>
-                </button>
-              </div>
+          <!-- Bottom Footer -->
+          <div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500 font-medium">
+            <p>© ${new Date().getFullYear()} ${escapeHtml(business.businessName)}. All rights reserved.</p>
+            <div class="flex items-center gap-1">
+              Crafted with <svg class="w-3 h-3 text-red-500 fill-current" viewBox="0 0 20 20"><path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path></svg> by <a href="https://varanasihub.com" target="_blank" class="text-blue-500 hover:underline">VaranasiHub</a>
             </div>
-          \`).join('');
-          if (cartTotal) cartTotal.textContent = \`₹\${total.toFixed(2)}\`;
-          if (checkoutBtn) checkoutBtn.disabled = false;
-        }
+          </div>
+        </div>
+      </footer>
 
-        if (cartBadge) {
-          const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-          if (itemCount > 0) {
-            cartBadge.textContent = itemCount;
-            cartBadge.classList.remove('hidden');
-          } else {
-            cartBadge.classList.add('hidden');
+
+
+      <!--Floating Action Buttons-- >
+      <div class="fixed bottom-6 right-6 z-40 flex flex-col gap-3 floating-actions">
+        ${business.mobile ? `
+          <a href="tel:${escapeHtml(business.mobile)}" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center lg:hidden hover:scale-110 transition-all duration-300">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+          </a>
+        ` : ''}
+        ${business.whatsapp ? `
+          <a href="https://wa.me/${escapeHtml(business.whatsapp.replace(/\D/g, ''))}" target="_blank" rel="noopener noreferrer" class="w-14 h-14 bg-green-500 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all duration-300">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+          </a>
+        ` : ''}
+        <button id="back-to-top" class="w-14 h-14 bg-white text-gray-900 rounded-full shadow-2xl flex items-center justify-center opacity-0 pointer-events-none hover:scale-110 transition-all duration-300">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>
+        </button>
+      </div>
+
+      <!--Lightbox Overhaul-- >
+      <div id="lightbox" class="fixed inset-0 bg-black/95 z-[100] hidden flex flex-col backdrop-blur-sm" onclick="closeLightboxOnBackdrop(event)">
+        <div class="flex items-center justify-between p-4 md:p-8 text-white relative z-10">
+          <div class="flex items-center gap-4">
+            <span id="lightbox-counter" class="text-xs font-black uppercase tracking-widest bg-white/10 px-3 py-1 rounded-full">0 / 0</span>
+            <h4 class="text-sm font-bold truncate max-w-[200px] hidden sm:block">${escapeHtml(business.businessName)}</h4>
+          </div>
+          <button onclick="closeLightbox()" class="group p-2 hover:bg-white/10 rounded-full transition-all">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
+        </div>
+        <div class="flex-1 flex items-center justify-center p-4 relative">
+          <img id="lightbox-img" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-transform duration-300" src="" alt="Gallery Image" />
+
+          <!-- Navigation Arrows -->
+          <button onclick="changeLightboxImage(-1)" class="absolute left-4 p-4 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all group">
+            <svg class="w-10 h-10 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          </button>
+          <button onclick="changeLightboxImage(1)" class="absolute right-4 p-4 text-white/50 hover:text-white hover:bg-white/10 rounded-full transition-all group">
+            <svg class="w-10 h-10 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <script>
+        // Global State
+        let currentLightboxIdx = 0;
+        const galleryImages = ${JSON.stringify(business.imagesUrl || [])};
+        let currentReviewIdx = 0;
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+          const menu = document.getElementById('mobileMenu');
+          const menuIcons = document.querySelectorAll('.menu-icon');
+          if (menu) {
+            menu.classList.toggle('hidden');
+            menuIcons.forEach(icon => icon.classList.toggle('hidden'));
           }
         }
-      }
 
-      // Open cart
-      window.openCart = function() {
-        const sidebar = document.getElementById('cart-sidebar');
-        const overlay = document.getElementById('cart-overlay');
-        if (sidebar) sidebar.classList.remove('translate-x-full');
-        if (overlay) overlay.classList.remove('hidden');
-      };
-
-      // Close cart
-      window.closeCart = function() {
-        const sidebar = document.getElementById('cart-sidebar');
-        const overlay = document.getElementById('cart-overlay');
-        if (sidebar) sidebar.classList.add('translate-x-full');
-        if (overlay) overlay.classList.add('hidden');
-      };
-
-      // Checkout
-      window.checkout = async function() {
-        if (cart.length === 0) return;
-
-        const customerName = prompt('Enter your name:');
-        if (!customerName) return;
-
-        const customerPhone = prompt('Enter your phone number:');
-        if (!customerPhone) return;
-
-        const customerEmail = prompt('Enter your email (optional):') || '';
-        const customerAddress = prompt('Enter your address (optional):') || '';
-        const notes = prompt('Any special instructions (optional):') || '';
-
-        const notificationMethod = confirm('Would you like to receive order confirmation via WhatsApp? (OK for WhatsApp, Cancel for Email)') ? 'whatsapp' : 'email';
-
-        try {
-          const response = await fetch(\`\${API_BASE_URL}/ecommerce/\${businessSlug}/orders\`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              items: cart,
-              customerName,
-              customerEmail,
-              customerPhone,
-              customerAddress,
-              notes,
-              notificationMethod
-            })
-          });
-
-          const data = await response.json();
+        // Scroll Logic (Sticky Header & Back to Top)
+        window.addEventListener('scroll', () => {
+          const header = document.querySelector('nav');
+          const backToTop = document.getElementById('back-to-top');
           
-          if (data.success) {
-            let message = \`Order placed successfully!\\n\\nOrder Number: \${data.order.orderNumber}\\nTotal: ₹\${data.order.total}\`;
-            if (data.order.whatsappUrl && data.notificationSent?.whatsapp) {
-              message += \`\\n\\nClick OK to open WhatsApp and confirm your order.\`;
-              if (confirm(message)) {
-                window.open(data.order.whatsappUrl, '_blank');
+          if (window.scrollY > 100) {
+            header?.classList.add('shadow-xl', 'py-2');
+            header?.classList.remove('py-4');
+            backToTop?.classList.remove('opacity-0', 'pointer-events-none');
+            backToTop?.classList.add('opacity-100');
+          } else {
+            header?.classList.remove('shadow-xl', 'py-2');
+            header?.classList.add('py-4');
+            backToTop?.classList.add('opacity-0', 'pointer-events-none');
+            backToTop?.classList.remove('opacity-100');
+          }
+        });
+
+        document.getElementById('back-to-top')?.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Review Carousel Logic
+        function scrollReview(idx) {
+          const carousel = document.getElementById('review-carousel');
+          const dots = document.querySelectorAll('.review-dot');
+          if (carousel) {
+            carousel.style.transform = 'translateX(-' + (idx * 100) + '%)';
+            currentReviewIdx = idx;
+            dots.forEach((dot, i) => {
+              if (i === idx) {
+                dot.classList.add('bg-blue-600', 'w-12');
+                dot.classList.remove('bg-gray-300');
+              } else {
+                dot.classList.remove('bg-blue-600', 'w-12');
+                dot.classList.add('bg-gray-300');
+              }
+            });
+          }
+        }
+
+        // Auto-scroll Reviews
+        setInterval(() => {
+          const totalReviews = ${(business.reviews || [1, 2, 3]).length};
+          currentReviewIdx = (currentReviewIdx + 1) % totalReviews;
+          scrollReview(currentReviewIdx);
+        }, 5000);
+
+        // Lightbox Logic
+        function openLightbox(idx) {
+          const lightbox = document.getElementById('lightbox');
+          const img = document.getElementById('lightbox-img');
+          const counter = document.getElementById('lightbox-counter');
+          
+          if (lightbox && img && galleryImages.length > 0) {
+            currentLightboxIdx = idx;
+            img.src = galleryImages[idx];
+            counter.textContent = (idx + 1) + ' / ' + galleryImages.length;
+            lightbox.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            trackEvent('gallery_view');
+          }
+        }
+
+        function closeLightbox() {
+          const lightbox = document.getElementById('lightbox');
+          if (lightbox) {
+            lightbox.classList.add('hidden');
+            document.body.style.overflow = '';
+          }
+        }
+
+        function closeLightboxOnBackdrop(e) {
+          if (e.target.id === 'lightbox' || e.target.id === 'lightbox-img-container') {
+            closeLightbox();
+          }
+        }
+
+        function changeLightboxImage(dir) {
+          currentLightboxIdx = (currentLightboxIdx + dir + galleryImages.length) % galleryImages.length;
+          const img = document.getElementById('lightbox-img');
+          const counter = document.getElementById('lightbox-counter');
+          if (img && counter) {
+            img.style.opacity = '0';
+            setTimeout(() => {
+              img.src = galleryImages[currentLightboxIdx];
+              counter.textContent = (currentLightboxIdx + 1) + ' / ' + galleryImages.length;
+              img.style.opacity = '1';
+            }, 200)
+          }
+        }
+
+        // FAQ Toggle
+        function toggleFaq(idx) {
+          const items = document.querySelectorAll('.faq-item');
+          items.forEach((item, i) => {
+            const answer = item.querySelector('.faq-answer');
+            const icon = item.querySelector('.faq-icon');
+            const box = item.querySelector('.faq-icon-box');
+
+            if (i === idx) {
+              const isHidden = answer.classList.contains('hidden');
+              answer.classList.toggle('hidden');
+              icon.style.transform = isHidden ? 'rotate(180deg)' : 'rotate(0deg)';
+              if (box) {
+                box.classList.toggle('bg-blue-50');
+                box.classList.toggle('text-blue-600');
               }
             } else {
-              alert(message);
+              answer.classList.add('hidden');
+              icon.style.transform = 'rotate(0deg)';
+              if (box) {
+                box.classList.remove('bg-blue-50', 'text-blue-600');
+              }
             }
-            
-            cart = [];
-            saveCart();
-            updateCartUI();
-            window.closeCart();
-            
-            // Track conversion for A/B testing
-            const businessId = ${business.id};
-            const currentVariant = '${business.currentVariant || 'default'}';
-            if (businessId && currentVariant) {
-              fetch(\`\${API_BASE_URL}/ab-test/track-conversion/\${businessId}/\${currentVariant}\`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' }
-              }).catch(err => console.log('A/B test conversion tracking error:', err));
-            }
-          } else {
-            alert('Error placing order: ' + (data.error || 'Unknown error'));
+          });
+        }
+
+        // Inquiry Functions
+        function openServiceInquiry(serviceName) {
+          const contactSection = document.getElementById('contact');
+          const messageArea = document.querySelector('textarea[name="message"]');
+          if (contactSection && messageArea) {
+            contactSection.scrollIntoView({ behavior: 'smooth' });
+            messageArea.value = "I'm interested in the service: " + serviceName + ". Please provide more details.";
+            messageArea.focus();
           }
-        } catch (error) {
-          console.error('Checkout error:', error);
-          alert('Error placing order. Please try again.');
         }
-      };
-      
 
-      // Initialize
-      if (document.getElementById('products-container')) {
-        loadProducts();
-        updateCartUI();
-      }
-    })();
-
-    // Service Inquiry Modal Functions
-    let currentServiceName = '';
-    let currentServiceDescription = '';
-    let currentServicePrice = '';
-
-    function handleServiceCardClick(element) {
-      const serviceName = element.getAttribute('data-service-name') || '';
-      const serviceDescription = element.getAttribute('data-service-description') || '';
-      const servicePrice = element.getAttribute('data-service-price') || '';
-      openServiceInquiryModal(serviceName, serviceDescription, servicePrice);
-    }
-
-    function openServiceInquiryModal(serviceName, serviceDescription, servicePrice) {
-      currentServiceName = serviceName;
-      currentServiceDescription = serviceDescription;
-      currentServicePrice = servicePrice;
-      
-      document.getElementById('inquiryServiceName').textContent = serviceName;
-      document.getElementById('inquiryServiceDescription').textContent = serviceDescription || 'No description available';
-      document.getElementById('inquiryServicePrice').textContent = servicePrice ? 'Price: ' + servicePrice : '';
-      
-      const modal = document.getElementById('serviceInquiryModal');
-      if (modal) {
-        modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    function closeServiceInquiryModal() {
-      const modal = document.getElementById('serviceInquiryModal');
-      if (modal) {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-        document.getElementById('serviceInquiryForm').reset();
-        document.getElementById('inquiryMessageDiv').classList.add('hidden');
-      }
-    }
-
-    function closeServiceInquiryModalOnBackdrop(event) {
-      if (event.target.id === 'serviceInquiryModal') {
-        closeServiceInquiryModal();
-      }
-    }
-
-    async function submitServiceInquiry(event) {
-      event.preventDefault();
-      
-      const businessSlug = '${business.slug}';
-      const API_BASE_URL = '${apiUrl}';
-      const submitBtn = document.getElementById('inquirySubmitBtn');
-      const messageDiv = document.getElementById('inquiryMessageDiv');
-      
-      const formData = {
-        name: document.getElementById('inquiryName').value.trim(),
-        email: document.getElementById('inquiryEmail').value.trim(),
-        phone: document.getElementById('inquiryPhone').value.trim() || '',
-        subject: \`Inquiry about: \${currentServiceName}\`,
-        message: \`Service: \${currentServiceName}\n\${currentServicePrice ? 'Price: ' + currentServicePrice + '\\n' : ''}\nMessage:\\n\${document.getElementById('inquiryMessage').value.trim()}\`
-      };
-
-      if (!formData.name || !formData.email || !formData.message) {
-        messageDiv.className = 'p-4 rounded-lg bg-red-100 text-red-700 border border-red-300';
-        messageDiv.textContent = 'Please fill in all required fields.';
-        messageDiv.classList.remove('hidden');
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Sending...';
-
-      try {
-        const response = await fetch(\`\${API_BASE_URL}/ecommerce/\${businessSlug}/contact\`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
-        });
-
-        const result = await response.json();
-        
-        if (result.success || response.ok) {
-          messageDiv.className = 'p-4 rounded-lg bg-green-100 text-green-700 border border-green-300';
-          messageDiv.textContent = result.message || 'Your inquiry has been sent successfully! The owner will contact you soon.';
-          messageDiv.classList.remove('hidden');
-          
-          document.getElementById('serviceInquiryForm').reset();
-          
-          setTimeout(() => {
-            closeServiceInquiryModal();
-          }, 2000);
-        } else {
-          messageDiv.className = 'p-4 rounded-lg bg-red-100 text-red-700 border border-red-300';
-          messageDiv.textContent = result.error || 'Error sending inquiry. Please try again.';
-          messageDiv.classList.remove('hidden');
+        function openOfferInquiry(offerName) {
+          const contactSection = document.getElementById('contact');
+          const messageArea = document.querySelector('textarea[name="message"]');
+          if (contactSection && messageArea) {
+            contactSection.scrollIntoView({ behavior: 'smooth' });
+            messageArea.value = "I'd like to grab the special offer: " + offerName + ". How can I proceed?";
+            messageArea.focus();
+          }
         }
-      } catch (error) {
-        console.error('Service inquiry error:', error);
-        messageDiv.className = 'p-4 rounded-lg bg-red-100 text-red-700 border border-red-300';
-        messageDiv.textContent = 'Error sending inquiry. Please try again.';
-        messageDiv.classList.remove('hidden');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Send Inquiry';
-      }
-    }
 
-    // Contact Form
-    (function() {
-      const businessSlug = '${business.slug}';
-      const API_BASE_URL = '${apiUrl}';
-      const form = document.getElementById('contact-form');
-      const messageDiv = document.getElementById('contact-form-message');
-
-      if (form) {
-        form.addEventListener('submit', async function(e) {
+        // Contact Form Submission
+        document.getElementById('contact-form')?.addEventListener('submit', async (e) => {
           e.preventDefault();
-          
+          const form = e.target;
+          const btn = form.querySelector('button[type="submit"]');
+          const successMsg = document.getElementById('contact-success');
+
           const formData = new FormData(form);
-          const data = {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            phone: formData.get('phone') || '',
-            subject: formData.get('subject') || '',
-            message: formData.get('message')
-          };
+          const data = Object.fromEntries(formData.entries());
+
+          btn.disabled = true;
+          btn.textContent = 'Sending...';
 
           try {
-            const response = await fetch(\`\${API_BASE_URL}/ecommerce/\${businessSlug}/contact\`, {
+            const businessSlug = '${business.slug}';
+            const API_BASE_URL = '${apiUrl}';
+            const response = await fetch(API_BASE_URL + '/ecommerce/' + businessSlug + '/contact', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify(data)
             });
 
             const result = await response.json();
-            
             if (result.success) {
-              messageDiv.className = 'mt-4 p-4 rounded-xl bg-green-100 text-green-700 border border-green-300';
-              messageDiv.textContent = result.message || 'Message sent successfully! We will get back to you soon.';
-              messageDiv.classList.remove('hidden');
+              successMsg.classList.remove('hidden');
               form.reset();
-              
-              setTimeout(() => {
-                messageDiv.classList.add('hidden');
-              }, 5000);
+              setTimeout(() => successMsg.classList.add('hidden'), 5000);
             } else {
-              messageDiv.className = 'mt-4 p-4 rounded-xl bg-red-100 text-red-700 border border-red-300';
-              messageDiv.textContent = result.error || 'Error sending message. Please try again.';
-              messageDiv.classList.remove('hidden');
+              alert(result.error || 'Failed to send message.');
             }
-          } catch (error) {
-            console.error('Contact form error:', error);
-            messageDiv.className = 'mt-4 p-4 rounded-xl bg-red-100 text-red-700 border border-red-300';
-            messageDiv.textContent = 'Error sending message. Please try again.';
-            messageDiv.classList.remove('hidden');
-          }
-        });
-      }
-    })();
-
-
-    // Image Lightbox Functionality
-    (function() {
-      const galleryImages = ${JSON.stringify(business.imagesUrl || [])};
-      let currentImageIndex = 0;
-      let currentZoom = 1;
-      let isDragging = false;
-      let translateX = 0;
-      let translateY = 0;
-      let touchStartDistance = 0;
-      let initialZoom = 1;
-
-      const lightboxModal = document.getElementById('lightboxModal');
-      const lightboxImage = document.getElementById('lightboxImage');
-      const lightboxCurrent = document.getElementById('lightboxCurrent');
-      const lightboxTotal = document.getElementById('lightboxTotal');
-
-      if (!lightboxModal || !lightboxImage || galleryImages.length === 0) return;
-
-      // Initialize lightbox
-      if (lightboxTotal) {
-        lightboxTotal.textContent = galleryImages.length;
-      }
-
-      // Open lightbox
-      window.openLightbox = function(index) {
-        if (index < 0 || index >= galleryImages.length) return;
-        currentImageIndex = index;
-        currentZoom = 1;
-        translateX = 0;
-        translateY = 0;
-        updateLightboxImage();
-        lightboxModal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        resetImageTransform();
-      };
-
-      // Close lightbox
-      window.closeLightbox = function() {
-        lightboxModal.classList.remove('active');
-        document.body.style.overflow = '';
-        currentZoom = 1;
-        translateX = 0;
-        translateY = 0;
-        resetImageTransform();
-      };
-
-      // Close on backdrop click
-      window.closeLightboxOnBackdrop = function(event) {
-        if (event.target === lightboxModal) {
-          closeLightbox();
-        }
-      };
-
-      // Change image
-      window.changeLightboxImage = function(direction) {
-        currentImageIndex += direction;
-        if (currentImageIndex < 0) {
-          currentImageIndex = galleryImages.length - 1;
-        } else if (currentImageIndex >= galleryImages.length) {
-          currentImageIndex = 0;
-        }
-        currentZoom = 1;
-        translateX = 0;
-        translateY = 0;
-        updateLightboxImage();
-        resetImageTransform();
-      };
-
-      // Update lightbox image
-      function updateLightboxImage() {
-        if (lightboxImage && galleryImages[currentImageIndex]) {
-          lightboxImage.src = galleryImages[currentImageIndex];
-          lightboxImage.alt = 'Gallery image ' + (currentImageIndex + 1);
-        }
-        if (lightboxCurrent) {
-          lightboxCurrent.textContent = currentImageIndex + 1;
-        }
-      }
-
-      // Reset image transform
-      function resetImageTransform() {
-        if (lightboxImage) {
-          lightboxImage.style.transform = 'scale(1) translate(0, 0)';
-        }
-      }
-
-      // Zoom functions
-      window.zoomIn = function() {
-        currentZoom = Math.min(currentZoom + 0.25, 3);
-        applyZoom();
-      };
-
-      window.zoomOut = function() {
-        currentZoom = Math.max(currentZoom - 0.25, 1);
-        if (currentZoom === 1) {
-          translateX = 0;
-          translateY = 0;
-        }
-        applyZoom();
-      };
-
-      window.resetZoom = function() {
-        currentZoom = 1;
-        translateX = 0;
-        translateY = 0;
-        applyZoom();
-      };
-
-      function applyZoom() {
-        if (lightboxImage) {
-          lightboxImage.style.transform = \`scale(\${currentZoom}) translate(\${translateX}px, \${translateY}px)\`;
-        }
-      }
-
-      // Keyboard navigation
-      document.addEventListener('keydown', function(e) {
-        if (!lightboxModal.classList.contains('active')) return;
-        if (e.key === 'Escape') {
-          closeLightbox();
-        } else if (e.key === 'ArrowLeft') {
-          changeLightboxImage(-1);
-        } else if (e.key === 'ArrowRight') {
-          changeLightboxImage(1);
-        } else if (e.key === '+' || e.key === '=') {
-          zoomIn();
-        } else if (e.key === '-') {
-          zoomOut();
-        } else if (e.key === '0') {
-          resetZoom();
-        }
-      });
-
-      // Touch events for swipe and pinch-to-zoom
-      let touchStartX = 0;
-      let touchStartY = 0;
-      let touchEndX = 0;
-      let touchEndY = 0;
-
-      lightboxImage.addEventListener('touchstart', function(e) {
-        if (e.touches.length === 1) {
-          touchStartX = e.touches[0].clientX;
-          touchStartY = e.touches[0].clientY;
-          isDragging = currentZoom > 1;
-        } else if (e.touches.length === 2) {
-          // Pinch gesture
-          const touch1 = e.touches[0];
-          const touch2 = e.touches[1];
-          touchStartDistance = Math.hypot(
-            touch2.clientX - touch1.clientX,
-            touch2.clientY - touch1.clientY
-          );
-          initialZoom = currentZoom;
-          e.preventDefault();
-        }
-      }, { passive: false });
-
-      lightboxImage.addEventListener('touchmove', function(e) {
-        if (e.touches.length === 1 && isDragging) {
-          // Pan when zoomed
-          const deltaX = e.touches[0].clientX - touchStartX;
-          const deltaY = e.touches[0].clientY - touchStartY;
-          translateX += deltaX / currentZoom;
-          translateY += deltaY / currentZoom;
-          touchStartX = e.touches[0].clientX;
-          touchStartY = e.touches[0].clientY;
-          applyZoom();
-          e.preventDefault();
-        } else if (e.touches.length === 2) {
-          // Pinch-to-zoom
-          const touch1 = e.touches[0];
-          const touch2 = e.touches[1];
-          const currentDistance = Math.hypot(
-            touch2.clientX - touch1.clientX,
-            touch2.clientY - touch1.clientY
-          );
-          const scale = currentDistance / touchStartDistance;
-          currentZoom = Math.max(1, Math.min(initialZoom * scale, 3));
-          applyZoom();
-          e.preventDefault();
-        }
-      }, { passive: false });
-
-      lightboxImage.addEventListener('touchend', function(e) {
-        if (e.changedTouches.length === 1 && !isDragging) {
-          // Swipe gesture
-          touchEndX = e.changedTouches[0].clientX;
-          touchEndY = e.changedTouches[0].clientY;
-          const deltaX = touchEndX - touchStartX;
-          const deltaY = touchEndY - touchStartY;
-          const minSwipeDistance = 50;
-
-          if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
-            if (deltaX > 0) {
-              // Swipe right - previous image
-              changeLightboxImage(-1);
-            } else {
-              // Swipe left - next image
-              changeLightboxImage(1);
-            }
-          }
-        }
-        isDragging = false;
-      });
-
-      // Mouse wheel zoom
-      lightboxImage.addEventListener('wheel', function(e) {
-        if (e.ctrlKey || e.metaKey) {
-          e.preventDefault();
-          if (e.deltaY < 0) {
-            zoomIn();
-          } else {
-            zoomOut();
-          }
-        }
-      }, { passive: false });
-    })();
-
-    // Mobile Bottom Navigation
-    (function() {
-      function handleMobileNavClick(event, target) {
-        event.preventDefault();
-        const targetElement = document.querySelector(target);
-        if (targetElement) {
-          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          // Update active state
-          document.querySelectorAll('.mobile-nav-item').forEach(item => {
-            item.classList.remove('active');
-          });
-          event.currentTarget.classList.add('active');
-        }
-      }
-      window.handleMobileNavClick = handleMobileNavClick;
-
-      // Update active nav item on scroll
-      function updateActiveNavItem() {
-        const sections = document.querySelectorAll('section[id]');
-        const navItems = document.querySelectorAll('.mobile-nav-item');
-        
-        let current = '';
-        sections.forEach(section => {
-          const sectionTop = section.offsetTop;
-          const sectionHeight = section.clientHeight;
-          if (window.pageYOffset >= sectionTop - 150) {
-            current = section.getAttribute('id');
+          } catch (err) {
+            alert('Failed to send message. Please try again.');
+          } finally {
+            btn.disabled = false;
+            btn.textContent = 'Send Message';
           }
         });
 
-        navItems.forEach(item => {
-          item.classList.remove('active');
-          const href = item.getAttribute('href');
-          if (href === '#' + current) {
-            item.classList.add('active');
-          }
-        });
-      }
-
-      window.addEventListener('scroll', updateActiveNavItem);
-      updateActiveNavItem();
-    })();
-
-    // Pull to Refresh
-    (function() {
-      if (window.innerWidth > 768) return; // Only on mobile
-
-      const pullToRefresh = document.getElementById('pullToRefresh');
-      if (!pullToRefresh) return;
-
-      let startY = 0;
-      let currentY = 0;
-      let isPulling = false;
-      let pullDistance = 0;
-      const threshold = 80;
-
-      document.addEventListener('touchstart', function(e) {
-        if (window.scrollY === 0) {
-          startY = e.touches[0].clientY;
-          isPulling = true;
-        }
-      }, { passive: true });
-
-      document.addEventListener('touchmove', function(e) {
-        if (!isPulling) return;
-        currentY = e.touches[0].clientY;
-        pullDistance = currentY - startY;
-
-        if (pullDistance > 0 && window.scrollY === 0) {
-          e.preventDefault();
-          const progress = Math.min(pullDistance / threshold, 1);
-          pullToRefresh.style.top = (pullDistance - 60) + 'px';
-          pullToRefresh.style.opacity = progress;
-
-          if (pullDistance > threshold) {
-            pullToRefresh.classList.add('active');
-            const spinner = pullToRefresh.querySelector('.pull-to-refresh-spinner');
-            if (spinner) {
-              spinner.style.animation = 'spin 1s linear infinite';
+        // Share Functionality (Fallback)
+        async function shareBusiness() {
+          if (navigator.share) {
+            try {
+              await navigator.share({
+                title: '${escapeHtml(business.businessName)}',
+                text: 'Check out ${escapeHtml(business.businessName)} on VaranasiHub!',
+                url: window.location.href
+              });
+            } catch (err) {
+              console.error('Share failed:', err);
             }
           } else {
-            pullToRefresh.classList.remove('active');
+            alert('Copy this link to share: ' + window.location.href);
           }
         }
-      }, { passive: false });
 
-      document.addEventListener('touchend', function() {
-        if (!isPulling) return;
-        isPulling = false;
+        // Mobile Navigation Handling
+        window.handleMobileNavClick = (e, targetId) => {
+          e.preventDefault();
+          const target = document.querySelector(targetId);
+          if (target) {
+            const headerHeight = 80;
+            window.scrollTo({
+              top: target.offsetTop - headerHeight,
+              behavior: 'smooth'
+            });
+          }
+        };
 
-        if (pullDistance > threshold) {
-          // Trigger refresh
-          pullToRefresh.classList.add('active');
-          location.reload();
-        } else {
-          // Reset
-          pullToRefresh.style.top = '-60px';
-          pullToRefresh.style.opacity = '0';
-          pullToRefresh.classList.remove('active');
-        }
-        pullDistance = 0;
-      });
-    })();
+        // Analytics Tracking Logic
+        const trackEvent = async (eventType) => {
+          try {
+            const businessId = ${business.id};
+            const API_BASE_URL = '${apiUrl}';
+            await fetch(API_BASE_URL + '/analytics/track', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ businessId, eventType })
+            });
+          } catch (err) {
+            console.warn('Analytics error:', err);
+          }
+        };
 
-  </script>
-</body>
-</html>
+        // Track page view
+        window.addEventListener('load', () => trackEvent('visitor'));
+
+        // Track clicks
+        document.addEventListener('click', (e) => {
+          const target = e.target.closest('a, button');
+          if (!target) return;
+
+          const href = target.getAttribute('href') || '';
+          
+          if (href.startsWith('tel:')) {
+            trackEvent('call_click');
+          } else if (href.includes('wa.me')) {
+            trackEvent('whatsapp_click');
+          } else if (href.includes('maps.google.com') || href.includes('maps.app.goo.gl') || target.innerText.toLowerCase().includes('view on maps')) {
+            trackEvent('map_click');
+          }
+        });
+      </script>
+    </body >
+  </html >
   `;
 };
-

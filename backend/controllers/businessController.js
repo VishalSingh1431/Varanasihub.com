@@ -162,10 +162,10 @@ export const checkSubdomainAvailability = async (req, res) => {
     }
 
     // Validate slug format (alphanumeric only, no hyphens, 3-50 chars)
-    const slugRegex = /^[a-z0-9]{3,50}$/;
+    const slugRegex = /^[a-z0-9-]{3,50}$/;
     if (!slugRegex.test(slug)) {
       return res.status(400).json({
-        error: 'Invalid slug format. Use only lowercase letters and numbers (3-50 characters, no spaces or hyphens).',
+        error: 'Invalid slug format. Use only lowercase letters, numbers, and hyphens (3-50 characters).',
         available: false
       });
     }
@@ -388,7 +388,7 @@ export const createBusiness = async (req, res) => {
     if (preferredSlug && typeof preferredSlug === 'string') {
       // Use preferred slug if provided and valid
       const preferredSlugClean = preferredSlug.toLowerCase().trim();
-      const slugRegex = /^[a-z0-9]{3,50}$/;
+      const slugRegex = /^[a-z0-9-]{3,50}$/;
       if (slugRegex.test(preferredSlugClean)) {
         const preferredExists = await Business.slugExists(preferredSlugClean);
         if (!preferredExists) {

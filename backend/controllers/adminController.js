@@ -88,7 +88,7 @@ export const approveWebsite = async (req, res) => {
     await sendApprovalEmail(
       business.email,
       business.businessName,
-      business.subdomainUrl || business.subdirectoryUrl
+      business.subdomainUrl
     );
 
     res.json({
