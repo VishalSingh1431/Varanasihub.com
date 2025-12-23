@@ -49,9 +49,22 @@ initializeDatabase()
 // CORS configuration
 const corsOptions = {
   origin: NODE_ENV === 'production'
-    ? (process.env.FRONTEND_URL
-      ? [process.env.FRONTEND_URL]
-      : ['https://varanasihub.com', 'https://www.varanasihub.com'])
+    ? (origin, callback) => {
+      // Allow main domain and all subdomains
+      const allowedDomains = [
+        'https://varanasihub.com',
+        'https://www.varanasihub.com',
+        /^https:\/\/[\w-]+\.varanasihub\.com$/  // Any subdomain
+      ];
+
+      if (!origin || allowedDomains.some(domain =>
+        typeof domain === 'string' ? domain === origin : domain.test(origin)
+      )) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    }
     : ['http://localhost:5173', 'http://localhost:3000', 'http://127.0.0.1:5173'],
   credentials: true,
   optionsSuccessStatus: 200,
@@ -207,6 +220,22 @@ app.get('/:slug', async (req, res, next) => {
     return next();
   }
 });
+
+// Serve static files from React build (production only)
+if (NODE_ENV === 'production') {
+  const frontendBuildPath = join(__dirname, '../frontend/dist');
+  app.use(express.static(frontendBuildPath));
+
+  // Catch-all route for subdomains - serve React app
+  app.get('*', (req, res, next) => {
+    // If there's a subdomain (and it's not www/api), serve the React app
+    if (req.subdomain && req.subdomain !== 'www' && req.subdomain !== 'api') {
+      console.log(`[Subdomain Route] Serving React app for subdomain: ${req.subdomain}`);
+      return res.sendFile(join(frontendBuildPath, 'index.html'));
+    }
+    next();
+  });
+}
 
 // 404 handler
 app.use((req, res) => {
