@@ -883,6 +883,11 @@ export const getBusinessBySlug = async (req, res) => {
       return res.status(404).json({ error: 'Business not found' });
     }
 
+    // Check if JSON format is requested
+    if (req.query.format === 'json') {
+      return res.json({ business });
+    }
+
     // Return HTML template for business page
     const html = generateBusinessHTML(business);
     res.setHeader('Content-Type', 'text/html');

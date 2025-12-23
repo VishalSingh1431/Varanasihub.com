@@ -143,11 +143,18 @@ app.use('/', sitemapRoutes);
 app.use(async (req, res, next) => {
   const subdomain = req.subdomain;
 
+  // We are moving to React-based rendering for subdomains.
+  // The frontend code (App.jsx) detects the subdomain and renders the appropriate component.
+  // The backend should simpler serve the API or let the request fall through to the static file server (for the React app).
+
+  // Originally:
   // If there's a subdomain and it's not 'www' or 'api', treat it as a business slug
+  /*
   if (subdomain && subdomain !== 'www' && subdomain !== 'api' && !req.path.startsWith('/api')) {
     const { getBusinessBySubdomain } = await import('./controllers/businessController.js');
     return getBusinessBySubdomain(req, res, next);
   }
+  */
 
   next();
 });

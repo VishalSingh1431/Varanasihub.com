@@ -2,7 +2,7 @@ import pool from './config/database.js';
 
 async function queryBusiness() {
     try {
-        const result = await pool.query("SELECT * FROM businesses WHERE slug = 'iitmadrascampus'");
+        const result = await pool.query("SELECT slug FROM businesses LIMIT 1");
         if (result.rows.length > 0) {
             console.log('BUSINESS_DATA_START');
             console.log(JSON.stringify(result.rows[0], null, 2));

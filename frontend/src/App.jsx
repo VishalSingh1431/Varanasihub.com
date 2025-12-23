@@ -22,6 +22,7 @@ import WebsiteHosting from './pages/services/WebsiteHosting'
 import OnlinePresence from './pages/services/OnlinePresence'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
+import BusinessWebsite from './pages/BusinessWebsite'
 import WhatsAppWidget from './components/WhatsAppWidget'
 import { initGoogleAnalytics, trackPageView } from './utils/analytics'
 import './App.css'
@@ -43,6 +44,37 @@ const PageTracker = () => {
 };
 
 function App() {
+  const isSubdomain = () => {
+    const hostname = window.location.hostname;
+    const parts = hostname.split('.');
+
+    // Handle localhost (e.g. business.localhost)
+    if (hostname.includes('localhost')) {
+      return parts.length > 1 && parts[0] !== 'www';
+    }
+
+    // Handle production (e.g. business.domain.com)
+    // Assuming 3 parts for production: subdomain.domain.com
+    return parts.length > 2 && parts[0] !== 'www' && parts[0] !== 'api';
+  };
+
+  // If on a subdomain, render the BusinessWebsite component directly
+  if (isSubdomain()) {
+    return (
+      <ToastProvider>
+        <Router>
+          <ErrorBoundary>
+            <PageTracker />
+            <WhatsAppWidget />
+            <Routes>
+              <Route path="*" element={<BusinessWebsite />} />
+            </Routes>
+          </ErrorBoundary>
+        </Router>
+      </ToastProvider>
+    );
+  }
+
   return (
     <ToastProvider>
       <Router>
@@ -59,6 +91,7 @@ function App() {
             <Route path="/analytics/:businessId" element={<Analytics />} />
             <Route path="/qrcode/:id" element={<QRCodeGenerator />} />
             <Route path="/businesses" element={<Businesses />} />
+            <Route path="/b/:slug" element={<BusinessWebsite />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route path="/about" element={<About />} />

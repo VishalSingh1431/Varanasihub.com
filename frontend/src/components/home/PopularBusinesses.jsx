@@ -43,7 +43,7 @@ const PopularBusinesses = ({ businesses = [] }) => {
               whileHover={{ y: -12, scale: 1.02 }}
               className="group relative"
             >
-              <div className="relative bg-white rounded-3xl overflow-hidden border-2 border-gray-200 h-full hover:border-blue-300 hover:shadow-xl transition-all duration-500">
+              <div className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 hover:border-blue-200 h-full transform hover:-translate-y-2">
                 <div className="h-64 bg-gradient-to-br from-blue-400 to-purple-500 relative overflow-hidden">
                   <img
                     src={business.image}
