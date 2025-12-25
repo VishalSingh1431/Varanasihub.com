@@ -534,7 +534,7 @@ const BusinessWebsite = () => {
                                                     loading="lazy"
                                                     allowFullScreen
                                                     referrerPolicy="no-referrer-when-downgrade"
-                                                    src={`https://www.google.com/maps?q=${encodeURIComponent(formData.address)}&output=embed`}
+                                                    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyCYlXSxKwiSFqoPhivOu7Ev028HnNV42us&q=${encodeURIComponent(formData.address)}`}
                                                     title={`Map showing ${formData.address}`}
                                                     className="w-full"
                                                 ></iframe>
