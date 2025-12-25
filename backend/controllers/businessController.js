@@ -486,16 +486,17 @@ export const createBusiness = async (req, res) => {
     const baseDomain = process.env.BASE_DOMAIN || 'varanasihub.com';
 
     let subdomainUrl;
-    // Subdirectory URL is deprecated and will be null
-    const subdirectoryUrl = null;
+    let subdirectoryUrl;
 
     if (isDevelopment) {
       // For localhost: use http://subdomain.localhost:PORT
       const port = process.env.PORT || 5000;
       subdomainUrl = `http://${slug}.localhost:${port}`;
+      subdirectoryUrl = `http://localhost:${port}/${slug}`;
     } else {
       // For production: use https://subdomain.domain.com
       subdomainUrl = `https://${slug}.${baseDomain}`;
+      subdirectoryUrl = `https://${baseDomain}/${slug}`;
     }
 
     // FINAL SAFETY CHECK - ensure category is ALWAYS valid before database
