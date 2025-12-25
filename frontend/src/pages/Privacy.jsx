@@ -67,15 +67,15 @@ const Privacy = () => {
           >
             <div className="mb-8 text-gray-600">
               <p className="mb-4">
-                <strong>Last Updated:</strong> {new Date().toLocaleDateString('en-IN', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
+                <strong>Last Updated:</strong> {new Date().toLocaleDateString('en-IN', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
                 })}
               </p>
               <p>
-                At VaranasiHub, we are committed to protecting your privacy. This Privacy Policy 
-                explains how we collect, use, disclose, and safeguard your information when you 
+                At VaranasiHub, we are committed to protecting your privacy. This Privacy Policy
+                explains how we collect, use, disclose, and safeguard your information when you
                 use our website and services.
               </p>
             </div>
@@ -109,11 +109,11 @@ const Privacy = () => {
             >
               <h3 className="text-xl font-bold text-gray-800 mb-3">Contact Us</h3>
               <p className="text-gray-600 mb-2">
-                If you have any questions about this Privacy Policy or wish to exercise your rights, 
+                If you have any questions about this Privacy Policy or wish to exercise your rights,
                 please contact us at:
               </p>
               <p className="text-blue-600 mb-2">
-                Email: privacy@varanasihub.com
+                Email: varanasihub.com@gmail.com
               </p>
               <p className="text-blue-600">
                 Phone: +91 9305715031

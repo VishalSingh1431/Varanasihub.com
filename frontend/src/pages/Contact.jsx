@@ -92,8 +92,8 @@ const Contact = () => {
     {
       icon: Mail,
       title: 'Email Us',
-      content: 'info@varanasihub.com',
-      link: 'mailto:info@varanasihub.com',
+      content: 'varanasihub.com@gmail.com',
+      link: 'mailto:varanasihub.com@gmail.com',
       gradient: 'from-blue-500 to-cyan-500'
     },
     {
@@ -145,7 +145,7 @@ const Contact = () => {
     <>
       <SEOHead
         title="Contact Us - VaranasiHub | Get Support & Business Inquiries"
-        description="Contact VaranasiHub for support, questions, or business inquiries. Email: info@varanasihub.com | Phone: +91 9305715031 | Located in Varanasi, Uttar Pradesh. We're here 24/7 to help you create your online presence."
+        description="Contact VaranasiHub for support, questions, or business inquiries. Email: varanasihub.com@gmail.com | Phone: +91 9305715031 | Located in Varanasi, Uttar Pradesh. We're here 24/7 to help you create your online presence."
         image="/og-image.jpg"
         url={`${getOrigin()}/contact`}
         keywords="contact VaranasiHub, VaranasiHub support, business inquiry Varanasi, website help Varanasi, customer support"
@@ -395,7 +395,7 @@ const Contact = () => {
                   </p>
                   <p className="flex items-start gap-3">
                     <Mail className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
-                    <span className="font-medium">info@varanasihub.com</span>
+                    <span className="font-medium">varanasihub.com@gmail.com</span>
                   </p>
                   <p className="flex items-start gap-3">
                     <Phone className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
@@ -411,7 +411,7 @@ const Contact = () => {
                     Our support team is available during business hours to help you with any questions or concerns.
                   </p>
                   <a
-                    href="mailto:support@varanasihub.com"
+                    href="mailto:varanasihub.com@gmail.com"
                     className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 sm:px-5 md:px-6 py-2 sm:py-2.5 md:py-3 rounded-lg md:rounded-xl font-bold text-sm sm:text-base hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl"
                   >
                     <Mail className="w-5 h-5" />

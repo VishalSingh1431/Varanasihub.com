@@ -67,14 +67,14 @@ const Terms = () => {
           >
             <div className="mb-8 text-gray-600">
               <p className="mb-4">
-                <strong>Last Updated:</strong> {new Date().toLocaleDateString('en-IN', { 
-                  year: 'numeric', 
-                  month: 'long', 
-                  day: 'numeric' 
+                <strong>Last Updated:</strong> {new Date().toLocaleDateString('en-IN', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
                 })}
               </p>
               <p>
-                These Terms of Service ("Terms") govern your access to and use of VaranasiHub's 
+                These Terms of Service ("Terms") govern your access to and use of VaranasiHub's
                 website and services. By using our services, you agree to be bound by these Terms.
               </p>
             </div>
@@ -111,7 +111,7 @@ const Terms = () => {
                 If you have any questions about these Terms, please contact us at:
               </p>
               <p className="text-blue-600">
-                Email: legal@varanasihub.com
+                Email: varanasihub.com@gmail.com
               </p>
             </motion.div>
           </motion.div>
