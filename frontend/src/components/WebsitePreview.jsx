@@ -1353,7 +1353,27 @@ const WebsitePreview = ({ formData, onClose }) => {
             )
           }
 
-          {/* Enhanced Reviews Section - Card with Carousel logic ported to Grid for consistency */}
+          {/* Video Section */}
+          {formData.youtubeVideo && (
+            <section id="video" className="py-12 md:py-16 bg-white">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+                  Watch Our <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Story</span>
+                </h2>
+                <div className="relative aspect-video max-w-4xl mx-auto rounded-[32px] overflow-hidden shadow-2xl border-4 border-white">
+                  <iframe
+                    className="absolute inset-0 w-full h-full"
+                    src={`https://www.youtube.com/embed/${getYouTubeId(formData.youtubeVideo)}`}
+                    title="Business Video"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* Enhanced Reviews Section */}
           {
             formData.googlePlacesData?.reviews && formData.googlePlacesData.reviews.length > 0 && (
               <section id="reviews" className="py-12 md:py-16 bg-gray-50 border-y border-gray-100/50">
@@ -1368,10 +1388,9 @@ const WebsitePreview = ({ formData, onClose }) => {
                     <div className={`w-24 h-2 bg-gradient-to-r ${theme.primary} mx-auto rounded-full`}></div>
                   </div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
                     {/* Summary Card */}
                     <div className="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-gray-100 flex flex-col items-center text-center relative overflow-hidden group">
-                      <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 opacity-0 group-hover:opacity-[0.02] transition-opacity duration-500"></div>
                       <div className="text-6xl font-black text-gray-900 mb-2">{formData.googlePlacesData.rating || '4.9'}</div>
                       <div className="flex gap-1 mb-4">
                         {[1, 2, 3, 4, 5].map((i) => (
@@ -1379,156 +1398,171 @@ const WebsitePreview = ({ formData, onClose }) => {
                         ))}
                       </div>
                       <p className="text-gray-500 font-bold uppercase tracking-wider text-[10px]">Verified Customer Satisfaction</p>
-
-                      <div className="mt-10 space-y-3 w-full">
-                        {[5, 4, 3, 2, 1].map(star => (
-                          <div key={star} className="flex items-center gap-4">
-                            <span className="text-xs font-black text-gray-400 w-3">{star}</span>
-                            <div className="flex-1 h-2 bg-gray-50 rounded-full overflow-hidden">
-                              <div className="h-full bg-yellow-400 rounded-full" style={{ width: `${star === 5 ? '92' : star === 4 ? '6' : '2'}%` }}></div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
                     </div>
 
-                    {/* Review Grid (Showing Paginated) */}
-                    <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
-                      {paginatedReviews.map((review, idx) => (
-                        <div key={idx} className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 flex flex-col h-full relative overflow-hidden group hover:shadow-md transition-shadow">
-                          <div className="absolute top-0 right-0 p-8 text-gray-100 group-hover:text-gray-200 transition-colors opacity-30">
-                            <svg className="w-16 h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19C19.5523 16 20 15.5523 20 15V9C20 8.44772 19.5523 8 19 8H15C14.4477 8 14 7.55228 14 7V5C14 4.44772 14.4477 4 15 4H20C21.1046 4 22 4.89543 22 6V15C22 18.3137 19.3137 21 16 21H14.017ZM4.017 21L4.017 18C4.017 16.8954 4.91243 16 6.017 16H9C9.55228 16 10 15.5523 10 15V9C10 8.44772 9.55228 8 9 8H5C4.44772 8 4 7.55228 4 7V5C4 4.44772 4.44772 4 5 4H10C11.1046 4 12 4.89543 12 6V15C12 18.3137 9.31371 21 6 21H4.017Z" /></svg>
+                    {/* Review Cards */}
+                    {formData.googlePlacesData.reviews.slice(0, 5).map((review, idx) => (
+                      <div key={idx} className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all italic">
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                            {review.author?.charAt(0) || 'G'}
                           </div>
-                          <div className="flex items-center gap-5 mb-8 relative">
-                            {review.authorPhoto ? (
-                              <img src={review.authorPhoto} alt={review.authorName} className="w-14 h-14 rounded-xl object-cover shadow-sm" />
-                            ) : (
-                              <div className="w-14 h-14 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg">
-                                {review.authorName?.charAt(0) || 'U'}
-                              </div>
-                            )}
-                            <div>
-                              <h4 className="text-xl font-black text-gray-900 line-clamp-1">{review.authorName}</h4>
-                              <div className="flex gap-1 mt-1">
-                                {[1, 2, 3, 4, 5].map(s => (
-                                  <Star key={s} className={`w-4 h-4 ${s <= (review.rating || 5) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-200'}`} />
-                                ))}
-                              </div>
+                          <div>
+                            <p className="font-bold text-gray-900">{review.author}</p>
+                            <div className="flex text-yellow-500">
+                              {[...Array(5)].map((_, i) => (
+                                <Star key={i} className={`w-3 h-3 ${i < review.rating ? 'fill-yellow-500' : ''}`} />
+                              ))}
                             </div>
                           </div>
-                          <p className="text-lg text-gray-600 leading-relaxed italic relative mb-6">"{review.text}"</p>
-                          <span className="text-sm text-gray-400 font-bold uppercase tracking-widest mt-auto">{review.time || 'Verified Review'}</span>
                         </div>
-                      ))}
-                    </div>
+                        <p className="text-gray-600 text-sm leading-relaxed">&quot;{review.text}&quot;</p>
+                      </div>
+                    ))}
                   </div>
-
-                  {/* Reviews Pagination */}
-                  {totalReviewPages > 1 && (
-                    <div className="flex items-center justify-center gap-3 mt-10">
-                      {[...Array(totalReviewPages)].map((_, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setCurrentReviewPage(idx)}
-                          className={`w-3 h-3 rounded-full transition-all duration-300 ${currentReviewPage === idx ? 'bg-blue-600 scale-125' : 'bg-gray-200 hover:bg-gray-300'}`}
-                        />
-                      ))}
-                    </div>
-                  )}
                 </div>
               </section>
             )
           }
 
-          {/* Enhanced Footer - Multi-column with Newsletter */}
+          {/* Gallery Section */}
+          {
+            images.length > 0 && (
+              <section id="gallery" className="py-12 md:py-16 bg-white border-y border-gray-50">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="text-center mb-12">
+                    <div className={`inline-block px-4 py-2 rounded-full bg-blue-600/10 text-blue-600 text-sm font-bold mb-4`}>
+                      Our Showcase
+                    </div>
+                    <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-6 font-primary uppercase tracking-tight">Our Gallery</h2>
+                    <div className={`h-1.5 w-24 bg-blue-600 mx-auto rounded-full`}></div>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                    {images.map((img, idx) => (
+                      <div
+                        key={idx}
+                        className="group relative aspect-square overflow-hidden rounded-2xl shadow-sm border border-gray-100 hover:shadow-xl transition-all duration-500 cursor-pointer"
+                        onClick={() => openLightbox(idx)}
+                      >
+                        <img
+                          src={img}
+                          alt={`Gallery ${idx + 1}`}
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                          loading="lazy"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                          <div className="text-white">
+                            <p className="text-xs font-black uppercase tracking-widest">View Full</p>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            )
+          }
+
+          {/* Lightbox Modal */}
+          {
+            lightboxOpen && images.length > 0 && (
+              <div
+                className="fixed inset-0 bg-black/90 z-[9999] flex items-center justify-center p-4"
+                onClick={closeLightbox}
+              >
+                <button
+                  onClick={closeLightbox}
+                  className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-[10000] bg-black/50 rounded-full p-2 hover:bg-black/70"
+                >
+                  <X className="w-6 h-6 sm:w-8 sm:h-8" />
+                </button>
+
+                {images.length > 1 && (
+                  <>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                      className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-[10000] bg-black/50 rounded-full p-2 sm:p-3 hover:bg-black/70"
+                    >
+                      <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                      className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors z-[10000] bg-black/50 rounded-full p-2 sm:p-3 hover:bg-black/70"
+                    >
+                      <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                    </button>
+                  </>
+                )}
+
+                <div
+                  className="max-w-6xl w-full max-h-[85vh] px-4"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <img
+                    src={images[lightboxIndex]}
+                    alt={`Gallery ${lightboxIndex + 1}`}
+                    className="w-full h-auto max-h-[75vh] object-contain rounded-lg mx-auto"
+                  />
+                </div>
+              </div>
+            )
+          }
+
+          {/* Footer */}
           <footer className="relative pt-20 pb-10 overflow-hidden bg-blue-600">
             <div className="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-purple-600"></div>
             <div className="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-white/10 to-transparent skew-x-12 translate-x-1/4"></div>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-white text-left">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
-                {/* Business Info */}
                 <div className="space-y-6">
                   <h3 className="text-3xl font-black text-white italic">
                     {formData.businessName}
                   </h3>
-                  <p className="text-blue-50 text-sm leading-relaxed max-w-xs">{formData.footerDescription || `Premium services in Varanasi. Quality and trust you can count on.`}</p>
+                  <p className="text-blue-50 text-sm leading-relaxed max-w-xs text-left">{formData.footerDescription || `Premium services in Varanasi. Quality and trust you can count on.`}</p>
                   <div className="flex gap-4">
                     {formData.instagram && (
-                      <a href={formData.instagram} className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-all group scale-100 hover:scale-110 shadow-lg backdrop-blur-sm border border-white/10">
-                        <Instagram className="w-5 h-5 text-white" />
+                      <a href={formData.instagram} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-all scale-100 hover:scale-110 shadow-lg backdrop-blur-sm border border-white/10 cursor-pointer">
+                        <Instagram className="w-5 h-5" />
                       </a>
                     )}
                     {formData.facebook && (
-                      <a href={formData.facebook} className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-all group scale-100 hover:scale-110 shadow-lg backdrop-blur-sm border border-white/10">
-                        <Facebook className="w-5 h-5 text-white" />
+                      <a href={formData.facebook} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-xl bg-white/10 text-white flex items-center justify-center hover:bg-white/20 transition-all scale-100 hover:scale-110 shadow-lg backdrop-blur-sm border border-white/10 cursor-pointer">
+                        <Facebook className="w-5 h-5" />
                       </a>
                     )}
                   </div>
                 </div>
 
-                {/* Quick Links */}
                 <div>
-                  <h4 className="text-lg font-black mb-6 uppercase tracking-widest text-white/50">Explore</h4>
+                  <h4 className="text-lg font-black mb-6 uppercase tracking-widest text-white/50">Quick Links</h4>
                   <ul className="space-y-4 text-sm font-bold">
-                    <li><a href="#home" className="text-blue-50 hover:text-white transition-colors">Home</a></li>
-                    <li><a href="#about" className="text-blue-50 hover:text-white transition-colors">About Us</a></li>
-                    <li><a href="#services" className="text-blue-50 hover:text-white transition-colors">Services</a></li>
-                    <li><a href="#contact" className="text-blue-50 hover:text-white transition-colors">Contact</a></li>
+                    <li><a onClick={() => scrollToSection('home')} className="text-blue-50 hover:text-white transition-colors cursor-pointer">Home</a></li>
+                    <li><a onClick={() => scrollToSection('about')} className="text-blue-50 hover:text-white transition-colors cursor-pointer">About Us</a></li>
+                    <li><a onClick={() => scrollToSection('services')} className="text-blue-50 hover:text-white transition-colors cursor-pointer">Services</a></li>
+                    <li><a onClick={() => scrollToSection('gallery')} className="text-blue-50 hover:text-white transition-colors cursor-pointer">Gallery</a></li>
                   </ul>
                 </div>
 
-                {/* Contact Info */}
                 <div id="contact">
-                  <h4 className="text-white font-bold mb-6">Request a Callback</h4>
-                  <div className="space-y-4">
-                    <div className="relative">
-                      <input
-                        type="tel"
-                        value={callbackNumber}
-                        onChange={(e) => setCallbackNumber(e.target.value)}
-                        placeholder="Your Phone Number"
-                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-white/50 outline-none transition-all"
-                      />
-                      <button
-                        onClick={() => {
-                          if (!callbackNumber) return;
-                          setIsSubmittingCallback(true);
-                          setTimeout(() => {
-                            setCallbackStatus('success');
-                            setCallbackNumber('');
-                            setIsSubmittingCallback(false);
-                            setTimeout(() => setCallbackStatus(null), 3000);
-                          }, 1000);
-                        }}
-                        disabled={isSubmittingCallback}
-                        className="mt-3 w-full py-3 bg-white text-blue-600 rounded-xl font-black transition-all disabled:opacity-50"
-                      >
-                        {isSubmittingCallback ? 'Sending...' : 'Request Call'}
-                      </button>
-                    </div>
-                    {callbackStatus === 'success' && (
-                      <p className="text-green-400 text-xs font-bold text-center">✓ Demo request sent successfully!</p>
-                    )}
-                  </div>
-
-                  <div className="mt-8 space-y-4 text-sm text-blue-100">
+                  <h4 className="text-lg font-black mb-6 uppercase tracking-widest text-white/50 text-left">Contact Us</h4>
+                  <div className="space-y-4 text-sm font-bold text-left">
                     {formData.mobileNumber && (
-                      <li className="flex items-start gap-3">
-                        <Phone className="w-5 h-5 text-white shrink-0" />
-                        <span className="hover:text-white transition-colors cursor-default">{formData.mobileNumber}</span>
-                      </li>
+                      <div className="flex items-center gap-3 text-blue-50">
+                        <Phone className="w-5 h-5" />
+                        {formData.mobileNumber}
+                      </div>
                     )}
                     {formData.email && (
-                      <li className="flex items-start gap-3">
-                        <Mail className="w-5 h-5 text-white shrink-0" />
-                        <a href={`mailto:${formData.email}`} className="hover:text-white transition-colors">{formData.email}</a>
-                      </li>
+                      <div className="flex items-center gap-3 text-blue-50">
+                        <Mail className="w-5 h-5" />
+                        {formData.email}
+                      </div>
                     )}
                     {formData.address && (
-                      <li className="flex items-start gap-3">
-                        <MapPin className="w-5 h-5 text-white shrink-0" />
+                      <div className="flex items-start gap-3 text-blue-50">
+                        <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />
                         <span>{formData.address}</span>
-                      </li>
+                      </div>
                     )}
                   </div>
                 </div>
@@ -1538,34 +1572,31 @@ const WebsitePreview = ({ formData, onClose }) => {
                 <p className="text-blue-50 text-xs font-bold uppercase tracking-[0.2em]">&copy; {new Date().getFullYear()} {formData.businessName}</p>
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                  <p className="text-blue-50 text-xs font-bold uppercase tracking-widest">Powered by <a href="https://varanasihub.com" className="text-white hover:underline">VaranasiHub</a></p>
+                  <p className="text-blue-50 text-xs font-bold uppercase tracking-widest">Powered by <a className="text-white hover:underline cursor-pointer">VaranasiHub</a></p>
                 </div>
               </div>
             </div>
           </footer>
 
-          {/* Floating Action Buttons */}
-          <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3">
-            {/* WhatsApp FAB */}
-            {(formData.whatsappNumber || formData.mobileNumber) && (
+          {/* FAB */}
+          {(formData.whatsappNumber || formData.mobileNumber) && (
+            <div className="fixed bottom-6 right-6 z-[100] flex flex-col gap-3">
               <a
                 href={`https://wa.me/${(formData.whatsappNumber || formData.mobileNumber).replace(/\D/g, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-14 h-14 bg-green-600 text-white rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.3)] flex items-center justify-center hover:bg-green-700 transition-all duration-300 hover:scale-110 animate-bounce"
-                aria-label="WhatsApp"
+                className="w-14 h-14 bg-green-600 text-white rounded-full shadow-[0_4px_15px_rgba(0,0,0,0.3)] flex items-center justify-center hover:bg-green-700 transition-all duration-300 hover:scale-110 animate-bounce cursor-pointer"
                 title="Chat with us"
               >
                 <MessageCircle className="w-8 h-8" />
               </a>
-            )}
-          </div>
-
+            </div>
+          )}
         </div>
       </div>
-
     </div>
   );
 };
 
 export default WebsitePreview;
+```

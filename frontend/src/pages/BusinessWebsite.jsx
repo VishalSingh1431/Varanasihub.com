@@ -885,6 +885,65 @@ const BusinessWebsite = () => {
                 )
             }
 
+            {/* Video Section */}
+            {formData.youtubeVideo && (
+                <section id="video" className="py-12 md:py-16 bg-white">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
+                            Watch Our <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Story</span>
+                        </h2>
+                        <div className="relative aspect-video max-w-4xl mx-auto rounded-[32px] overflow-hidden shadow-2xl border-4 border-white">
+                            <iframe
+                                className="absolute inset-0 w-full h-full"
+                                src={`https://www.youtube.com/embed/${getYouTubeId(formData.youtubeVideo)}`}
+                                title="Business Video"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            ></iframe>
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Reviews Section */}
+            {formData.googlePlacesData?.reviews && formData.googlePlacesData.reviews.length > 0 && (
+                <section id="reviews" className="py-12 md:py-16 bg-gray-50 border-y border-gray-100 italic">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-12">
+                            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-2">
+                                Customer <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Reviews</span>
+                            </h2>
+                            <div className="flex items-center justify-center gap-1 mt-4">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star key={i} className="w-5 h-5 text-yellow-500 fill-yellow-500" />
+                                ))}
+                                <span className="ml-2 font-bold text-gray-700">5.0 average rating</span>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {formData.googlePlacesData.reviews.map((review, idx) => (
+                                <div key={idx} className="bg-white p-6 rounded-2xl shadow-lg border border-gray-100 hover:shadow-xl transition-all">
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">
+                                            {review.author?.charAt(0) || 'G'}
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-900">{review.author}</p>
+                                            <div className="flex text-yellow-500">
+                                                {[...Array(5)].map((_, i) => (
+                                                    <Star key={i} className={`w-3 h-3 ${i < review.rating ? 'fill-yellow-500' : ''}`} />
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p className="text-gray-600 text-sm leading-relaxed">&quot;{review.text}&quot;</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
             {/* Gallery Section */}
             {
                 images.length > 0 && (
@@ -934,7 +993,7 @@ const BusinessWebsite = () => {
                             onClick={closeLightbox}
                             className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-[10000] bg-black/50 rounded-full p-2 hover:bg-black/70"
                         >
-                            <X className="w-6 h-6 sm:w-8 sm:h-8" />
+                            <X iconClassName="w-6 h-6 sm:w-8 sm:h-8" />
                         </button>
 
                         {images.length > 1 && (
@@ -994,93 +1053,41 @@ const BusinessWebsite = () => {
                         </div>
 
                         <div>
-                            <h4 className="text-lg font-black mb-6 uppercase tracking-widest text-white/50">Explore</h4>
+                            <h4 className="text-lg font-black mb-6 uppercase tracking-widest text-white/50">Quick Links</h4>
                             <ul className="space-y-4 text-sm font-bold">
                                 <li><a href="#home" className="text-blue-50 hover:text-white transition-colors">Home</a></li>
                                 <li><a href="#about" className="text-blue-50 hover:text-white transition-colors">About Us</a></li>
                                 <li><a href="#services" className="text-blue-50 hover:text-white transition-colors">Services</a></li>
-                                <li><a href="#contact" className="text-blue-50 hover:text-white transition-colors">Contact</a></li>
+                                <li><a href="#gallery" className="text-blue-50 hover:text-white transition-colors">Gallery</a></li>
                             </ul>
                         </div>
 
                         <div id="contact">
-                            <h4 className="text-white font-bold mb-6">Request a Callback</h4>
-                            <form
-                                onSubmit={async (e) => {
-                                    e.preventDefault();
-                                    if (!callbackNumber) return;
-                                    setIsSubmittingCallback(true);
-                                    try {
-                                        const response = await fetch(`${API_BASE_URL}/business/callback-request`, {
-                                            method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
-                                            body: JSON.stringify({
-                                                businessId: formData.id,
-                                                phone: callbackNumber,
-                                                businessName: formData.businessName
-                                            })
-                                        });
-                                        if (response.ok) {
-                                            setCallbackStatus('success');
-                                            setCallbackNumber('');
-                                            setTimeout(() => setCallbackStatus(null), 5000);
-                                        } else {
-                                            throw new Error('Failed to send');
-                                        }
-                                    } catch (err) {
-                                        setCallbackStatus('error');
-                                        setTimeout(() => setCallbackStatus(null), 5000);
-                                    } finally {
-                                        setIsSubmittingCallback(false);
-                                    }
-                                }}
-                                className="space-y-4"
-                            >
-                                <div className="relative">
-                                    <input
-                                        type="tel"
-                                        value={callbackNumber}
-                                        onChange={(e) => setCallbackNumber(e.target.value)}
-                                        placeholder="Your Phone Number"
-                                        required
-                                        className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder:text-white/50 outline-none focus:ring-2 focus:ring-white/50 transition-all"
-                                    />
-                                    <button
-                                        type="submit"
-                                        disabled={isSubmittingCallback}
-                                        className="mt-3 w-full py-3 bg-white text-blue-600 rounded-xl font-black hover:bg-blue-50 transition-all shadow-lg active:scale-95 disabled:opacity-50"
-                                    >
-                                        {isSubmittingCallback ? 'Sending...' : 'Request Call'}
-                                    </button>
-                                </div>
-                                {callbackStatus === 'success' && (
-                                    <p className="text-green-400 text-xs font-bold animate-fade-in text-center">✓ Request sent! We'll call you shortly.</p>
-                                )}
-                                {callbackStatus === 'error' && (
-                                    <p className="text-red-400 text-xs font-bold animate-fade-in text-center">✕ Failed to send. Please call us directly.</p>
-                                )}
-                            </form>
-
-                            <div className="mt-8 space-y-4 text-sm text-blue-100">
+                            <h4 className="text-lg font-black mb-6 uppercase tracking-widest text-white/50">Contact Us</h4>
+                            <ul className="space-y-4 text-sm font-bold">
                                 {formData.mobileNumber && (
-                                    <li className="flex items-start gap-3 list-none">
-                                        <Phone className="w-5 h-5 text-white shrink-0" />
-                                        <span className="hover:text-white transition-colors cursor-default">{formData.mobileNumber}</span>
+                                    <li>
+                                        <a href={`tel:${formData.mobileNumber}`} className="flex items-center gap-3 text-blue-50 hover:text-white transition-colors">
+                                            <Phone className="w-5 h-5" />
+                                            {formData.mobileNumber}
+                                        </a>
                                     </li>
                                 )}
                                 {formData.email && (
-                                    <li className="flex items-start gap-3 list-none">
-                                        <Mail className="w-5 h-5 text-white shrink-0" />
-                                        <a href={`mailto:${formData.email}`} className="hover:text-white transition-colors">{formData.email}</a>
+                                    <li>
+                                        <a href={`mailto:${formData.email}`} className="flex items-center gap-3 text-blue-50 hover:text-white transition-colors">
+                                            <Mail className="w-5 h-5" />
+                                            {formData.email}
+                                        </a>
                                     </li>
                                 )}
                                 {formData.address && (
-                                    <li className="flex items-start gap-3 list-none">
-                                        <MapPin className="w-5 h-5 text-white shrink-0" />
+                                    <li className="flex items-start gap-3 text-blue-50">
+                                        <MapPin className="w-5 h-5 flex-shrink-0 mt-0.5" />
                                         <span>{formData.address}</span>
                                     </li>
                                 )}
-                            </div>
+                            </ul>
                         </div>
                     </div>
 
@@ -1088,7 +1095,7 @@ const BusinessWebsite = () => {
                         <p className="text-blue-50 text-xs font-bold uppercase tracking-[0.2em]">&copy; {new Date().getFullYear()} {formData.businessName}</p>
                         <div className="flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-                            <p className="text-blue-50 text-xs font-bold uppercase tracking-widest">Powered by <a href="https://varanasihub.com" className="text-white hover:underline">VaranasiHub</a></p>
+                            <p className="text-blue-50 text-xs font-bold uppercase tracking-widest">Powered by <a href="https://varanasihub.com" className="text-white hover:underline" target="_blank" rel="noopener noreferrer">VaranasiHub</a></p>
                         </div>
                     </div>
                 </div>

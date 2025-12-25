@@ -1272,257 +1272,6 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
 
   <!-- Main Content -->
   <main class="w-full pb-20 md:pb-0">
-    <!-- Enhanced Hero Section - Name/Address Left, Image Right (Circular) -->
-    <section id="home" class="relative bg-gradient-to-r ${theme.primary} text-white py-12 overflow-hidden">
-      <!-- Animated Background Elements -->
-      <div class="absolute inset-0 opacity-10">
-        <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
-      </div>
-      
-      <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
-          <!-- Left Side - Content -->
-          <div class="order-2 md:order-1 text-center md:text-left">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-3 md:mb-4 break-words leading-tight tracking-tight">
-              ${escapeHtml(business.businessName)}
-            </h1>
-            
-            ${business.address ? `
-            <div class="flex items-start justify-center md:justify-start gap-2 text-white/90 mb-2">
-              <svg class="w-5 h-5 md:w-6 md:h-6 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-              <p class="text-base sm:text-lg md:text-xl font-medium leading-relaxed">${escapeHtml(business.address)}</p>
-            </div>
-            ` : ''}
-
-            ${(business.navbarTagline || (business.category === 'Temple' ? 'A Place of Peace and Devotion' : '')) ? `
-            <p class="text-xl md:text-2xl text-white/90 font-medium italic mb-4 drop-shadow-md">
-              ${escapeHtml(business.navbarTagline || (business.category === 'Temple' ? 'A Place of Peace and Devotion' : ''))}
-            </p>
-            ` : ''}
-
-            ${business.category ? `
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white/20 backdrop-blur-sm rounded-full text-sm font-semibold mt-3 border border-white/30">
-              <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
-              ${escapeHtml(business.category)}
-            </div>
-            ` : ''}
-
-            <div class="flex flex-col sm:flex-row items-center justify-center md:justify-start gap-4 mt-8">
-              ${business.mobile ? `
-              <a href="tel:${escapeHtml(business.mobile)}" class="group flex items-center justify-center gap-3 px-8 py-4 bg-white ${theme.accent} rounded-2xl font-black text-lg shadow-2xl hover:bg-white/90 transition-all duration-300 transform hover:-translate-y-1 hover:scale-105">
-                <svg class="w-6 h-6 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                Call Now
-              </a>
-              ` : ''}
-            </div>
-          </div>
-
-          <!-- Right Side - Hero Image -->
-          <div class="order-1 md:order-2 relative">
-            <!-- Decorative shapes -->
-            <div class="absolute top-0 right-0 w-40 h-40 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
-            <div class="absolute bottom-0 left-0 w-40 h-40 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
-            
-            ${business.logoUrl ? `
-            <div class="relative group">
-              <div class="absolute inset-0 bg-gradient-to-tr ${theme.primary} rounded-3xl rotate-3 scale-105 opacity-20 group-hover:rotate-0 group-hover:scale-100 transition-all duration-500"></div>
-              <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-                <img src="${escapeHtml(business.logoUrl)}" alt="${escapeHtml(business.businessName)}" 
-                     class="w-full h-[400px] md:h-[500px] object-cover cursor-pointer transition-transform duration-700 group-hover:scale-110" 
-                     onclick="openLightbox(0)" />
-                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                  <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold shadow-xl transform scale-90 group-hover:scale-100 transition-all duration-300">
-                    View Gallery
-                  </span>
-                </div>
-              </div>
-            </div>
-            ` : `
-            <div class="relative min-h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-12">
-              <div class="text-center space-y-6">
-                <div class="w-32 h-32 bg-gradient-to-br ${theme.primary} rounded-full flex items-center justify-center mx-auto shadow-2xl animate-pulse">
-                  <span class="text-white text-6xl font-black">${escapeHtml(business.businessName.charAt(0).toUpperCase())}</span>
-                </div>
-                <h4 class="text-2xl font-black text-gray-900">${escapeHtml(business.businessName)}</h4>
-                <p class="text-gray-500 font-bold">Trusted Varanasi Business</p>
-              </div>
-            </div>
-            `}
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Quick Contact Info Section -->
-    ${(business.businessHours || business.address) ? `
-    <section class="py-8 md:py-12 bg-gradient-to-br from-gray-50 to-white border-b border-gray-200">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-          ${business.businessHours && Object.keys(business.businessHours).length > 0 ? `
-          <div class="bg-white rounded-xl p-6 border-2 border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-              </div>
-              <h3 class="text-xl md:text-2xl font-bold text-gray-900">Business Hours</h3>
-            </div>
-            <div class="space-y-2">
-              ${['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].map(day => {
-    const hours = business.businessHours[day];
-    if (!hours) return '';
-    const now = new Date();
-    const daysArr = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
-    const isToday = day === daysArr[now.getDay()];
-    return `
-                  <div class="flex items-center justify-between p-3 rounded-lg border ${isToday ? `${theme.accent.replace('text-', 'bg-')}/10 ${theme.accent.replace('text-', 'border-')}` : 'bg-gray-50 border-gray-200'}">
-                    <span class="font-semibold text-sm md:text-base capitalize ${isToday ? theme.accent : 'text-gray-700'}">${day}</span>
-                    ${hours.open ? `
-                      <span class="font-medium text-sm md:text-base ${isToday ? theme.accent : 'text-gray-600'}">${escapeHtml(hours.start)} - ${escapeHtml(hours.end)}</span>
-                    ` : `
-                      <span class="text-gray-400 italic text-sm md:text-base">Closed</span>
-                    `}
-                  </div>
-                `;
-  }).join('')}
-            </div>
-          </div>
-          ` : ''}
-          ${business.address ? `
-          <div class="bg-white rounded-xl p-6 border-2 border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300">
-            <div class="flex items-center gap-3 mb-4">
-              <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg flex items-center justify-center">
-                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-              </div>
-              <h3 class="text-xl md:text-2xl font-bold text-gray-900">Location</h3>
-            </div>
-            <div class="text-gray-700 text-sm md:text-base leading-relaxed mb-4">
-              ${escapeHtml(business.address)}
-            </div>
-            <div class="mt-4 rounded-lg overflow-hidden border-2 border-gray-200 shadow-md">
-              <iframe width="100%" height="300" style="border:0;" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=${encodeURIComponent(business.address)}&output=embed"></iframe>
-            </div>
-          </div>
-          ` : ''}
-        </div>
-      </div>
-    </section>
-    ` : ''}
-
-    <!-- Enhanced About Section -->
-    <section id="about" class="py-12 bg-gray-50 overflow-hidden">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-12 md:mb-16">
-          <h2 class="text-3xl md:text-5xl font-black text-gray-900 mb-4">
-            About <span class="bg-gradient-to-r ${theme.primary} bg-clip-text text-transparent">Us</span>
-          </h2>
-          <div class="w-24 h-2 bg-gradient-to-r ${theme.primary} mx-auto rounded-full"></div>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
-          <div class="order-2 md:order-1 space-y-8">
-            <div class="space-y-4">
-              <h3 class="text-2xl md:text-4xl font-bold text-gray-900 mb-2">${escapeHtml(business.businessName)}</h3>
-              ${business.category ? `
-                <span class="inline-block px-4 py-2 bg-gradient-to-r ${theme.primary} text-white rounded-xl text-sm font-bold shadow-lg">
-                  ${escapeHtml(business.category)}
-                </span>
-              ` : ''}
-            </div>
-
-            ${business.ownerName ? `
-              <div class="p-6 bg-white rounded-2xl shadow-sm border border-gray-100 flex items-center gap-6 group hover:shadow-md transition-all duration-300">
-                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">👤</div>
-                <div>
-                  <p class="text-gray-500 text-sm font-bold uppercase tracking-wider mb-1">Business Owner</p>
-                  <p class="text-xl font-bold text-gray-900">${escapeHtml(business.ownerName)}</p>
-                </div>
-              </div>
-            ` : ''}
-
-            <div class="relative">
-              ${business.description ? `
-                <div class="description-container relative bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-                  <p id="description-text" class="text-lg text-gray-700 leading-relaxed whitespace-pre-line">
-                    ${escapeHtml(business.description.length > 400 ? business.description.substring(0, 400) + '...' : business.description)}
-                  </p>
-                  ${business.description.length > 400 ? `
-                    <button onclick="toggleReadMore()" id="read-more-btn" class="mt-6 text-blue-600 hover:text-blue-700 font-bold flex items-center gap-2 group transition-all">
-                      Read Full Story
-                      <svg class="w-5 h-5 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                  ` : ''}
-                </div>
-              ` : `
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-                  <p class="text-lg text-gray-600 leading-relaxed italic">
-                    Welcome to ${escapeHtml(business.businessName)}! We are committed to providing excellent service and quality products to our customers in Varanasi. Our dedication to excellence and customer satisfaction drives everything we do.
-                  </p>
-                </div>
-              `}
-            </div>
-          </div>
-
-          <div class="order-1 md:order-2 relative">
-            <!-- Decorative shapes -->
-            <div class="absolute -top-10 -right-10 w-40 h-40 bg-blue-100 rounded-full blur-3xl opacity-50"></div>
-            <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
-            
-            ${business.imagesUrl && business.imagesUrl.length > 0 ? `
-              <div class="relative group">
-                <div class="absolute inset-0 bg-gradient-to-tr ${theme.primary} rounded-3xl rotate-3 scale-105 opacity-20 group-hover:rotate-0 group-hover:scale-100 transition-all duration-500"></div>
-                <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-                  <img src="${escapeHtml(business.imagesUrl[0])}" alt="${escapeHtml(business.businessName)}" 
-                       class="w-full h-[400px] md:h-[500px] object-cover cursor-pointer transition-transform duration-700 group-hover:scale-110" 
-                       onclick="openLightbox(0)" />
-                  <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <span class="px-6 py-3 bg-white text-gray-900 rounded-full font-bold shadow-xl transform scale-90 group-hover:scale-100 transition-all duration-300">
-                      View Gallery
-                    </span>
-                  </div>
-                </div>
-              </div>
-            ` : `
-              <div class="relative h-[400px] md:h-[500px] rounded-3xl overflow-hidden shadow-2xl bg-gradient-to-br from-blue-50 to-indigo-50 flex items-center justify-center p-12">
-                <div class="text-center space-y-6">
-                  <div class="w-32 h-32 bg-gradient-to-br ${theme.primary} rounded-full flex items-center justify-center mx-auto shadow-2xl animate-pulse">
-                    <span class="text-white text-6xl font-black">${escapeHtml(business.businessName.charAt(0).toUpperCase())}</span>
-                  </div>
-                  <h4 class="text-2xl font-black text-gray-900">${escapeHtml(business.businessName)}</h4>
-                  <p class="text-gray-500 font-bold">Trusted Varanasi Business</p>
-                </div>
-              </div>
-            `}
-          </div>
-        </div>
-      </div>
-    </section>
-
-
-
-      <!-- Trust Badges Section -->
-      <section class="py-10 bg-white border-b border-gray-100">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            ${(() => {
-      const defaultBadges = [
-        { title: 'Verified', icon: 'M5 13l4 4L19 7', color: 'text-green-600', bg: 'bg-green-50' },
-        { title: 'Safe & Secure', icon: 'M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z', color: 'text-blue-600', bg: 'bg-blue-50' },
-        { title: 'Top Rated', icon: 'M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z', color: 'text-yellow-600', bg: 'bg-yellow-50' },
-        { title: 'Best Quality', icon: 'M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z', color: 'text-purple-600', bg: 'bg-purple-50' }
-      ];
-      return defaultBadges.map(badge => `
-                <div class="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-gray-50 transition-colors group">
-                  <div class="w-14 h-14 ${badge.bg} ${badge.color} rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-sm">
-                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${badge.icon}"></path></svg>
-                  </div>
-                  <h4 class="text-sm font-black text-gray-900 uppercase tracking-wider">${badge.title}</h4>
-                </div>
-              `).join('');
-    })()}
-          </div>
-        </div>
-      </section>
       <section id="home" class="relative min-h-[90vh] flex items-center pt-24 pb-12 overflow-hidden bg-blue-600">
         <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-purple-600"></div>
         <div class="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-white/10 to-transparent skew-x-12 translate-x-1/4"></div>
@@ -1551,7 +1300,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
                 ${business.mobile ? `
                   <a href="tel:${escapeHtml(business.mobile)}" class="inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-blue-600 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all transform active:scale-95 group">
                     <svg class="w-6 h-6 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                    Book A Call Now
+                    Book Now
                   </a>
                 ` : ''}
                 <a href="#about" class="inline-flex items-center justify-center gap-3 px-10 py-5 bg-white/10 text-white border-2 border-white/20 rounded-2xl font-black text-lg hover:bg-white/20 transition-all transform hover:-translate-y-1 active:scale-95 backdrop-blur-md">
@@ -1599,28 +1348,6 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
         <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent"></div>
       </section>
 
-      <!-- Enhanced Video Section -->
-      ${embedUrl ? `
-      <section class="py-10 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 class="text-3xl md:text-4xl font-black text-gray-900 mb-8 md:mb-12 text-center">
-            Watch <span class="bg-gradient-to-r ${theme.primary} bg-clip-text text-transparent">Our Story</span>
-          </h2>
-          <div class="max-w-4xl mx-auto relative group">
-            <div class="absolute -inset-1 bg-gradient-to-r ${theme.primary} rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-            <div class="relative aspect-video rounded-2xl overflow-hidden shadow-2xl bg-black">
-              <iframe src="${embedUrl}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
-            <div class="mt-4 flex justify-center">
-              <a href="https://youtube.com/watch?v=${getYouTubeId(business.videoUrl)}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-red-600 font-bold hover:text-red-700 transition-colors">
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 4-8 4z"/></svg>
-                Watch on YouTube
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-      ` : ''}
 
       <!-- Amenities & Features Section -->
       ${(business.amenities?.length || business.paymentMethods?.length || business.parkingInfo?.length) ? `
@@ -1853,7 +1580,33 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     }
 
 
-      <section id="reviews" class="py-12 bg-gray-50 border-y border-gray-100/50">
+  ${business.youtubeVideoId ? `
+      <section id="video" class="py-12 md:py-20 bg-white px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+          <div class="text-center mb-12 sm:mb-16">
+            <div class="inline-block px-4 py-2 rounded-full ${theme.accent.replace('text-', 'bg-')}/10 ${theme.accent} text-sm font-bold mb-4">
+              Watch Our Story
+            </div>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-6">Our Video Tour</h2>
+            <div class="h-1.5 w-24 ${theme.primarySolid.replace('bg-', 'bg-')} mx-auto rounded-full"></div>
+          </div>
+          <div class="aspect-video rounded-3xl overflow-hidden shadow-2xl border border-gray-100 max-w-4xl mx-auto">
+            <iframe 
+              width="100%" 
+              height="100%" 
+              src="https://www.youtube.com/embed/${escapeHtml(business.youtubeVideoId)}" 
+              title="YouTube video player" 
+              frameborder="0" 
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+              allowfullscreen>
+            </iframe>
+          </div>
+        </div>
+      </section>
+      ` : ''}
+
+
+      <section id="reviews" class="py-12 md:py-20 bg-gray-50 border-y border-gray-100/50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="text-center mb-12 md:mb-16">
             <div class="inline-block px-4 py-2 rounded-full ${theme.accent.replace('text-', 'bg-')}/10 ${theme.accent} text-sm font-bold mb-4">
@@ -1867,11 +1620,11 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
 
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
             <!-- Summary Card -->
-            <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-gray-100 flex flex-col items-center text-center relative overflow-hidden group">
+            <div class="bg-white rounded-3xl p-8 md:p-10 shadow-sm border border-gray-100 flex flex-col items-center text-center relative overflow-hidden group h-full">
               <div class="absolute inset-0 bg-gradient-to-br ${theme.primary} opacity-0 group-hover:opacity-[0.02] transition-opacity duration-500"></div>
-              <div class="text-6xl font-black text-gray-900 mb-2">4.9</div>
+              <div class="text-6xl font-black text-gray-900 mb-2">${business.googlePlacesData?.rating || '4.9'}</div>
               <div class="flex gap-1 mb-4">
-                ${[1, 2, 3, 4, 5].map(() => `<svg class="w-5 h-5 text-yellow-400 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join('')}
+                ${[1, 2, 3, 4, 5].map(i => `<svg class="w-5 h-5 ${i <= Math.round(business.googlePlacesData?.rating || 4.9) ? 'text-yellow-400 fill-current' : 'text-gray-200 fill-current'}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join('')}
               </div>
               <p class="text-gray-500 font-bold uppercase tracking-wider text-[10px]">Verified Customer Satisfaction</p>
               
@@ -1891,29 +1644,29 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
             <div class="lg:col-span-2 relative h-full">
               <div class="overflow-hidden h-full">
                 <div id="review-carousel" class="flex transition-transform duration-500 ease-in-out h-full items-stretch">
-                  ${(business.reviews || [
-      { name: 'Rahul Sharma', rating: 5, comment: 'Excellent service! The team was professional and the results exceeded my expectations. Highly recommend!', date: '2 days ago' },
-      { name: 'Priya Verma', rating: 5, comment: 'Great experience from start to finish. Very communicative and skilled at what they do.', date: '1 week ago' },
-      { name: 'Amit Singh', rating: 5, comment: 'Best in the business! Quality is top-notch and prices are very reasonable.', date: '3 weeks ago' }
-    ]).map((review, idx) => `
+                  ${(business.googlePlacesData?.reviews || business.reviews || [
+      { author: 'Rahul Sharma', rating: 5, text: 'Excellent service! The team was professional and the results exceeded my expectations. Highly recommend!', relativeTimeDescription: '2 days ago' },
+      { author: 'Priya Verma', rating: 5, text: 'Great experience from start to finish. Very communicative and skilled at what they do.', relativeTimeDescription: '1 week ago' },
+      { author: 'Amit Singh', rating: 5, text: 'Best in the business! Quality is top-notch and prices are very reasonable.', relativeTimeDescription: '3 weeks ago' }
+    ]).slice(0, 6).map((review, idx) => `
                     <div class="min-w-full px-2 h-full">
                       <div class="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-gray-100 flex flex-col h-full relative overflow-hidden group">
                         <div class="absolute top-0 right-0 p-8 text-gray-100 group-hover:text-gray-200 transition-colors opacity-30">
                           <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21L14.017 18C14.017 16.8954 14.9124 16 16.017 16H19C19.5523 16 20 15.5523 20 15V9C20 8.44772 19.5523 8 19 8H15C14.4477 8 14 7.55228 14 7V5C14 4.44772 14.4477 4 15 4H20C21.1046 4 22 4.89543 22 6V15C22 18.3137 19.3137 21 16 21H14.017ZM4.017 21L4.017 18C4.017 16.8954 4.91243 16 6.017 16H9C9.55228 16 10 15.5523 10 15V9C10 8.44772 9.55228 8 9 8H5C4.44772 8 4 7.55228 4 7V5C4 4.44772 4.44772 4 5 4H10C11.1046 4 12 4.89543 12 6V15C12 18.3137 9.31371 21 6 21H4.017Z"/></svg>
                         </div>
                         <div class="flex items-center gap-5 mb-8 relative">
-                          <div class="w-14 h-14 bg-gradient-to-br ${theme.primary} rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg">
-                            ${escapeHtml(review.name.charAt(0))}
+                          <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-blue-600 font-black text-xl shadow-sm">
+                            ${escapeHtml((review.author || review.name || 'G').charAt(0))}
                           </div>
                           <div>
-                            <h4 class="text-xl font-black text-gray-900">${escapeHtml(review.name)}</h4>
+                            <h4 class="text-xl font-black text-gray-900">${escapeHtml(review.author || review.name)}</h4>
                             <div class="flex gap-1 mt-1">
                               ${[1, 2, 3, 4, 5].map(s => `<svg class="w-4 h-4 ${s <= (review.rating || 5) ? 'text-yellow-400 fill-current' : 'text-gray-200'}" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>`).join('')}
                             </div>
                           </div>
                         </div>
-                        <p class="text-lg text-gray-600 leading-relaxed italic relative mb-6">"${escapeHtml(review.comment || '')}"</p>
-                        <span class="text-sm text-gray-400 font-bold uppercase tracking-widest mt-auto">${escapeHtml(review.date || 'Member')}</span>
+                        <p class="text-lg text-gray-600 leading-relaxed italic relative mb-6">"${escapeHtml(review.text || review.comment || '')}"</p>
+                        <span class="text-sm text-gray-400 font-bold uppercase tracking-widest mt-auto">${escapeHtml(review.relativeTimeDescription || review.date || 'Customer')}</span>
                       </div>
                     </div>
                   `).join('')}
@@ -1922,7 +1675,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
               
               <!-- Carousel Controls -->
               <div class="flex justify-center gap-3 mt-8">
-                ${(business.reviews || [1, 2, 3]).map((_, idx) => `
+                ${(business.googlePlacesData?.reviews || business.reviews || [1, 2, 3]).slice(0, 6).map((_, idx) => `
                   <button onclick="scrollReview(${idx})" class="w-3 h-3 rounded-full transition-all duration-300 review-dot ${idx === 0 ? 'bg-blue-600 scale-125' : 'bg-gray-200 hover:bg-gray-300'}"></button>
                 `).join('')}
               </div>
@@ -2047,133 +1800,7 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
     }
 
 
-  <section id="contact" class="py-12 bg-white px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-12 sm:mb-16">
-        <div class="inline-block px-4 py-2 rounded-full ${theme.accent.replace('text-', 'bg-')}/10 ${theme.accent} text-sm font-bold mb-4">
-          Get in touch
-        </div>
-        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-gray-900 mb-6">Contact Us</h2>
-        <div class="h-1.5 w-24 ${theme.primarySolid.replace('bg-', 'bg-')} mx-auto rounded-full"></div>
-      </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-        <!-- Contact Details -->
-        <div class="space-y-6 order-2 lg:order-1">
-          <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100">
-            <h3 class="text-2xl font-black text-gray-900 mb-8">Contact Information</h3>
-            <div class="space-y-6">
-              ${business.address ? `
-                  <div class="flex items-start gap-5">
-                    <div class="w-12 h-12 rounded-2xl ${theme.primarySolid} flex items-center justify-center text-white shadow-lg flex-shrink-0">
-                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    </div>
-                    <div>
-                      <p class="text-sm font-black text-gray-400 uppercase tracking-widest mb-1">Address</p>
-                      <p class="text-lg font-bold text-gray-900">${escapeHtml(business.address)}</p>
-                    </div>
-                  </div>
-                  ` : ''}
-
-              ${business.mobile ? `
-                  <div class="flex items-start gap-5">
-                    <div class="w-12 h-12 rounded-2xl ${theme.primarySolid} flex items-center justify-center text-white shadow-lg flex-shrink-0">
-                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
-                    </div>
-                    <div>
-                      <p class="text-sm font-black text-gray-400 uppercase tracking-widest mb-1">Phone</p>
-                      <a href="tel:${escapeHtml(business.mobile)}" class="text-lg font-bold text-gray-900 hover:${theme.accent} transition-colors">${escapeHtml(business.mobile)}</a>
-                    </div>
-                  </div>
-                  ` : ''}
-
-              ${business.email ? `
-                  <div class="flex items-start gap-5">
-                    <div class="w-12 h-12 rounded-2xl ${theme.primarySolid} flex items-center justify-center text-white shadow-lg flex-shrink-0">
-                      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <div>
-                      <p class="text-sm font-black text-gray-400 uppercase tracking-widest mb-1">Email</p>
-                      <a href="mailto:${escapeHtml(business.email)}" class="text-lg font-bold text-gray-900 hover:${theme.accent} transition-colors break-all">${escapeHtml(business.email)}</a>
-                    </div>
-                  </div>
-                  ` : ''}
-
-              <div class="pt-4 border-t border-gray-100">
-                <p class="text-sm font-black text-gray-400 uppercase tracking-widest mb-3">Follow Us</p>
-                <div class="flex flex-wrap gap-4">
-                  ${['instagram', 'facebook', 'website'].map(key => business[key] ? `
-                        <a href="${escapeHtml(business[key])}" target="_blank" rel="noopener noreferrer" class="w-10 h-10 ${theme.primarySolid} text-white rounded-xl flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-                          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                            ${key === 'instagram' ? '<path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.247 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.332 2.633-1.308 3.608-.975.975-2.242 1.247-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.247-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.247 3.608-1.308 1.266-.058 1.646-.07 4.85-.07m0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>' : ''}
-                            ${key === 'facebook' ? '<path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>' : ''}
-                            ${key === 'website' ? '<path d="M12 0a12 12 0 100 24 12 12 0 000-24zm0 21.6A9.6 9.6 0 1112 2.4a9.6 9.6 0 010 19.2zm-1.2-13.2a1.2 1.2 0 012.4 0v4.8a1.2 1.2 0 01-2.4 0V8.4zm0 7.2a1.2 1.2 0 112.4 0 1.2 1.2 0 01-2.4 0z"/>' : ''}
-                          </svg>
-                        </a>
-                      ` : '').join('')}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          ${business.mapLink ? `
-              <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 h-64 sm:h-80 bg-gray-50">
-                ${(() => {
-        let embedUrl = null;
-        if (business.mapLink.includes('google.com/maps')) {
-          const placeIdMatch = business.mapLink.match(/place\/([^\/]+)/);
-          const queryMatch = business.mapLink.match(/q=([^&]+)/);
-          if (placeIdMatch) {
-            embedUrl = `https://www.google.com/maps?q=place_id:${placeIdMatch[1]}&output=embed`;
-          } else if (queryMatch) {
-            embedUrl = `https://www.google.com/maps?q=${encodeURIComponent(queryMatch[1])}&output=embed`;
-          } else {
-            // Fallback to simple address search if no specific matches but it's a maps link
-            embedUrl = `https://www.google.com/maps?q=${encodeURIComponent(business.address)}&output=embed`;
-          }
-        }
-        if (business.mapLink && business.mapLink.includes('google.com/maps/embed')) embedUrl = business.mapLink;
-
-        return embedUrl ? `
-                    <iframe src="${escapeHtml(embedUrl)}" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                  ` : `
-                    <div class="w-full h-full flex flex-col items-center justify-center gap-4">
-                      <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
-                      <a href="${escapeHtml(business.mapLink)}" target="_blank" class="px-6 py-3 bg-blue-600 text-white rounded-2xl font-bold shadow-lg">View on Maps</a>
-                    </div>
-                  `;
-      })()}
-              </div>
-              ` : ''}
-            </div>
-
-            <!-- Contact Form -->
-            <div class="order-1 lg:order-2">
-              <div class="bg-gray-50 rounded-3xl p-8 border border-gray-100 h-full">
-                <h3 class="text-2xl font-black text-gray-900 mb-8">Send a Message</h3>
-                <form id="contact-form" class="space-y-6">
-                  <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Full Name *</label>
-                    <input type="text" name="name" required class="w-full px-4 py-4 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 outline-none" placeholder="Your name" />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Email Address *</label>
-                    <input type="email" name="email" required class="w-full px-4 py-4 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 outline-none" placeholder="your@email.com" />
-                  </div>
-                  <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Message *</label>
-                    <textarea name="message" rows="6" required class="w-full px-4 py-4 bg-white border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 outline-none resize-none" placeholder="How can we help?"></textarea>
-                  </div>
-                  <button type="submit" class="w-full ${theme.primarySolid} text-white py-5 rounded-2xl font-black text-lg shadow-xl hover:shadow-2xl transition-all duration-300">
-                    Send Now
-                  </button>
-                  <p id="contact-success" class="hidden text-center text-sm font-bold mt-4 text-green-600">Message sent successfully!</p>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
 
       <div id="pullToRefresh" class="fixed top-0 left-0 w-full h-16 flex items-center justify-center -translate-y-full z-[100] transition-transform duration-300">
@@ -2182,25 +1809,25 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
           <span class="text-sm font-black text-gray-900">Refreshing...</span>
         </div>
       </div>
-      <footer class="relative pt-20 pb-12 overflow-hidden bg-blue-600">
+      <footer id="contact" class="relative pt-20 pb-12 overflow-hidden bg-blue-600">
         <div class="absolute inset-0 bg-gradient-to-br from-blue-600 via-blue-700 to-purple-600"></div>
         <div class="absolute top-0 right-0 w-2/3 h-full bg-gradient-to-l from-white/10 to-transparent skew-x-12 translate-x-1/4"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mb-16">
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
             <!-- Brand Column -->
             <div class="space-y-6">
               <div class="flex items-center gap-3">
                 ${business.logoUrl ? `
                   <img src="${escapeHtml(business.logoUrl)}" alt="${escapeHtml(business.businessName)}" class="w-12 h-12 rounded-xl object-contain bg-white p-1" />
                 ` : `
-                  <div class="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">
+                  <div class="w-12 h-12 bg-white/10 backdrop-blur-md rounded-xl flex items-center justify-center font-bold text-xl text-white shadow-lg border border-white/20">
                     ${escapeHtml(business.businessName.charAt(0).toUpperCase())}
                   </div>
                 `}
                 <span class="text-xl font-black tracking-tight text-white">${escapeHtml(business.businessName)}</span>
               </div>
               <p class="text-blue-50 text-sm leading-relaxed">
-                ${business.description ? escapeHtml(business.description.substring(0, 120)) + '...' : `Connecting businesses with customers through premium digital experiences.`}
+                ${business.description ? escapeHtml(business.description.substring(0, 120)) + (business.description.length > 120 ? '...' : '') : `Connecting businesses with customers through premium digital experiences.`}
               </p>
               <div class="flex gap-4">
                 ${[
@@ -2214,30 +1841,53 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
               </div>
             </div>
 
+            <!-- Services Column -->
+            <div>
+              <h4 class="text-white font-bold mb-6">Our Services</h4>
+              <ul class="space-y-3 text-sm text-blue-100">
+                ${(business.services || []).slice(0, 5).map(service => `
+                  <li><a href="#services" class="hover:text-white transition-colors capitalize">${escapeHtml(service.name)}</a></li>
+                `).join('')}
+              </ul>
+            </div>
+
             <!-- Quick Links -->
             <div>
-              <h4 class="text-white font-bold mb-6">Explore</h4>
+              <h4 class="text-white font-bold mb-6">Quick Links</h4>
               <ul class="space-y-3 text-sm text-blue-100">
-                <li><a href="#home" class="hover:text-white transition-colors">Home</a></li>
-                <li><a href="#about" class="hover:text-white transition-colors">About</a></li>
-                <li><a href="#services" class="hover:text-white transition-colors">Services</a></li>
-                <li><a href="#gallery" class="hover:text-white transition-colors">Gallery</a></li>
-                <li><a href="#contact" class="hover:text-white transition-colors">Contact</a></li>
+                <li><a href="#about" class="hover:text-white transition-colors">About Us</a></li>
+                <li><a href="#gallery" class="hover:text-white transition-colors">Photo Gallery</a></li>
+                <li><a href="#reviews" class="hover:text-white transition-colors">Customer Reviews</a></li>
+                <li><a href="#faq" class="hover:text-white transition-colors">FAQs</a></li>
               </ul>
             </div>
 
-            <!-- Contact Info -->
+            <!-- Contact Column -->
             <div>
-              <h4 class="text-white font-bold mb-6">Contact</h4>
+              <h4 class="text-white font-bold mb-6">Get In Touch</h4>
               <ul class="space-y-4 text-sm text-blue-100">
-                ${business.mobile ? `<li class="flex items-start gap-3"><svg class="w-5 h-5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg><span class="hover:text-white transition-colors cursor-default">${escapeHtml(business.mobile)}</span></li>` : ''}
-                ${business.email ? `<li class="flex items-start gap-3"><svg class="w-5 h-5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg><a href="mailto:${escapeHtml(business.email)}" class="hover:text-white transition-colors">${escapeHtml(business.email)}</a></li>` : ''}
-                ${business.address ? `<li class="flex items-start gap-3"><svg class="w-5 h-5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>${escapeHtml(business.address)}</li>` : ''}
+                ${business.mobile ? `
+                  <li class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+                    <a href="tel:${escapeHtml(business.mobile)}" class="hover:text-white transition-colors">${escapeHtml(business.mobile)}</a>
+                  </li>
+                ` : ''}
+                ${business.email ? `
+                  <li class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <a href="mailto:${escapeHtml(business.email)}" class="hover:text-white transition-colors break-all">${escapeHtml(business.email)}</a>
+                  </li>
+                ` : ''}
+                ${business.address ? `
+                  <li class="flex items-start gap-3">
+                    <svg class="w-5 h-5 text-white shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span>${escapeHtml(business.address)}</span>
+                  </li>
+                ` : ''}
               </ul>
-            </div>
-
             </div>
           </div>
+
 
           <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-blue-100 font-medium">
             <p>© ${new Date().getFullYear()} ${escapeHtml(business.businessName)}. All rights reserved.</p>
@@ -2252,6 +1902,11 @@ export const generateBusinessHTML = (business, apiBaseUrl = null) => {
 
 
       <div class="fixed bottom-6 right-6 z-40 flex flex-col gap-3 floating-actions">
+        ${business.mobile ? `
+          <a href="tel:${escapeHtml(business.mobile)}" class="w-14 h-14 bg-blue-600 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all duration-300">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path></svg>
+          </a>
+        ` : ''}
         ${(business.whatsapp || business.mobile) ? `
           <a href="https://wa.me/${escapeHtml((business.whatsapp || business.mobile).replace(/\D/g, ''))}" target="_blank" rel="noopener noreferrer" class="w-14 h-14 bg-green-500 text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all duration-300">
             <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
