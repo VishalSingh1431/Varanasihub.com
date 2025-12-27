@@ -565,6 +565,7 @@ const EditWebsite = () => {
                     </ul>
                   </div>
                 </div>
+              </div>
 
                 {/* Website URL / Subdomain Section */}
                 <div className="border-b border-gray-200 pb-8">
