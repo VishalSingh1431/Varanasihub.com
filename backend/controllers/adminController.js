@@ -78,10 +78,15 @@ export const approveWebsite = async (req, res) => {
     `, [id]);
     const updatedBusiness = await Business.findById(id);
 
-    // Auto-promote user to content_admin
+    // Promote user to content_admin if they are currently a normal user
     if (business.userId) {
-      await User.update(business.userId, { role: 'content_admin' });
-      console.log(`✓ Promoted user ${business.userId} to content_admin`);
+      const businessOwner = await User.findById(business.userId);
+      if (businessOwner && businessOwner.role === 'normal') {
+        await User.update(business.userId, { role: 'content_admin' });
+        console.log(`✓ Promoted user ${business.userId} to content_admin`);
+      } else {
+        console.log(`ℹ️ User ${business.userId} already has role: ${businessOwner?.role}, skipping promotion.`);
+      }
     }
 
     // Send approval email

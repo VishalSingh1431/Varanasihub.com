@@ -670,8 +670,11 @@ export const getBusinessById = async (req, res) => {
       return res.status(404).json({ error: 'Business not found' });
     }
 
+    // Fetch user from database to get current role (more reliable than JWT)
+    const user = await User.findById(userId);
+    const userRole = user?.role || 'normal';
+
     // Check if user owns this business or is main_admin
-    const userRole = req.user?.role;
     if (business.userId !== userId && userRole !== 'main_admin') {
       return res.status(403).json({ error: 'You do not have permission to edit this business' });
     }

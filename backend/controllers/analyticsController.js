@@ -61,8 +61,12 @@ export const getAnalytics = async (req, res) => {
       return res.status(404).json({ error: 'Business not found' });
     }
 
+    // Fetch user from database to get current role (more reliable than JWT)
+    const user = await User.findById(userId);
+    const userRole = user?.role || 'normal';
+
     // Check if user owns the business or is admin
-    if (business.userId !== userId && req.user?.role !== 'main_admin') {
+    if (business.userId !== userId && userRole !== 'main_admin') {
       return res.status(403).json({ error: 'Access denied. You can only view analytics for your own businesses.' });
     }
 
