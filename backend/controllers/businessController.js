@@ -445,7 +445,7 @@ export const createBusiness = async (req, res) => {
     if (servicesData && Array.isArray(servicesData) && req.files) {
       servicesData = servicesData.map((service, index) => {
         const serviceImageField = `serviceImage_${index}`;
-        const serviceImageFile = req.files.find(f => f.fieldname === serviceImageField);
+        const serviceImageFile = req.files[serviceImageField]?.[0];
         if (serviceImageFile) {
           return {
             ...service,
@@ -737,6 +737,7 @@ export const updateBusiness = async (req, res) => {
       businessHours,
       appointmentSettings,
       theme,
+      preferredSlug,
     } = req.body;
 
     // Get uploaded files from Cloudinary (already processed by middleware)
@@ -763,7 +764,7 @@ export const updateBusiness = async (req, res) => {
     if (servicesData && Array.isArray(servicesData) && req.files) {
       servicesData = servicesData.map((service, index) => {
         const serviceImageField = `serviceImage_${index}`;
-        const serviceImageFile = req.files.find(f => f.fieldname === serviceImageField);
+        const serviceImageFile = req.files[serviceImageField]?.[0];
         if (serviceImageFile) {
           return {
             ...service,
@@ -841,6 +842,36 @@ export const updateBusiness = async (req, res) => {
       console.log('🔍 Update Category input:', category, '→ Final:', finalCategory);
     }
 
+    // Handle Subdomain/Slug change
+    let newSlug = existingBusiness.slug;
+    let newSubdomainUrl = existingBusiness.subdomainUrl;
+    let newSubdirectoryUrl = existingBusiness.subdirectoryUrl;
+
+    if (preferredSlug && preferredSlug !== existingBusiness.slug) {
+      // Validate slug format (alphanumeric only, no hyphens, 3-50 chars)
+      const slugRegex = /^[a-z0-9-]{3,50}$/;
+      if (!slugRegex.test(preferredSlug)) {
+        return res.status(400).json({
+          error: 'Invalid subdomain format. Use only lowercase letters, numbers, and hyphens (3-50 characters).'
+        });
+      }
+
+      // Check for availability
+      const slugExists = await Business.slugExists(preferredSlug);
+      if (slugExists) {
+        return res.status(400).json({ error: 'This subdomain is already taken. Please choose another one.' });
+      }
+
+      newSlug = preferredSlug;
+
+      // Update URLs based on the new slug
+      const BASE_DOMAIN = process.env.BASE_DOMAIN || 'varanasihub.com';
+      newSubdomainUrl = `https://${newSlug}.${BASE_DOMAIN}`;
+      newSubdirectoryUrl = `https://${BASE_DOMAIN}/${newSlug}`;
+
+      console.log('🔄 Subdomain updated:', existingBusiness.slug, '→', newSlug);
+    }
+
     // Update business
     const updatedBusiness = await Business.update(id, {
       businessName: businessName || existingBusiness.businessName,
@@ -868,6 +899,9 @@ export const updateBusiness = async (req, res) => {
         website: website || existingBusiness.socialLinks?.website || '',
       },
       editApprovalStatus: needsApproval ? 'pending' : 'none',
+      slug: newSlug,
+      subdomainUrl: newSubdomainUrl,
+      subdirectoryUrl: newSubdirectoryUrl,
     });
 
     const message = needsApproval
@@ -1041,3 +1075,4 @@ export const submitCallbackRequest = async (req, res) => {
     res.status(500).json({ error: 'Failed to submit callback request' });
   }
 };
+

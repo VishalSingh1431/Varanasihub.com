@@ -223,8 +223,11 @@ class Business {
         theme = COALESCE($19, theme),
         social_links = COALESCE($20, social_links),
         is_premium = COALESCE($21, is_premium),
+        slug = COALESCE($22, slug),
+        subdomain_url = COALESCE($23, subdomain_url),
+        subdirectory_url = COALESCE($24, subdirectory_url),
         updated_at = CURRENT_TIMESTAMP
-      WHERE id = $22
+      WHERE id = $25
       RETURNING *
     `;
 
@@ -250,6 +253,9 @@ class Business {
       data.theme || null,
       data.socialLinks ? JSON.stringify(data.socialLinks) : null,
       data.isPremium !== undefined ? data.isPremium : null,
+      data.slug || null,
+      data.subdomainUrl || null,
+      data.subdirectoryUrl || null,
       id,
     ];
 

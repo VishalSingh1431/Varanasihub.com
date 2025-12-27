@@ -460,7 +460,7 @@ export const updateBusinessAdmin = async (req, res) => {
     if (servicesData && Array.isArray(servicesData) && req.files) {
       servicesData = servicesData.map((service, index) => {
         const serviceImageField = `serviceImage_${index}`;
-        const serviceImageFile = req.files.find(f => f.fieldname === serviceImageField);
+        const serviceImageFile = req.files[serviceImageField]?.[0];
         if (serviceImageFile) {
           return {
             ...service,
