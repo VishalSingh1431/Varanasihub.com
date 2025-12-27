@@ -134,11 +134,6 @@ app.get('/api/health', async (req, res) => {
 });
 
 // API Routes (must come before subdomain routing)
-// Analytics route FIRST - bypass everything, always return success
-app.post('/api/analytics/track', (req, res) => {
-  res.json({ success: true, message: 'Event tracked' });
-});
-
 app.use('/api/auth', authRoutes);
 app.use('/api/business', businessRoutes);
 app.use('/api/ecommerce', ecommerceRoutes);
